@@ -1,5 +1,5 @@
-// Quantum Chaos Simulator - Frontend Application
-class QuantumChaosSimulator {
+// Advanced Quantum Chaos Simulator - Frontend Application
+class AdvancedQuantumChaosSimulator {
     constructor() {
         this.scene = null;
         this.camera = null;
@@ -9,6 +9,14 @@ class QuantumChaosSimulator {
         this.socket = null;
         this.animationId = null;
         this.entanglementMode = false;
+        this.audioEnabled = false;
+        this.audioContext = null;
+        this.oscillators = [];
+        this.particleMeshes = new Map();
+        this.fieldVisualizations = [];
+        this.entanglementLines = [];
+        this.waveFunctionVisualizer = null;
+        this.stats = null;
         
         this.init();
     }
@@ -16,7 +24,9 @@ class QuantumChaosSimulator {
     init() {
         this.setupSocket();
         this.setupThreeJS();
-        this.setupControls();
+        this.setupAdvancedControls();
+        this.setupAudio();
+        this.setupStats();
         this.hideLoading();
         this.animate();
     }
@@ -28,18 +38,20 @@ class QuantumChaosSimulator {
             this.simulationData = data;
             this.updateStats();
             this.updateParticles();
+            this.updateFieldVisualizations();
+            this.updateEntanglementLines();
+            this.updateWaveFunction();
         });
     }
 
     setupThreeJS() {
         const canvas = document.getElementById('canvas');
-        const container = document.querySelector('.container');
         
-        // Scene setup
+        // Scene setup with advanced effects
         this.scene = new THREE.Scene();
         this.scene.fog = new THREE.Fog(0x000000, 1, 100);
         
-        // Camera setup
+        // Advanced camera setup
         this.camera = new THREE.PerspectiveCamera(
             75,
             window.innerWidth / window.innerHeight,
@@ -48,63 +60,103 @@ class QuantumChaosSimulator {
         );
         this.camera.position.set(0, 0, 50);
         
-        // Renderer setup
+        // Advanced renderer setup
         this.renderer = new THREE.WebGLRenderer({ 
             canvas: canvas,
             antialias: true,
-            alpha: true 
+            alpha: true,
+            powerPreference: "high-performance"
         });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor(0x000000, 0);
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         
-        // Lighting
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
-        this.scene.add(ambientLight);
+        // Advanced lighting system
+        this.setupAdvancedLighting();
         
-        const directionalLight = new THREE.DirectionalLight(0x00ff88, 1);
-        directionalLight.position.set(10, 10, 5);
-        this.scene.add(directionalLight);
-        
-        // Add some psychedelic effects
-        this.addPsychedelicEffects();
+        // Add advanced psychedelic effects
+        this.addAdvancedPsychedelicEffects();
         
         // Handle window resize
         window.addEventListener('resize', () => this.onWindowResize());
     }
 
-    addPsychedelicEffects() {
-        // Create a grid of lines for visual reference
+    setupAdvancedLighting() {
+        // Ambient lighting
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+        this.scene.add(ambientLight);
+        
+        // Main directional light
+        const directionalLight = new THREE.DirectionalLight(0x00ff88, 1);
+        directionalLight.position.set(10, 10, 5);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        this.scene.add(directionalLight);
+        
+        // Point lights for dynamic effects
+        for (let i = 0; i < 3; i++) {
+            const pointLight = new THREE.PointLight(0x00ffff, 0.5, 50);
+            pointLight.position.set(
+                (Math.random() - 0.5) * 40,
+                (Math.random() - 0.5) * 40,
+                (Math.random() - 0.5) * 40
+            );
+            this.scene.add(pointLight);
+        }
+        
+        // Spot light for dramatic effect
+        const spotLight = new THREE.SpotLight(0xff00ff, 0.8, 100, Math.PI / 6, 0.5);
+        spotLight.position.set(0, 30, 0);
+        spotLight.target.position.set(0, 0, 0);
+        this.scene.add(spotLight);
+        this.scene.add(spotLight.target);
+    }
+
+    addAdvancedPsychedelicEffects() {
+        // Advanced grid system
         const gridHelper = new THREE.GridHelper(20, 20, 0x00ff88, 0x00cc66);
         gridHelper.material.opacity = 0.3;
         gridHelper.material.transparent = true;
         this.scene.add(gridHelper);
         
-        // Add some floating geometric shapes
-        this.addFloatingShapes();
+        // Add floating geometric shapes with advanced materials
+        this.addAdvancedFloatingShapes();
+        
+        // Add quantum field visualizations
+        this.addQuantumFieldVisualizations();
+        
+        // Add wave function visualizer
+        this.addWaveFunctionVisualizer();
     }
 
-    addFloatingShapes() {
+    addAdvancedFloatingShapes() {
         const shapes = [];
         const geometries = [
             new THREE.TetrahedronGeometry(2),
             new THREE.OctahedronGeometry(1.5),
-            new THREE.IcosahedronGeometry(1)
+            new THREE.IcosahedronGeometry(1),
+            new THREE.DodecahedronGeometry(1.2),
+            new THREE.TorusKnotGeometry(1, 0.3, 100, 16)
         ];
         
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 8; i++) {
             const geometry = geometries[Math.floor(Math.random() * geometries.length)];
             const material = new THREE.MeshPhongMaterial({
                 color: new THREE.Color().setHSL(Math.random(), 0.8, 0.5),
                 transparent: true,
                 opacity: 0.6,
-                wireframe: true
+                wireframe: true,
+                emissive: new THREE.Color().setHSL(Math.random(), 0.8, 0.3),
+                emissiveIntensity: 0.2
             });
             
             const shape = new THREE.Mesh(geometry, material);
             shape.position.set(
-                (Math.random() - 0.5) * 30,
-                (Math.random() - 0.5) * 30,
-                (Math.random() - 0.5) * 30
+                (Math.random() - 0.5) * 40,
+                (Math.random() - 0.5) * 40,
+                (Math.random() - 0.5) * 40
             );
             
             shape.rotation.set(
@@ -117,22 +169,72 @@ class QuantumChaosSimulator {
             shapes.push(shape);
         }
         
-        // Animate shapes
+        // Animate shapes with complex patterns
         this.animateShapes = (time) => {
             shapes.forEach((shape, index) => {
                 shape.rotation.x += 0.01 * (index + 1);
                 shape.rotation.y += 0.015 * (index + 1);
                 shape.rotation.z += 0.02 * (index + 1);
                 
-                // Float up and down
+                // Complex floating motion
                 shape.position.y += Math.sin(time * 0.001 + index) * 0.02;
+                shape.position.x += Math.cos(time * 0.0008 + index * 0.5) * 0.01;
+                shape.position.z += Math.sin(time * 0.0012 + index * 0.3) * 0.015;
+                
+                // Dynamic material changes
+                const material = shape.material;
+                material.emissiveIntensity = 0.2 + 0.1 * Math.sin(time * 0.002 + index);
+                material.opacity = 0.4 + 0.2 * Math.sin(time * 0.001 + index);
             });
         };
     }
 
-    setupControls() {
+    addQuantumFieldVisualizations() {
+        // Create field lines for electromagnetic field
+        for (let i = 0; i < 20; i++) {
+            const geometry = new THREE.BufferGeometry();
+            const points = [];
+            
+            for (let j = 0; j < 50; j++) {
+                const t = j / 49;
+                const x = (Math.random() - 0.5) * 20;
+                const y = (Math.random() - 0.5) * 20;
+                const z = (Math.random() - 0.5) * 20;
+                points.push(new THREE.Vector3(x, y, z));
+            }
+            
+            geometry.setFromPoints(points);
+            const material = new THREE.LineBasicMaterial({
+                color: 0x00ffff,
+                transparent: true,
+                opacity: 0.3
+            });
+            
+            const line = new THREE.Line(geometry, material);
+            this.scene.add(line);
+            this.fieldVisualizations.push(line);
+        }
+    }
+
+    addWaveFunctionVisualizer() {
+        // Create a complex wave function visualization
+        const geometry = new THREE.SphereGeometry(15, 32, 32);
+        const material = new THREE.MeshPhongMaterial({
+            color: 0x8000ff,
+            transparent: true,
+            opacity: 0.1,
+            wireframe: true
+        });
+        
+        this.waveFunctionVisualizer = new THREE.Mesh(geometry, material);
+        this.scene.add(this.waveFunctionVisualizer);
+    }
+
+    setupAdvancedControls() {
         const chaosSlider = document.getElementById('chaosSlider');
         const dimensionSlider = document.getElementById('dimensionSlider');
+        const emFieldSlider = document.getElementById('emFieldSlider');
+        const gravFieldSlider = document.getElementById('gravFieldSlider');
         
         chaosSlider.addEventListener('input', (e) => {
             const level = parseFloat(e.target.value);
@@ -143,6 +245,46 @@ class QuantumChaosSimulator {
             const dimension = parseInt(e.target.value);
             this.updateDimension(dimension);
         });
+        
+        emFieldSlider.addEventListener('input', (e) => {
+            const strength = parseFloat(e.target.value);
+            this.updateEMField(strength);
+        });
+        
+        gravFieldSlider.addEventListener('input', (e) => {
+            const strength = parseFloat(e.target.value);
+            this.updateGravField(strength);
+        });
+        
+        // Setup simulation mode buttons
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.setSimulationMode(e.target.dataset.mode);
+            });
+        });
+        
+        // Setup particle type buttons
+        document.querySelectorAll('.particle-type-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.toggleParticleType(e.target.dataset.type);
+            });
+        });
+    }
+
+    setupAudio() {
+        // Initialize audio context for particle sound effects
+        if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
+            this.audioContext = new (AudioContext || webkitAudioContext)();
+        }
+    }
+
+    setupStats() {
+        // Performance monitoring
+        this.stats = new Stats();
+        this.stats.dom.style.position = 'absolute';
+        this.stats.dom.style.top = '0px';
+        this.stats.dom.style.left = '0px';
+        document.body.appendChild(this.stats.dom);
     }
 
     updateChaosLevel(level) {
@@ -161,6 +303,44 @@ class QuantumChaosSimulator {
         });
     }
 
+    updateEMField(strength) {
+        // Update electromagnetic field visualization
+        this.fieldVisualizations.forEach((line, index) => {
+            const material = line.material;
+            material.opacity = 0.1 + 0.2 * strength;
+            material.color.setHSL(0.5 + strength * 0.1, 0.8, 0.5);
+        });
+    }
+
+    updateGravField(strength) {
+        // Update gravitational field effects
+        if (this.waveFunctionVisualizer) {
+            this.waveFunctionVisualizer.material.opacity = 0.05 + 0.1 * strength;
+        }
+    }
+
+    setSimulationMode(mode) {
+        fetch('/api/simulation-mode', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mode })
+        });
+        
+        // Update UI
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+    }
+
+    toggleParticleType(type) {
+        this.socket.emit('toggleParticleType', type);
+        
+        // Update UI
+        const btn = document.querySelector(`[data-type="${type}"]`);
+        btn.classList.toggle('active');
+    }
+
     updateStats() {
         if (!this.simulationData) return;
         
@@ -168,6 +348,13 @@ class QuantumChaosSimulator {
         document.getElementById('chaosLevel').textContent = this.simulationData.chaosLevel.toFixed(2);
         document.getElementById('dimension').textContent = this.simulationData.dimension + 'D';
         document.getElementById('time').textContent = this.simulationData.time.toFixed(2);
+        document.getElementById('simulationMode').textContent = this.simulationData.simulationMode;
+        document.getElementById('emField').textContent = this.simulationData.fields.electromagnetic.strength.toFixed(1);
+        document.getElementById('gravField').textContent = this.simulationData.fields.gravitational.strength.toFixed(2);
+        document.getElementById('quantumField').textContent = this.simulationData.fields.quantum.superposition.toFixed(1);
+        
+        const entangledCount = this.simulationData.entanglementGroups.length * 2;
+        document.getElementById('entangledCount').textContent = entangledCount;
     }
 
     updateParticles() {
@@ -179,35 +366,91 @@ class QuantumChaosSimulator {
         });
         this.particles = [];
         
-        // Create new particles
+        // Create new particles with advanced rendering
         this.simulationData.particles.forEach((particleData, index) => {
-            const geometry = new THREE.SphereGeometry(0.2, 8, 6);
-            const material = new THREE.MeshPhongMaterial({
-                color: this.getParticleColor(particleData),
-                transparent: true,
-                opacity: 0.8,
-                emissive: this.getParticleColor(particleData),
-                emissiveIntensity: 0.3
-            });
-            
-            const particle = new THREE.Mesh(geometry, material);
-            particle.position.set(
-                particleData.position.x,
-                particleData.position.y,
-                particleData.position.z
-            );
-            
-            // Store particle data for animation
-            particle.userData = particleData;
-            
+            const particle = this.createAdvancedParticle(particleData);
             this.scene.add(particle);
             this.particles.push(particle);
+            this.particleMeshes.set(particleData.id, particle);
         });
+    }
+
+    createAdvancedParticle(particleData) {
+        let geometry, material;
+        
+        // Different geometries for different particle types
+        switch (particleData.type) {
+            case 'electron':
+                geometry = new THREE.SphereGeometry(0.3, 8, 6);
+                material = new THREE.MeshPhongMaterial({
+                    color: this.getParticleColor(particleData),
+                    transparent: true,
+                    opacity: 0.9,
+                    emissive: this.getParticleColor(particleData),
+                    emissiveIntensity: 0.4,
+                    shininess: 100
+                });
+                break;
+            case 'photon':
+                geometry = new THREE.SphereGeometry(0.2, 6, 4);
+                material = new THREE.MeshPhongMaterial({
+                    color: 0xffff00,
+                    transparent: true,
+                    opacity: 0.8,
+                    emissive: 0xffff00,
+                    emissiveIntensity: 0.6
+                });
+                break;
+            case 'quark':
+                geometry = new THREE.TetrahedronGeometry(0.25);
+                material = new THREE.MeshPhongMaterial({
+                    color: 0xff0000,
+                    transparent: true,
+                    opacity: 0.8,
+                    emissive: 0xff0000,
+                    emissiveIntensity: 0.3
+                });
+                break;
+            case 'neutrino':
+                geometry = new THREE.SphereGeometry(0.15, 4, 3);
+                material = new THREE.MeshPhongMaterial({
+                    color: 0x00ffff,
+                    transparent: true,
+                    opacity: 0.6,
+                    emissive: 0x00ffff,
+                    emissiveIntensity: 0.2
+                });
+                break;
+            default:
+                geometry = new THREE.SphereGeometry(0.2, 8, 6);
+                material = new THREE.MeshPhongMaterial({
+                    color: this.getParticleColor(particleData),
+                    transparent: true,
+                    opacity: 0.8
+                });
+        }
+        
+        const particle = new THREE.Mesh(geometry, material);
+        particle.position.set(
+            particleData.position.x,
+            particleData.position.y,
+            particleData.position.z
+        );
+        
+        // Store particle data for animation
+        particle.userData = particleData;
+        
+        // Add shadow casting
+        particle.castShadow = true;
+        particle.receiveShadow = true;
+        
+        return particle;
     }
 
     getParticleColor(particleData) {
         const energy = particleData.energy / 100;
-        const hue = (particleData.quantumState / (Math.PI * 2)) % 1;
+        const phase = particleData.quantumState.phase;
+        const hue = (phase / (Math.PI * 2)) % 1;
         
         if (this.entanglementMode && particleData.entangledWith !== null) {
             return new THREE.Color().setHSL(hue, 1, 0.5 + energy * 0.5);
@@ -216,50 +459,159 @@ class QuantumChaosSimulator {
         }
     }
 
+    updateFieldVisualizations() {
+        if (!this.simulationData) return;
+        
+        const fields = this.simulationData.fields;
+        
+        // Update electromagnetic field lines
+        this.fieldVisualizations.forEach((line, index) => {
+            const material = line.material;
+            material.opacity = 0.1 + 0.2 * fields.electromagnetic.strength;
+            material.color.setHSL(0.5 + fields.electromagnetic.phase * 0.1, 0.8, 0.5);
+        });
+    }
+
+    updateEntanglementLines() {
+        // Remove old entanglement lines
+        this.entanglementLines.forEach(line => {
+            this.scene.remove(line);
+        });
+        this.entanglementLines = [];
+        
+        if (!this.simulationData) return;
+        
+        // Create new entanglement lines
+        this.simulationData.entanglementGroups.forEach(group => {
+            const p1 = this.particleMeshes.get(group.particles[0]);
+            const p2 = this.particleMeshes.get(group.particles[1]);
+            
+            if (p1 && p2) {
+                const geometry = new THREE.BufferGeometry().setFromPoints([
+                    p1.position,
+                    p2.position
+                ]);
+                
+                const material = new THREE.LineBasicMaterial({
+                    color: 0xff00ff,
+                    transparent: true,
+                    opacity: 0.3 + 0.4 * group.correlation
+                });
+                
+                const line = new THREE.Line(geometry, material);
+                this.scene.add(line);
+                this.entanglementLines.push(line);
+            }
+        });
+    }
+
+    updateWaveFunction() {
+        if (!this.simulationData || !this.waveFunctionVisualizer) return;
+        
+        const waveFunction = this.simulationData.waveFunction;
+        const material = this.waveFunctionVisualizer.material;
+        
+        material.opacity = 0.05 + 0.1 * waveFunction.amplitude;
+        material.color.setHSL(0.8 + waveFunction.phase * 0.1, 0.8, 0.5);
+    }
+
     animate() {
         this.animationId = requestAnimationFrame(() => this.animate());
         
+        if (this.stats) this.stats.begin();
+        
         const time = Date.now();
         
-        // Animate particles
-        this.particles.forEach(particle => {
-            if (particle.userData) {
-                // Smooth position interpolation
-                const targetX = particle.userData.position.x;
-                const targetY = particle.userData.position.y;
-                const targetZ = particle.userData.position.z;
-                
-                particle.position.x += (targetX - particle.position.x) * 0.1;
-                particle.position.y += (targetY - particle.position.y) * 0.1;
-                particle.position.z += (targetZ - particle.position.z) * 0.1;
-                
-                // Rotate particles
-                particle.rotation.x += 0.02;
-                particle.rotation.y += 0.03;
-                
-                // Scale based on energy
-                const scale = 0.5 + (particle.userData.energy / 100) * 0.5;
-                particle.scale.setScalar(scale);
-                
-                // Update material color
-                const material = particle.material;
-                const newColor = this.getParticleColor(particle.userData);
-                material.color.lerp(newColor, 0.1);
-                material.emissive.lerp(newColor, 0.1);
-            }
-        });
+        // Animate particles with advanced physics
+        this.animateAdvancedParticles(time);
         
         // Animate floating shapes
         if (this.animateShapes) {
             this.animateShapes(time);
         }
         
-        // Rotate camera slowly
-        this.camera.position.x = Math.cos(time * 0.0005) * 50;
-        this.camera.position.z = Math.sin(time * 0.0005) * 50;
-        this.camera.lookAt(0, 0, 0);
+        // Animate camera with complex motion
+        this.animateAdvancedCamera(time);
+        
+        // Update field visualizations
+        this.updateFieldVisualizations();
         
         this.renderer.render(this.scene, this.camera);
+        
+        if (this.stats) this.stats.end();
+    }
+
+    animateAdvancedParticles(time) {
+        this.particles.forEach(particle => {
+            if (particle.userData) {
+                const data = particle.userData;
+                
+                // Smooth position interpolation
+                const targetX = data.position.x;
+                const targetY = data.position.y;
+                const targetZ = data.position.z;
+                
+                particle.position.x += (targetX - particle.position.x) * 0.1;
+                particle.position.y += (targetY - particle.position.y) * 0.1;
+                particle.position.z += (targetZ - particle.position.z) * 0.1;
+                
+                // Advanced rotation based on particle type
+                switch (data.type) {
+                    case 'electron':
+                        particle.rotation.x += 0.03;
+                        particle.rotation.y += 0.04;
+                        break;
+                    case 'photon':
+                        particle.rotation.x += 0.05;
+                        particle.rotation.z += 0.06;
+                        break;
+                    case 'quark':
+                        particle.rotation.x += 0.02;
+                        particle.rotation.y += 0.03;
+                        particle.rotation.z += 0.04;
+                        break;
+                    default:
+                        particle.rotation.x += 0.02;
+                        particle.rotation.y += 0.03;
+                }
+                
+                // Dynamic scaling based on energy and type
+                const baseScale = data.type === 'photon' ? 0.8 : 1.0;
+                const scale = baseScale + (data.energy / 100) * 0.5;
+                particle.scale.setScalar(scale);
+                
+                // Update material properties
+                const material = particle.material;
+                const newColor = this.getParticleColor(data);
+                material.color.lerp(newColor, 0.1);
+                material.emissive.lerp(newColor, 0.1);
+                
+                // Dynamic opacity based on quantum state
+                if (data.quantumState.superposition) {
+                    material.opacity = 0.6 + 0.3 * Math.sin(time * 0.01);
+                }
+            }
+        });
+    }
+
+    animateAdvancedCamera(time) {
+        // Complex camera motion
+        const radius = 50;
+        const speed = 0.0003;
+        
+        this.camera.position.x = Math.cos(time * speed) * radius;
+        this.camera.position.y = Math.sin(time * speed * 0.7) * 20;
+        this.camera.position.z = Math.sin(time * speed) * radius;
+        
+        this.camera.lookAt(0, 0, 0);
+        
+        // Add subtle camera shake based on chaos level
+        if (this.simulationData) {
+            const chaos = this.simulationData.chaosLevel;
+            this.camera.position.x += (Math.random() - 0.5) * chaos * 0.5;
+            this.camera.position.y += (Math.random() - 0.5) * chaos * 0.5;
+            this.camera.position.z += (Math.random() - 0.5) * chaos * 0.5;
+        }
     }
 
     onWindowResize() {
@@ -294,12 +646,25 @@ function toggleEntanglement() {
     }
 }
 
+function toggleAudio() {
+    if (window.simulator) {
+        window.simulator.audioEnabled = !window.simulator.audioEnabled;
+        const button = event.target;
+        button.textContent = window.simulator.audioEnabled ? '🎵 Audio On' : '🎵 Audio';
+        button.classList.toggle('active');
+        
+        if (window.simulator.audioEnabled && window.simulator.audioContext) {
+            window.simulator.audioContext.resume();
+        }
+    }
+}
+
 // Initialize the simulator when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    window.simulator = new QuantumChaosSimulator();
+    window.simulator = new AdvancedQuantumChaosSimulator();
 });
 
-// Add some keyboard controls
+// Add advanced keyboard controls
 document.addEventListener('keydown', (event) => {
     switch(event.key) {
         case ' ':
@@ -309,6 +674,10 @@ document.addEventListener('keydown', (event) => {
         case 'e':
         case 'E':
             toggleEntanglement();
+            break;
+        case 'a':
+        case 'A':
+            toggleAudio();
             break;
         case '1':
             document.getElementById('chaosSlider').value = 0;
@@ -321,6 +690,15 @@ document.addEventListener('keydown', (event) => {
         case '3':
             document.getElementById('chaosSlider').value = 1;
             document.getElementById('chaosSlider').dispatchEvent(new Event('input'));
+            break;
+        case 'q':
+            window.simulator.setSimulationMode('quantum');
+            break;
+        case 'c':
+            window.simulator.setSimulationMode('classical');
+            break;
+        case 'r':
+            window.simulator.setSimulationMode('relativistic');
             break;
     }
 });

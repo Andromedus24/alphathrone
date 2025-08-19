@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌌 Quantum Chaos Simulator 🔮</title>
+    <title>🌌 Advanced Quantum Chaos Simulator 🔮</title>
     <style>
         * {
             margin: 0;
@@ -40,11 +40,12 @@
             transform: translateX(-50%);
             z-index: 100;
             text-align: center;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             padding: 20px;
             border-radius: 15px;
             border: 2px solid #00ff88;
             box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+            max-width: 90vw;
         }
 
         .title {
@@ -65,6 +66,7 @@
             align-items: center;
             flex-wrap: wrap;
             justify-content: center;
+            margin-bottom: 15px;
         }
 
         .control-group {
@@ -77,6 +79,7 @@
         .control-group label {
             font-size: 0.9em;
             color: #00cc66;
+            text-align: center;
         }
 
         .slider {
@@ -119,6 +122,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+            font-size: 0.9em;
         }
 
         .button:hover {
@@ -126,17 +130,76 @@
             box-shadow: 0 0 25px rgba(0, 255, 136, 0.8);
         }
 
+        .button.active {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+        }
+
+        .advanced-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #00ff88;
+        }
+
+        .particle-types {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .particle-type-btn {
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid #00ff88;
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: #00ff88;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8em;
+        }
+
+        .particle-type-btn.active {
+            background: #00ff88;
+            color: #000;
+        }
+
+        .simulation-modes {
+            display: flex;
+            gap: 10px;
+        }
+
+        .mode-btn {
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid #ff6b6b;
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: #ff6b6b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8em;
+        }
+
+        .mode-btn.active {
+            background: #ff6b6b;
+            color: #000;
+        }
+
         .stats {
             position: absolute;
             top: 20px;
             right: 20px;
             z-index: 100;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             padding: 15px;
             border-radius: 10px;
             border: 1px solid #00ff88;
             font-size: 0.9em;
             line-height: 1.4;
+            max-width: 300px;
         }
 
         .stats div {
@@ -159,13 +222,21 @@
             color: #4ecdc4;
         }
 
+        .fields {
+            color: #a855f7;
+        }
+
+        .mode {
+            color: #f59e0b;
+        }
+
         #canvas {
             position: absolute;
             top: 0;
             left: 0;
             z-index: 1;
         }
-
+        
         .loading {
             position: absolute;
             top: 50%;
@@ -196,12 +267,20 @@
         .hidden {
             display: none;
         }
+
+        .field-strength {
+            color: #ec4899;
+        }
+
+        .entanglement {
+            color: #8b5cf6;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1 class="title">🌌 Quantum Chaos Simulator 🔮</h1>
+            <h1 class="title">🌌 Advanced Quantum Chaos Simulator 🔮</h1>
             <div class="controls">
                 <div class="control-group">
                     <label for="chaosSlider">🌪️ Chaos Level</label>
@@ -211,8 +290,33 @@
                     <label for="dimensionSlider">🔮 Dimensions</label>
                     <input type="range" id="dimensionSlider" class="slider" min="2" max="4" step="1" value="3">
                 </div>
+                <div class="control-group">
+                    <label for="emFieldSlider">⚡ EM Field</label>
+                    <input type="range" id="emFieldSlider" class="slider" min="0" max="2" step="0.1" value="1.0">
+                </div>
+                <div class="control-group">
+                    <label for="gravFieldSlider">🌍 Grav Field</label>
+                    <input type="range" id="gravFieldSlider" class="slider" min="0" max="1" step="0.05" value="0.5">
+                </div>
+            </div>
+            
+            <div class="advanced-controls">
+                <div class="simulation-modes">
+                    <button class="mode-btn active" data-mode="quantum">⚛️ Quantum</button>
+                    <button class="mode-btn" data-mode="classical">🔬 Classical</button>
+                    <button class="mode-btn" data-mode="relativistic">🚀 Relativistic</button>
+                </div>
+                
+                <div class="particle-types">
+                    <button class="particle-type-btn active" data-type="electron">⚡ Electron</button>
+                    <button class="particle-type-btn active" data-type="photon">💡 Photon</button>
+                    <button class="particle-type-btn" data-type="quark">🔴 Quark</button>
+                    <button class="particle-type-btn" data-type="neutrino">👻 Neutrino</button>
+                </div>
+                
                 <button class="button" onclick="resetSimulation()">🔄 Reset</button>
                 <button class="button" onclick="toggleEntanglement()">⚛️ Toggle Entanglement</button>
+                <button class="button" onclick="toggleAudio()">🎵 Audio</button>
             </div>
         </div>
 
@@ -221,6 +325,11 @@
             <div class="chaos-level">🌪️ Chaos: <span id="chaosLevel">0.5</span></div>
             <div class="dimension">🔮 Dimension: <span id="dimension">3D</span></div>
             <div class="time">⏰ Time: <span id="time">0.00</span>s</div>
+            <div class="mode">🔬 Mode: <span id="simulationMode">Quantum</span></div>
+            <div class="fields">⚡ EM Field: <span id="emField">1.0</span></div>
+            <div class="fields">🌍 Grav Field: <span id="gravField">0.5</span></div>
+            <div class="entanglement">🔗 Entangled: <span id="entangledCount">0</span></div>
+            <div class="field-strength">🌊 Quantum Field: <span id="quantumField">0.7</span></div>
         </div>
 
         <canvas id="canvas"></canvas>
