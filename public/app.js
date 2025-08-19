@@ -17,6 +17,10 @@ class AdvancedQuantumChaosSimulator {
         this.entanglementLines = [];
         this.waveFunctionVisualizer = null;
         this.stats = null;
+        this.particleTrails = [];
+        this.trailsEnabled = false;
+        this.quantumStateVisible = true;
+        this.experiments = {};
         
         this.init();
     }
@@ -41,6 +45,8 @@ class AdvancedQuantumChaosSimulator {
             this.updateFieldVisualizations();
             this.updateEntanglementLines();
             this.updateWaveFunction();
+            this.updateParticleTrails();
+            this.updateExperiments();
         });
     }
 
@@ -235,6 +241,8 @@ class AdvancedQuantumChaosSimulator {
         const dimensionSlider = document.getElementById('dimensionSlider');
         const emFieldSlider = document.getElementById('emFieldSlider');
         const gravFieldSlider = document.getElementById('gravFieldSlider');
+        const temperatureSlider = document.getElementById('temperatureSlider');
+        const pressureSlider = document.getElementById('pressureSlider');
         
         chaosSlider.addEventListener('input', (e) => {
             const level = parseFloat(e.target.value);
@@ -254,6 +262,16 @@ class AdvancedQuantumChaosSimulator {
         gravFieldSlider.addEventListener('input', (e) => {
             const strength = parseFloat(e.target.value);
             this.updateGravField(strength);
+        });
+        
+        temperatureSlider.addEventListener('input', (e) => {
+            const temperature = parseFloat(e.target.value);
+            this.updateTemperature(temperature);
+        });
+        
+        pressureSlider.addEventListener('input', (e) => {
+            const pressure = parseFloat(e.target.value);
+            this.updatePressure(pressure);
         });
         
         // Setup simulation mode buttons
@@ -319,6 +337,22 @@ class AdvancedQuantumChaosSimulator {
         }
     }
 
+    updateTemperature(temperature) {
+        fetch('/api/temperature', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ temperature })
+        });
+    }
+
+    updatePressure(pressure) {
+        fetch('/api/pressure', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pressure })
+        });
+    }
+
     setSimulationMode(mode) {
         fetch('/api/simulation-mode', {
             method: 'POST',
@@ -352,9 +386,19 @@ class AdvancedQuantumChaosSimulator {
         document.getElementById('emField').textContent = this.simulationData.fields.electromagnetic.strength.toFixed(1);
         document.getElementById('gravField').textContent = this.simulationData.fields.gravitational.strength.toFixed(2);
         document.getElementById('quantumField').textContent = this.simulationData.fields.quantum.superposition.toFixed(1);
+        document.getElementById('temperature').textContent = this.simulationData.temperature;
+        document.getElementById('pressure').textContent = this.simulationData.pressure.toFixed(1);
+        document.getElementById('totalEnergy').textContent = this.simulationData.quantumState.totalEnergy.toFixed(0);
+        document.getElementById('entropy').textContent = this.simulationData.quantumState.entropy.toFixed(2);
         
         const entangledCount = this.simulationData.entanglementGroups.length * 2;
         document.getElementById('entangledCount').textContent = entangledCount;
+        
+        // Update quantum state panel
+        document.getElementById('superpositionCount').textContent = this.simulationData.quantumState.superpositionCount;
+        document.getElementById('collapsedCount').textContent = this.simulationData.quantumState.collapsedCount;
+        document.getElementById('uncertainty').textContent = this.simulationData.quantumState.uncertainty.toFixed(2);
+        document.getElementById('coherence').textContent = this.simulationData.quantumState.coherence.toFixed(2);
     }
 
     updateParticles() {
@@ -515,6 +559,56 @@ class AdvancedQuantumChaosSimulator {
         material.color.setHSL(0.8 + waveFunction.phase * 0.1, 0.8, 0.5);
     }
 
+    updateParticleTrails() {
+        if (!this.simulationData || !this.trailsEnabled) return;
+        
+        // Clear old trails
+        this.particleTrails.forEach(trail => {
+            this.scene.remove(trail);
+        });
+        this.particleTrails = [];
+        
+        // Create new trails
+        this.simulationData.particleTrails.forEach(trailData => {
+            if (trailData.positions.length > 1) {
+                const points = trailData.positions.map(pos => 
+                    new THREE.Vector3(pos.x, pos.y, pos.z)
+                );
+                
+                const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                const material = new THREE.LineBasicMaterial({
+                    color: 0x00ff88,
+                    transparent: true,
+                    opacity: 0.3
+                });
+                
+                const trail = new THREE.Line(geometry, material);
+                this.scene.add(trail);
+                this.particleTrails.push(trail);
+            }
+        });
+    }
+
+    updateExperiments() {
+        if (!this.simulationData) return;
+        
+        this.experiments = this.simulationData.experiments;
+        
+        // Update experiment UI based on active experiments
+        Object.entries(this.experiments).forEach(([name, experiment]) => {
+            const btn = document.querySelector(`[onclick*="${name}"]`);
+            if (btn) {
+                if (experiment.active) {
+                    btn.style.background = 'rgba(255, 107, 107, 0.6)';
+                    btn.style.color = '#fff';
+                } else {
+                    btn.style.background = 'rgba(255, 107, 107, 0.2)';
+                    btn.style.color = '#ff6b6b';
+                }
+            }
+        });
+    }
+
     animate() {
         this.animationId = requestAnimationFrame(() => this.animate());
         
@@ -626,12 +720,25 @@ class AdvancedQuantumChaosSimulator {
             loading.classList.add('hidden');
         }
     }
+
+    showNotification(message, duration = 3000) {
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notificationText');
+        
+        notificationText.textContent = message;
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, duration);
+    }
 }
 
 // Global functions for button clicks
 function resetSimulation() {
     if (window.simulator && window.simulator.socket) {
         window.simulator.socket.emit('resetSimulation');
+        window.simulator.showNotification('🔄 Simulation reset!');
     }
 }
 
@@ -643,6 +750,10 @@ function toggleEntanglement() {
         button.style.background = window.simulator.entanglementMode ? 
             'linear-gradient(45deg, #ff6b6b, #ff8e8e)' : 
             'linear-gradient(45deg, #00ff88, #00cc66)';
+        
+        window.simulator.showNotification(
+            window.simulator.entanglementMode ? '🔗 Entanglement mode enabled!' : '🔗 Entanglement mode disabled!'
+        );
     }
 }
 
@@ -656,6 +767,108 @@ function toggleAudio() {
         if (window.simulator.audioEnabled && window.simulator.audioContext) {
             window.simulator.audioContext.resume();
         }
+        
+        window.simulator.showNotification(
+            window.simulator.audioEnabled ? '🎵 Audio enabled!' : '🎵 Audio disabled!'
+        );
+    }
+}
+
+function toggleParticleTrails() {
+    if (window.simulator) {
+        window.simulator.trailsEnabled = !window.simulator.trailsEnabled;
+        const button = event.target;
+        button.textContent = window.simulator.trailsEnabled ? '🌊 Trails On' : '🌊 Trails';
+        button.classList.toggle('active');
+        
+        window.simulator.showNotification(
+            window.simulator.trailsEnabled ? '🌊 Particle trails enabled!' : '🌊 Particle trails disabled!'
+        );
+    }
+}
+
+function toggleQuantumState() {
+    if (window.simulator) {
+        window.simulator.quantumStateVisible = !window.simulator.quantumStateVisible;
+        const button = event.target;
+        button.textContent = window.simulator.quantumStateVisible ? '🔬 State On' : '🔬 Quantum State';
+        button.classList.toggle('active');
+        
+        const panel = document.querySelector('.quantum-state-panel');
+        if (panel) {
+            panel.style.display = window.simulator.quantumStateVisible ? 'block' : 'none';
+        }
+        
+        window.simulator.showNotification(
+            window.simulator.quantumStateVisible ? '🔬 Quantum state panel visible!' : '🔬 Quantum state panel hidden!'
+        );
+    }
+}
+
+// Quantum Experiment Functions
+function runDoubleSlitExperiment() {
+    if (window.simulator && window.simulator.socket) {
+        const isActive = window.simulator.experiments.doubleSlit?.active;
+        window.simulator.socket.emit(isActive ? 'stopExperiment' : 'startExperiment', 'doubleSlit');
+        
+        window.simulator.showNotification(
+            isActive ? '🔬 Double slit experiment stopped!' : '🔬 Double slit experiment started!'
+        );
+    }
+}
+
+function runBellTest() {
+    if (window.simulator && window.simulator.socket) {
+        const isActive = window.simulator.experiments.bellTest?.active;
+        window.simulator.socket.emit(isActive ? 'stopExperiment' : 'startExperiment', 'bellTest');
+        
+        window.simulator.showNotification(
+            isActive ? '🔔 Bell test stopped!' : '🔔 Bell test started!'
+        );
+    }
+}
+
+function runQuantumTunneling() {
+    if (window.simulator && window.simulator.socket) {
+        const isActive = window.simulator.experiments.quantumTunneling?.active;
+        window.simulator.socket.emit(isActive ? 'stopExperiment' : 'startExperiment', 'quantumTunneling');
+        
+        window.simulator.showNotification(
+            isActive ? '🌊 Quantum tunneling stopped!' : '🌊 Quantum tunneling started!'
+        );
+    }
+}
+
+function runParticleCollision() {
+    if (window.simulator && window.simulator.socket) {
+        const isActive = window.simulator.experiments.particleCollision?.active;
+        window.simulator.socket.emit(isActive ? 'stopExperiment' : 'startExperiment', 'particleCollision');
+        
+        window.simulator.showNotification(
+            isActive ? '💥 Particle collision stopped!' : '💥 Particle collision started!'
+        );
+    }
+}
+
+function runQuantumTeleportation() {
+    if (window.simulator && window.simulator.socket) {
+        const isActive = window.simulator.experiments.quantumTeleportation?.active;
+        window.simulator.socket.emit(isActive ? 'stopExperiment' : 'startExperiment', 'quantumTeleportation');
+        
+        window.simulator.showNotification(
+            isActive ? '🚀 Quantum teleportation stopped!' : '🚀 Quantum teleportation started!'
+        );
+    }
+}
+
+function runSchrodingerCat() {
+    if (window.simulator && window.simulator.socket) {
+        const isActive = window.simulator.experiments.schrodingerCat?.active;
+        window.simulator.socket.emit(isActive ? 'stopExperiment' : 'startExperiment', 'schrodingerCat');
+        
+        window.simulator.showNotification(
+            isActive ? '🐱 Schrödinger\'s cat experiment stopped!' : '🐱 Schrödinger\'s cat experiment started!'
+        );
     }
 }
 
@@ -679,6 +892,14 @@ document.addEventListener('keydown', (event) => {
         case 'A':
             toggleAudio();
             break;
+        case 't':
+        case 'T':
+            toggleParticleTrails();
+            break;
+        case 'q':
+        case 'Q':
+            toggleQuantumState();
+            break;
         case '1':
             document.getElementById('chaosSlider').value = 0;
             document.getElementById('chaosSlider').dispatchEvent(new Event('input'));
@@ -699,6 +920,24 @@ document.addEventListener('keydown', (event) => {
             break;
         case 'r':
             window.simulator.setSimulationMode('relativistic');
+            break;
+        case 'd':
+            runDoubleSlitExperiment();
+            break;
+        case 'b':
+            runBellTest();
+            break;
+        case 'u':
+            runQuantumTunneling();
+            break;
+        case 'p':
+            runParticleCollision();
+            break;
+        case 'x':
+            runQuantumTeleportation();
+            break;
+        case 's':
+            runSchrodingerCat();
             break;
     }
 });

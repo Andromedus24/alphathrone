@@ -37,13 +37,39 @@ let simulationState = {
   activeTypes: ['electron', 'photon'],
   simulationMode: 'quantum', // quantum, classical, relativistic
   entanglementGroups: [],
-  waveFunction: { amplitude: 1.0, phase: 0, collapse: false }
+  waveFunction: { amplitude: 1.0, phase: 0, collapse: false },
+  experiments: {
+    doubleSlit: { active: false, slits: [], interference: [] },
+    bellTest: { active: false, measurements: [], correlation: 0 },
+    quantumTunneling: { active: false, barrier: null, tunneled: [] },
+    particleCollision: { active: false, collisions: [], energy: 0 },
+    quantumTeleportation: { active: false, teleported: [], fidelity: 0 },
+    schrodingerCat: { active: false, catState: 'alive', probability: 0.5 }
+  },
+  particleTrails: [],
+  quantumState: {
+    superpositionCount: 0,
+    collapsedCount: 0,
+    uncertainty: 0,
+    coherence: 0,
+    totalEnergy: 0,
+    entropy: 0
+  },
+  advancedPhysics: {
+    relativisticEffects: true,
+    quantumTunneling: true,
+    particleDecay: true,
+    fieldInteractions: true,
+    entanglement: true,
+    waveFunctionCollapse: true
+  }
 };
 
 // Advanced particle generation with multiple types
 function generateParticles() {
   simulationState.particles = [];
   simulationState.entanglementGroups = [];
+  simulationState.particleTrails = [];
   
   const particleCounts = {
     electron: 40,
@@ -58,11 +84,21 @@ function generateParticles() {
     for (let i = 0; i < count; i++) {
       const particle = createParticle(type, particleId++);
       simulationState.particles.push(particle);
+      
+      // Initialize particle trail
+      simulationState.particleTrails.push({
+        particleId: particle.id,
+        positions: [],
+        maxTrailLength: 50
+      });
     }
   });
   
   // Create entanglement groups
   createEntanglementGroups();
+  
+  // Initialize quantum state
+  updateQuantumState();
 }
 
 function createParticle(type, id) {
@@ -105,7 +141,9 @@ function createParticle(type, id) {
     },
     lifetime: Math.random() * 1000,
     decayProducts: [],
-    interactionHistory: []
+    interactionHistory: [],
+    trail: [],
+    experimentData: {}
   };
 }
 
@@ -146,10 +184,17 @@ function updateSimulation() {
     applyQuantumEffects(particle);
     handleParticleInteractions(particle);
     updateWaveFunction(particle);
+    updateParticleTrail(particle);
   });
   
   // Handle particle decay and creation
   handleParticleDecay();
+  
+  // Update experiments
+  updateExperiments();
+  
+  // Update quantum state
+  updateQuantumState();
   
   // Emit updated state to all clients
   io.emit('simulationUpdate', simulationState);
@@ -174,6 +219,14 @@ function updateParticlePhysics(particle) {
   const chaos = simulationState.chaosLevel;
   const time = simulationState.time;
   const fields = simulationState.fields;
+  const temperature = simulationState.temperature;
+  const pressure = simulationState.pressure;
+  
+  // Temperature effects on particle motion
+  const thermalVelocity = Math.sqrt(3 * 1.380649e-23 * temperature / particle.mass) * 1000;
+  
+  // Pressure effects on particle confinement
+  const pressureFactor = 1 / (1 + pressure);
   
   // Advanced quantum tunneling with field effects
   if (Math.random() < 0.001 * chaos * fields.quantum.superposition) {
@@ -194,6 +247,16 @@ function updateParticlePhysics(particle) {
   // Gravitational effects
   const gravStrength = fields.gravitational.curvature;
   particle.velocity.y -= gravStrength * 0.01;
+  
+  // Thermal motion
+  particle.velocity.x += (Math.random() - 0.5) * thermalVelocity * 0.001;
+  particle.velocity.y += (Math.random() - 0.5) * thermalVelocity * 0.001;
+  particle.velocity.z += (Math.random() - 0.5) * thermalVelocity * 0.001;
+  
+  // Pressure confinement
+  particle.velocity.x *= pressureFactor;
+  particle.velocity.y *= pressureFactor;
+  particle.velocity.z *= pressureFactor;
   
   // Update position with relativistic corrections
   const velocity = Math.sqrt(
@@ -301,6 +364,23 @@ function updateWaveFunction(particle) {
   particle.waveFunction.imaginary += (Math.random() - 0.5) * 0.1 * chaos;
 }
 
+function updateParticleTrail(particle) {
+  const trail = simulationState.particleTrails.find(t => t.particleId === particle.id);
+  if (trail) {
+    trail.positions.push({
+      x: particle.position.x,
+      y: particle.position.y,
+      z: particle.position.z,
+      time: simulationState.time
+    });
+    
+    // Limit trail length
+    if (trail.positions.length > trail.maxTrailLength) {
+      trail.positions.shift();
+    }
+  }
+}
+
 function handleParticleDecay() {
   simulationState.particles.forEach((particle, index) => {
     if (particle.lifetime > 0) {
@@ -333,6 +413,143 @@ function createDecayProducts(particle) {
   }
   
   return products;
+}
+
+function updateExperiments() {
+  const experiments = simulationState.experiments;
+  
+  // Double slit experiment
+  if (experiments.doubleSlit.active) {
+    updateDoubleSlitExperiment();
+  }
+  
+  // Bell test experiment
+  if (experiments.bellTest.active) {
+    updateBellTestExperiment();
+  }
+  
+  // Quantum tunneling experiment
+  if (experiments.quantumTunneling.active) {
+    updateQuantumTunnelingExperiment();
+  }
+  
+  // Particle collision experiment
+  if (experiments.particleCollision.active) {
+    updateParticleCollisionExperiment();
+  }
+  
+  // Quantum teleportation experiment
+  if (experiments.quantumTeleportation.active) {
+    updateQuantumTeleportationExperiment();
+  }
+  
+  // Schrödinger's cat experiment
+  if (experiments.schrodingerCat.active) {
+    updateSchrodingerCatExperiment();
+  }
+}
+
+function updateDoubleSlitExperiment() {
+  const experiment = simulationState.experiments.doubleSlit;
+  
+  // Create interference pattern
+  simulationState.particles.forEach(particle => {
+    if (particle.type === 'photon') {
+      const x = particle.position.x;
+      const interference = Math.sin(x * 2) * Math.cos(x * 3);
+      particle.position.y += interference * 0.01;
+    }
+  });
+}
+
+function updateBellTestExperiment() {
+  const experiment = simulationState.experiments.bellTest;
+  
+  // Measure entanglement correlation
+  let totalCorrelation = 0;
+  simulationState.entanglementGroups.forEach(group => {
+    totalCorrelation += group.correlation;
+  });
+  
+  experiment.correlation = totalCorrelation / simulationState.entanglementGroups.length;
+}
+
+function updateQuantumTunnelingExperiment() {
+  const experiment = simulationState.experiments.quantumTunneling;
+  
+  // Increase tunneling probability
+  simulationState.particles.forEach(particle => {
+    if (Math.random() < 0.01) {
+      const tunnelDistance = 10 + Math.random() * 20;
+      particle.position.x += (Math.random() - 0.5) * tunnelDistance;
+      particle.position.y += (Math.random() - 0.5) * tunnelDistance;
+      particle.position.z += (Math.random() - 0.5) * tunnelDistance;
+    }
+  });
+}
+
+function updateParticleCollisionExperiment() {
+  const experiment = simulationState.experiments.particleCollision;
+  
+  // Simulate high-energy collisions
+  let totalEnergy = 0;
+  simulationState.particles.forEach(particle => {
+    totalEnergy += particle.energy;
+  });
+  
+  experiment.energy = totalEnergy;
+}
+
+function updateQuantumTeleportationExperiment() {
+  const experiment = simulationState.experiments.quantumTeleportation;
+  
+  // Simulate quantum teleportation
+  if (Math.random() < 0.001) {
+    const particle = simulationState.particles[Math.floor(Math.random() * simulationState.particles.length)];
+    if (particle) {
+      particle.position.x = (Math.random() - 0.5) * 40;
+      particle.position.y = (Math.random() - 0.5) * 40;
+      particle.position.z = (Math.random() - 0.5) * 40;
+      
+      experiment.teleported.push(particle.id);
+      experiment.fidelity = 0.95 + Math.random() * 0.05;
+    }
+  }
+}
+
+function updateSchrodingerCatExperiment() {
+  const experiment = simulationState.experiments.schrodingerCat;
+  
+  // Update cat state probability
+  experiment.probability = 0.5 + 0.3 * Math.sin(simulationState.time * 0.1);
+  
+  if (Math.random() < 0.001) {
+    experiment.catState = Math.random() < experiment.probability ? 'alive' : 'dead';
+  }
+}
+
+function updateQuantumState() {
+  const quantumState = simulationState.quantumState;
+  
+  // Count particles in superposition
+  quantumState.superpositionCount = simulationState.particles.filter(p => 
+    p.quantumState.superposition
+  ).length;
+  
+  // Count collapsed particles
+  quantumState.collapsedCount = simulationState.particles.length - quantumState.superpositionCount;
+  
+  // Calculate total energy
+  quantumState.totalEnergy = simulationState.particles.reduce((total, p) => total + p.energy, 0);
+  
+  // Calculate entropy (simplified)
+  quantumState.entropy = Math.log(simulationState.particles.length) * simulationState.chaosLevel;
+  
+  // Calculate uncertainty
+  quantumState.uncertainty = simulationState.chaosLevel * 0.5;
+  
+  // Calculate coherence
+  quantumState.coherence = 1 - simulationState.chaosLevel;
 }
 
 // Enhanced API routes
@@ -385,6 +602,40 @@ app.post('/api/particle-types', (req, res) => {
   }
 });
 
+app.post('/api/temperature', (req, res) => {
+  const { temperature } = req.body;
+  if (temperature >= 0 && temperature <= 1000) {
+    simulationState.temperature = temperature;
+    res.json({ success: true, temperature: simulationState.temperature });
+  } else {
+    res.status(400).json({ error: 'Temperature must be between 0 and 1000K' });
+  }
+});
+
+app.post('/api/pressure', (req, res) => {
+  const { pressure } = req.body;
+  if (pressure >= 0 && pressure <= 10) {
+    simulationState.pressure = pressure;
+    res.json({ success: true, pressure: simulationState.pressure });
+  } else {
+    res.status(400).json({ error: 'Pressure must be between 0 and 10 atm' });
+  }
+});
+
+app.post('/api/experiment', (req, res) => {
+  const { experiment, action } = req.body;
+  if (simulationState.experiments[experiment]) {
+    if (action === 'start') {
+      simulationState.experiments[experiment].active = true;
+    } else if (action === 'stop') {
+      simulationState.experiments[experiment].active = false;
+    }
+    res.json({ success: true, experiment, active: simulationState.experiments[experiment].active });
+  } else {
+    res.status(400).json({ error: 'Invalid experiment' });
+  }
+});
+
 // Socket.IO connection handling
 io.on('connection', (socket) => {
   console.log('New quantum observer connected:', socket.id);
@@ -410,6 +661,20 @@ io.on('connection', (socket) => {
     generateParticles();
     socket.emit('simulationUpdate', simulationState);
   });
+  
+  socket.on('startExperiment', (experiment) => {
+    if (simulationState.experiments[experiment]) {
+      simulationState.experiments[experiment].active = true;
+      socket.emit('simulationUpdate', simulationState);
+    }
+  });
+  
+  socket.on('stopExperiment', (experiment) => {
+    if (simulationState.experiments[experiment]) {
+      simulationState.experiments[experiment].active = false;
+      socket.emit('simulationUpdate', simulationState);
+    }
+  });
 });
 
 // Initialize particles
@@ -427,4 +692,7 @@ server.listen(PORT, () => {
   console.log(`🔬 Simulation Mode: ${simulationState.simulationMode}`);
   console.log(`🌊 Active Particle Types: ${simulationState.activeTypes.join(', ')}`);
   console.log(`⚡ Quantum Fields: ${Object.keys(simulationState.fields).join(', ')}`);
+  console.log(`🌡️  Temperature: ${simulationState.temperature}K`);
+  console.log(`💨 Pressure: ${simulationState.pressure}atm`);
+  console.log(`🧪 Experiments: ${Object.keys(simulationState.experiments).join(', ')}`);
 });
