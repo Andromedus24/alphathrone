@@ -1,0 +1,28 @@
+{
+  "name": "quantum-chaos-simulator",
+  "version": "1.0.0",
+  "description": "A mind-bending quantum chaos simulator with psychedelic visualizations",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "webpack --mode production",
+    "test": "jest"
+  },
+  "keywords": ["quantum", "chaos", "simulation", "physics", "visualization", "psychedelic"],
+  "author": "Quantum Chaos Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2",
+    "three": "^0.155.0",
+    "mathjs": "^11.11.0",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "jest": "^29.6.2"
+  }
+}
