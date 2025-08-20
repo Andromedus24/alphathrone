@@ -95,6 +95,27 @@ let simulationState = {
     encryptedMessages: [],
     quantumKeyDistribution: false,
     eavesdropping: false
+  },
+  multiverse: {
+    universes: [],
+    activeUniverse: 0,
+    quantumBranches: [],
+    dimensionalPortals: [],
+    parallelTimelines: [],
+    universeCollisions: []
+  },
+  timeDilation: {
+    relativisticEffects: true,
+    gravitationalTimeDilation: false,
+    velocityTimeDilation: false,
+    timeParadoxes: []
+  },
+  quantumEntanglement: {
+    bellStates: [],
+    GHZStates: [],
+    clusterStates: [],
+    entanglementSwapping: false,
+    quantumRepeaters: []
   }
 };
 
