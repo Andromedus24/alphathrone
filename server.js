@@ -435,6 +435,30 @@ let simulationState = {
     adiabaticComputing: false,
     variationalMethods: false,
     quantumApproximate: false
+  },
+  quantumCryptography: {
+    bb84: false,
+    ekert91: false,
+    bbm92: false,
+    quantumKeyDistribution: false,
+    quantumDigitalSignatures: false,
+    quantumCommitment: false
+  },
+  postQuantumCryptography: {
+    latticeBased: false,
+    codeBased: false,
+    multivariate: false,
+    hashBased: false,
+    isogenyBased: false,
+    quantumResistant: false
+  },
+  quantumResistantAlgorithms: {
+    ntrulpr: false,
+    saber: false,
+    kyber: false,
+    dilithium: false,
+    falcon: false,
+    sphincs: false
   }
 };
 
