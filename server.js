@@ -1327,6 +1327,27 @@ let simulationState = {
     quantumPolicies: false,
     quantumGuidelines: false,
     quantumEnforcement: false
+  },
+  quantumGovernance: {
+    quantumPolicies: false,
+    quantumProcedures: false,
+    quantumControls: false,
+    quantumOversight: false,
+    quantumAccountability: false
+  },
+  quantumOversight: {
+    quantumMonitoring: false,
+    quantumSupervision: false,
+    quantumReview: false,
+    quantumAudit: false,
+    quantumInspection: false
+  },
+  quantumAccountability: {
+    quantumResponsibility: false,
+    quantumLiability: false,
+    quantumObligation: false,
+    quantumDuty: false,
+    quantumCommitment: false
   }
 };
 
