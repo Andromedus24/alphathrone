@@ -740,6 +740,27 @@ let simulationState = {
     quantumThemes: false,
     quantumMessages: false
   },
+  quantumDesign: {
+    quantumGraphics: false,
+    quantumInterfaces: false,
+    quantumUserExperience: false,
+    quantumVisualization: false,
+    quantumAesthetics: false
+  },
+  quantumArchitecture: {
+    quantumBuildings: false,
+    quantumStructures: false,
+    quantumSpaces: false,
+    quantumForms: false,
+    quantumFunction: false
+  },
+  quantumUrbanPlanning: {
+    quantumCities: false,
+    quantumInfrastructure: false,
+    quantumTransportation: false,
+    quantumSustainability: false,
+    quantumInnovation: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
