@@ -433,6 +433,25 @@ class AdvancedQuantumChaosSimulator {
         document.getElementById('collapsedCount').textContent = this.simulationData.quantumState.collapsedCount;
         document.getElementById('uncertainty').textContent = this.simulationData.quantumState.uncertainty.toFixed(2);
         document.getElementById('coherence').textContent = this.simulationData.quantumState.coherence.toFixed(2);
+        
+        // Update advanced field statistics
+        if (this.simulationData.fields.strong) {
+            document.getElementById('strongForce').textContent = this.simulationData.fields.strong.strength.toFixed(2);
+        }
+        if (this.simulationData.fields.weak) {
+            document.getElementById('weakForce').textContent = this.simulationData.fields.weak.strength.toFixed(2);
+        }
+        
+        // Update spacetime curvature
+        if (this.simulationData.spacetimeCurvature) {
+            document.getElementById('spacetimeCurvature').textContent = 
+                `(${this.simulationData.spacetimeCurvature.x.toFixed(3)}, ${this.simulationData.spacetimeCurvature.y.toFixed(3)}, ${this.simulationData.spacetimeCurvature.z.toFixed(3)})`;
+        }
+        
+        // Update spin network count
+        if (this.simulationData.spinNetworks) {
+            document.getElementById('spinNetworks').textContent = this.simulationData.spinNetworks.length;
+        }
     }
 
     updateParticles() {
