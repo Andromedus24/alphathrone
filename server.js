@@ -290,6 +290,39 @@ let simulationState = {
     diffusion: 0,
     quantumHall: false,
     andersonLocalization: false
+  },
+  quantumThermodynamics: {
+    temperature: 300,
+    pressure: 1.0,
+    volume: 1.0,
+    internalEnergy: 0,
+    enthalpy: 0,
+    gibbsFreeEnergy: 0,
+    helmholtzFreeEnergy: 0
+  },
+  statisticalMechanics: {
+    partitionFunction: 0,
+    canonicalEnsemble: false,
+    grandCanonical: false,
+    microcanonical: false,
+    boltzmannDistribution: false,
+    fermiDirac: false,
+    boseEinstein: false
+  },
+  entropy: {
+    thermodynamic: 0,
+    information: 0,
+    vonNeumann: 0,
+    renyi: 0,
+    tsallis: 0,
+    maxEntropy: 0
+  },
+  quantumFluids: {
+    boseEinsteinCondensate: false,
+    fermiLiquid: false,
+    superfluid: false,
+    quantumVortex: false,
+    solitons: []
   }
 };
 
