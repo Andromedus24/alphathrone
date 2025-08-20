@@ -170,6 +170,33 @@ let simulationState = {
     susyBreaking: false,
     rParity: true,
     neutralinos: []
+  },
+  quantumBiology: {
+    photosynthesis: false,
+    birdNavigation: false,
+    olfaction: false,
+    enzymeCatalysis: false,
+    quantumCoherence: false
+  },
+  consciousness: {
+    quantumMind: false,
+    orchestratedObjectiveReduction: false,
+    microtubules: [],
+    quantumCoherence: false,
+    freeWill: false
+  },
+  neuralNetworks: {
+    quantumNeurons: [],
+    synapticPlasticity: false,
+    learningRate: 0.01,
+    backpropagation: false,
+    quantumLearning: false
+  },
+  artificialIntelligence: {
+    quantumAI: false,
+    machineLearning: false,
+    neuralEvolution: false,
+    consciousnessEmergence: false
   }
 };
 
