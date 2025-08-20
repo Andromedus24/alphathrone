@@ -564,6 +564,27 @@ let simulationState = {
     carbonSequestration: false,
     renewableEnergy: false,
     sustainability: false
+  },
+  quantumEnergy: {
+    fusionPower: false,
+    quantumBatteries: false,
+    quantumSolar: false,
+    quantumNuclear: false,
+    quantumStorage: false
+  },
+  quantumSpace: {
+    spaceExploration: false,
+    satelliteNavigation: false,
+    quantumCommunication: false,
+    quantumSensors: false,
+    quantumPropulsion: false
+  },
+  quantumDefense: {
+    quantumRadar: false,
+    quantumStealth: false,
+    quantumEncryption: false,
+    quantumSurveillance: false,
+    quantumWeapons: false
   }
 };
 
