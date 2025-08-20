@@ -1369,6 +1369,27 @@ let simulationState = {
     quantumContainment: false,
     quantumEradication: false,
     quantumRecovery: false
+  },
+  quantumDataCollection: {
+    quantumSensors: false,
+    quantumSources: false,
+    quantumStreams: false,
+    quantumStorage: false,
+    quantumRetrieval: false
+  },
+  quantumProcessing: {
+    quantumAlgorithms: false,
+    quantumComputation: false,
+    quantumTransformation: false,
+    quantumManipulation: false,
+    quantumCalculation: false
+  },
+  quantumAnalysis: {
+    quantumPatterns: false,
+    quantumTrends: false,
+    quantumInsights: false,
+    quantumCorrelations: false,
+    quantumPredictions: false
   }
 };
 
