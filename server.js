@@ -46,7 +46,11 @@ let simulationState = {
     quantumTunneling: { active: false, barrier: null, tunneled: [] },
     particleCollision: { active: false, collisions: [], energy: 0 },
     quantumTeleportation: { active: false, teleported: [], fidelity: 0 },
-    schrodingerCat: { active: false, catState: 'alive', probability: 0.5 }
+    schrodingerCat: { active: false, catState: 'alive', probability: 0.5 },
+    quantumEraser: { active: false, whichPath: [], interference: [], erased: [] },
+    delayedChoice: { active: false, choice: null, measurement: [], delayed: [] },
+    quantumZeno: { active: false, measurements: [], frozen: [], zenoTime: 0 },
+    quantumWalk: { active: false, walkers: [], steps: 0, distribution: [] }
   },
   particleTrails: [],
   quantumState: {
@@ -597,6 +601,26 @@ function updateExperiments() {
   if (experiments.schrodingerCat.active) {
     updateSchrodingerCatExperiment();
   }
+  
+  // Quantum eraser experiment
+  if (experiments.quantumEraser.active) {
+    updateQuantumEraserExperiment();
+  }
+  
+  // Delayed choice experiment
+  if (experiments.delayedChoice.active) {
+    updateDelayedChoiceExperiment();
+  }
+  
+  // Quantum Zeno effect experiment
+  if (experiments.quantumZeno.active) {
+    updateQuantumZenoExperiment();
+  }
+  
+  // Quantum walk experiment
+  if (experiments.quantumWalk.active) {
+    updateQuantumWalkExperiment();
+  }
 }
 
 function updateDoubleSlitExperiment() {
@@ -675,6 +699,106 @@ function updateSchrodingerCatExperiment() {
   
   if (Math.random() < 0.001) {
     experiment.catState = Math.random() < experiment.probability ? 'alive' : 'dead';
+  }
+}
+
+function updateQuantumEraserExperiment() {
+  const experiment = simulationState.experiments.quantumEraser;
+  
+  // Simulate quantum eraser
+  if (Math.random() < 0.001) {
+    const particle = simulationState.particles[Math.floor(Math.random() * simulationState.particles.length)];
+    if (particle) {
+      // Simulate which path the particle took
+      const whichPath = Math.random() < 0.5 ? 'A' : 'B';
+      experiment.whichPath.push(whichPath);
+      
+      // Simulate interference pattern
+      const interference = Math.sin(particle.position.x * 2) * Math.cos(particle.position.y * 3);
+      particle.position.z += interference * 0.01;
+      
+      // Simulate wave function collapse
+      particle.quantumState.superposition = false;
+      particle.quantumState.phase = Math.random() * Math.PI * 2;
+      particle.waveFunction.real = Math.cos(particle.quantumState.phase) * particle.quantumState.amplitude;
+      particle.waveFunction.imaginary = Math.sin(particle.quantumState.phase) * particle.quantumState.amplitude;
+      
+      experiment.erased.push(particle.id);
+    }
+  }
+}
+
+function updateDelayedChoiceExperiment() {
+  const experiment = simulationState.experiments.delayedChoice;
+  
+  // Simulate delayed choice
+  if (Math.random() < 0.001) {
+    const particle = simulationState.particles[Math.floor(Math.random() * simulationState.particles.length)];
+    if (particle) {
+      // Simulate which path the particle took
+      const whichPath = Math.random() < 0.5 ? 'A' : 'B';
+      experiment.choice = whichPath;
+      
+      // Simulate measurement
+      if (whichPath === 'A') {
+        particle.position.x = (Math.random() - 0.5) * 10;
+        particle.position.y = (Math.random() - 0.5) * 10;
+        particle.position.z = (Math.random() - 0.5) * 10;
+      } else {
+        particle.position.x = (Math.random() - 0.5) * 10;
+        particle.position.y = (Math.random() - 0.5) * 10;
+        particle.position.z = (Math.random() - 0.5) * 10;
+      }
+      
+      experiment.measurement.push(particle.id);
+      experiment.delayed.push(particle.id);
+    }
+  }
+}
+
+function updateQuantumZenoExperiment() {
+  const experiment = simulationState.experiments.quantumZeno;
+  
+  // Simulate quantum Zeno effect
+  if (Math.random() < 0.001) {
+    const particle = simulationState.particles[Math.floor(Math.random() * simulationState.particles.length)];
+    if (particle) {
+      // Simulate freezing of particle
+      particle.quantumState.superposition = false;
+      particle.quantumState.phase = Math.random() * Math.PI * 2;
+      particle.waveFunction.real = Math.cos(particle.quantumState.phase) * particle.quantumState.amplitude;
+      particle.waveFunction.imaginary = Math.sin(particle.quantumState.phase) * particle.quantumState.amplitude;
+      
+      experiment.frozen.push(particle.id);
+      experiment.zenoTime += 0.016; // Increment time
+    }
+  }
+}
+
+function updateQuantumWalkExperiment() {
+  const experiment = simulationState.experiments.quantumWalk;
+  
+  // Simulate quantum walk
+  if (Math.random() < 0.001) {
+    const particle = simulationState.particles[Math.floor(Math.random() * simulationState.particles.length)];
+    if (particle) {
+      // Simulate step in a random direction
+      const stepSize = 0.1 + Math.random() * 0.5;
+      const angle = Math.random() * Math.PI * 2;
+      
+      particle.position.x += Math.cos(angle) * stepSize;
+      particle.position.y += Math.sin(angle) * stepSize;
+      particle.position.z += (Math.random() - 0.5) * stepSize;
+      
+      experiment.walkers.push(particle.id);
+      experiment.steps++;
+      
+      // Simulate wave function collapse
+      particle.quantumState.superposition = false;
+      particle.quantumState.phase = Math.random() * Math.PI * 2;
+      particle.waveFunction.real = Math.cos(particle.quantumState.phase) * particle.quantumState.amplitude;
+      particle.waveFunction.imaginary = Math.sin(particle.quantumState.phase) * particle.quantumState.amplitude;
+    }
   }
 }
 
