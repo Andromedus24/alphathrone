@@ -197,6 +197,37 @@ let simulationState = {
     machineLearning: false,
     neuralEvolution: false,
     consciousnessEmergence: false
+  },
+  quantumChemistry: {
+    molecules: [],
+    orbitals: [],
+    chemicalBonds: [],
+    reactionPathways: [],
+    transitionStates: [],
+    quantumTunneling: false
+  },
+  molecularDynamics: {
+    atoms: [],
+    bonds: [],
+    forces: [],
+    temperature: 300,
+    pressure: 1.0,
+    timeStep: 0.001
+  },
+  chemicalReactions: {
+    reactants: [],
+    products: [],
+    catalysts: [],
+    activationEnergy: 0,
+    reactionRate: 0,
+    equilibrium: false
+  },
+  spectroscopy: {
+    absorption: false,
+    emission: false,
+    raman: false,
+    infrared: false,
+    ultraviolet: false
   }
 };
 
