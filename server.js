@@ -753,6 +753,27 @@ let simulationState = {
     quantumTuringMachines: false,
     quantumCircuits: false,
     quantumGates: false
+  },
+  quantumNanotechnology: {
+    quantumDots: false,
+    quantumWires: false,
+    quantumWells: false,
+    quantumDevices: false,
+    quantumAssembly: false
+  },
+  quantumRobotics: {
+    quantumSensors: false,
+    quantumActuators: false,
+    quantumControl: false,
+    quantumLearning: false,
+    quantumAdaptation: false
+  },
+  quantumAutomation: {
+    quantumManufacturing: false,
+    quantumQuality: false,
+    quantumMaintenance: false,
+    quantumOptimization: false,
+    quantumEfficiency: false
   }
 };
 
