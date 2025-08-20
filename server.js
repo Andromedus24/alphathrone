@@ -394,6 +394,27 @@ let simulationState = {
     squeezedStates: false,
     noiselessAmplification: false,
     quantumEnhanced: false
+  },
+  quantumNetworks: {
+    nodes: [],
+    links: [],
+    routing: false,
+    quantumInternet: false,
+    distributedComputing: false,
+    quantumCloud: false
+  },
+  quantumInternet: {
+    quantumRouters: [],
+    quantumRepeaters: [],
+    quantumMemories: [],
+    entanglementSwapping: false,
+    quantumTeleportation: false
+  },
+  distributedQuantumComputing: {
+    clusters: [],
+    loadBalancing: false,
+    faultTolerance: false,
+    quantumSharding: false
   }
 };
 
