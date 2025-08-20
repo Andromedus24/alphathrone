@@ -711,6 +711,27 @@ let simulationState = {
     quantumSurfaces: false,
     quantumHomology: false,
     quantumCohomology: false
+  },
+  quantumProbability: {
+    quantumRandomness: false,
+    quantumUncertainty: false,
+    quantumDistributions: false,
+    quantumMoments: false,
+    quantumCorrelations: false
+  },
+  quantumStatistics: {
+    quantumEnsembles: false,
+    quantumDistributions: false,
+    quantumAverages: false,
+    quantumFluctuations: false,
+    quantumCorrelations: false
+  },
+  quantumInformationTheory: {
+    quantumEntropy: false,
+    quantumMutualInformation: false,
+    quantumChannelCapacity: false,
+    quantumDataCompression: false,
+    quantumErrorCorrection: false
   }
 };
 
