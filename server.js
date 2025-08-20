@@ -1390,6 +1390,27 @@ let simulationState = {
     quantumInsights: false,
     quantumCorrelations: false,
     quantumPredictions: false
+  },
+  quantumVisualization: {
+    quantumCharts: false,
+    quantumGraphs: false,
+    quantumMaps: false,
+    quantumDiagrams: false,
+    quantumModels: false
+  },
+  quantumReporting: {
+    quantumMetrics: false,
+    quantumKPIs: false,
+    quantumTrends: false,
+    quantumInsights: false,
+    quantumRecommendations: false
+  },
+  quantumDashboards: {
+    quantumOverview: false,
+    quantumDetails: false,
+    quantumFilters: false,
+    quantumDrillDown: false,
+    quantumRealTime: false
   }
 };
 
