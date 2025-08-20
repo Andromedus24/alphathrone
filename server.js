@@ -690,6 +690,27 @@ let simulationState = {
     quantumMeaning: false,
     quantumContext: false,
     quantumInterpretation: false
+  },
+  quantumMathematics: {
+    quantumAlgebra: false,
+    quantumCalculus: false,
+    quantumAnalysis: false,
+    quantumNumberTheory: false,
+    quantumCombinatorics: false
+  },
+  quantumGeometry: {
+    quantumSpaces: false,
+    quantumManifolds: false,
+    quantumCurvature: false,
+    quantumMetrics: false,
+    quantumSymmetries: false
+  },
+  quantumTopology: {
+    quantumInvariants: false,
+    quantumKnots: false,
+    quantumSurfaces: false,
+    quantumHomology: false,
+    quantumCohomology: false
   }
 };
 
