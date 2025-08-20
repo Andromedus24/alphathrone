@@ -866,6 +866,27 @@ let simulationState = {
     quantumImprovements: false,
     quantumOptimization: false
   },
+  quantumSecurity: {
+    quantumEncryption: false,
+    quantumAuthentication: false,
+    quantumAuthorization: false,
+    quantumIntegrity: false,
+    quantumConfidentiality: false
+  },
+  quantumPrivacy: {
+    quantumDataProtection: false,
+    quantumAnonymization: false,
+    quantumPseudonymization: false,
+    quantumConsent: false,
+    quantumRights: false
+  },
+  quantumProtection: {
+    quantumFirewalls: false,
+    quantumIntrusion: false,
+    quantumMalware: false,
+    quantumThreats: false,
+    quantumVulnerabilities: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
