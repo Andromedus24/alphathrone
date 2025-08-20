@@ -501,6 +501,27 @@ let simulationState = {
     quantumEquilibrium: false,
     quantumMarkets: false,
     quantumPricing: false
+  },
+  quantumLogistics: {
+    quantumRouting: false,
+    quantumScheduling: false,
+    quantumInventory: false,
+    quantumWarehousing: false,
+    quantumDistribution: false
+  },
+  quantumTransportation: {
+    quantumTraffic: false,
+    quantumFleet: false,
+    quantumNavigation: false,
+    quantumRouting: false,
+    quantumOptimization: false
+  },
+  quantumSupplyChain: {
+    quantumProcurement: false,
+    quantumProduction: false,
+    quantumDistribution: false,
+    quantumRetail: false,
+    quantumReverse: false
   }
 };
 
