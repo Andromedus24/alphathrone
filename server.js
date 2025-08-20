@@ -415,6 +415,26 @@ let simulationState = {
     loadBalancing: false,
     faultTolerance: false,
     quantumSharding: false
+  },
+  quantumMachineLearning: {
+    quantumNeuralNetworks: false,
+    quantumKernels: false,
+    quantumFeatureMaps: false,
+    quantumClassifiers: false,
+    quantumRegression: false
+  },
+  quantumNeuralNetworks: {
+    layers: [],
+    weights: [],
+    activations: [],
+    backpropagation: false,
+    quantumGradients: false
+  },
+  quantumOptimization: {
+    quantumAnnealing: false,
+    adiabaticComputing: false,
+    variationalMethods: false,
+    quantumApproximate: false
   }
 };
 
