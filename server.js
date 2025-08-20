@@ -761,6 +761,27 @@ let simulationState = {
     quantumSustainability: false,
     quantumInnovation: false
   },
+  quantumFashion: {
+    quantumClothing: false,
+    quantumAccessories: false,
+    quantumTextiles: false,
+    quantumStyle: false,
+    quantumTrends: false
+  },
+  quantumTextiles: {
+    quantumFibers: false,
+    quantumFabrics: false,
+    quantumDyes: false,
+    quantumPatterns: false,
+    quantumProperties: false
+  },
+  quantumMaterialsScience: {
+    quantumPolymers: false,
+    quantumComposites: false,
+    quantumCeramics: false,
+    quantumMetals: false,
+    quantumAlloys: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
