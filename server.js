@@ -627,6 +627,27 @@ let simulationState = {
     quantumDesign: false,
     quantumArchitecture: false,
     quantumFashion: false
+  },
+  quantumPhilosophy: {
+    quantumRealism: false,
+    quantumIdealism: false,
+    quantumPhenomenology: false,
+    quantumExistentialism: false,
+    quantumMetaphysics: false
+  },
+  quantumConsciousness: {
+    quantumMind: false,
+    quantumAwareness: false,
+    quantumSubjectivity: false,
+    quantumFreeWill: false,
+    quantumAgency: false
+  },
+  quantumSpirituality: {
+    quantumMeditation: false,
+    quantumEnlightenment: false,
+    quantumTranscendence: false,
+    quantumUnity: false,
+    quantumDivinity: false
   }
 };
 
