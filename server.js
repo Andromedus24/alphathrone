@@ -1034,6 +1034,27 @@ let simulationState = {
     quantumBackup: false,
     quantumDisaster: false
   },
+  quantumAvailability: {
+    quantumUptime: false,
+    quantumDowntime: false,
+    quantumSLA: false,
+    quantumPerformance: false,
+    quantumAccessibility: false
+  },
+  quantumReliability: {
+    quantumConsistency: false,
+    quantumAccuracy: false,
+    quantumPrecision: false,
+    quantumStability: false,
+    quantumDependability: false
+  },
+  quantumDurability: {
+    quantumLongevity: false,
+    quantumPersistence: false,
+    quantumEndurance: false,
+    quantumRobustness: false,
+    quantumStrength: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
