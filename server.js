@@ -635,6 +635,27 @@ let simulationState = {
     quantumFactChecking: false,
     quantumTruth: false
   },
+  quantumLaw: {
+    quantumLegislation: false,
+    quantumRegulation: false,
+    quantumCompliance: false,
+    quantumEnforcement: false,
+    quantumJustice: false
+  },
+  quantumGovernance: {
+    quantumDemocracy: false,
+    quantumTransparency: false,
+    quantumAccountability: false,
+    quantumParticipation: false,
+    quantumInnovation: false
+  },
+  quantumPolicy: {
+    quantumDevelopment: false,
+    quantumImplementation: false,
+    quantumEvaluation: false,
+    quantumReform: false,
+    quantumProgress: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
