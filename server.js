@@ -648,6 +648,27 @@ let simulationState = {
     quantumTranscendence: false,
     quantumUnity: false,
     quantumDivinity: false
+  },
+  quantumSociology: {
+    quantumSociety: false,
+    quantumCulture: false,
+    quantumPolitics: false,
+    quantumEconomics: false,
+    quantumHistory: false
+  },
+  quantumPsychology: {
+    quantumBehavior: false,
+    quantumCognition: false,
+    quantumEmotion: false,
+    quantumPersonality: false,
+    quantumTherapy: false
+  },
+  quantumAnthropology: {
+    quantumEvolution: false,
+    quantumCulture: false,
+    quantumLanguage: false,
+    quantumRitual: false,
+    quantumBelief: false
   }
 };
 
