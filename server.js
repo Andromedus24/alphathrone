@@ -374,6 +374,26 @@ let simulationState = {
     darkEnergy: false,
     cosmicMicrowave: false,
     gravitationalWaves: false
+  },
+  quantumSensors: {
+    atomicClocks: false,
+    magnetometers: false,
+    gravimeters: false,
+    interferometers: false,
+    quantumRadar: false
+  },
+  quantumImaging: {
+    ghostImaging: false,
+    quantumLithography: false,
+    quantumMicroscopy: false,
+    quantumTomography: false,
+    quantumHolography: false
+  },
+  quantumMetrology: {
+    heisenbergLimit: false,
+    squeezedStates: false,
+    noiselessAmplification: false,
+    quantumEnhanced: false
   }
 };
 
