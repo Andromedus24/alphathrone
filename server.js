@@ -116,6 +116,33 @@ let simulationState = {
     clusterStates: [],
     entanglementSwapping: false,
     quantumRepeaters: []
+  },
+  blackHoles: {
+    singularities: [],
+    eventHorizons: [],
+    accretionDisks: [],
+    hawkingRadiation: false,
+    informationParadox: false,
+    holographicPrinciple: false
+  },
+  wormholes: {
+    throats: [],
+    mouths: [],
+    traversable: false,
+    timeMachines: [],
+    causalityViolations: []
+  },
+  darkMatter: {
+    particles: [],
+    halos: [],
+    distribution: 'spherical',
+    interactionStrength: 0.1
+  },
+  darkEnergy: {
+    density: 0.7,
+    equationOfState: -1,
+    phantomEnergy: false,
+    bigRip: false
   }
 };
 
