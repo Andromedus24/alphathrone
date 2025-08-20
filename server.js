@@ -677,6 +677,27 @@ let simulationState = {
     quantumWisdom: false,
     quantumExcellence: false
   },
+  quantumSpirituality: {
+    quantumMeditation: false,
+    quantumEnlightenment: false,
+    quantumTranscendence: false,
+    quantumUnity: false,
+    quantumDivinity: false
+  },
+  quantumReligion: {
+    quantumFaith: false,
+    quantumWorship: false,
+    quantumRitual: false,
+    quantumCommunity: false,
+    quantumSacred: false
+  },
+  quantumFaith: {
+    quantumBelief: false,
+    quantumTrust: false,
+    quantumHope: false,
+    quantumLove: false,
+    quantumGrace: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
@@ -711,13 +732,6 @@ let simulationState = {
     quantumSubjectivity: false,
     quantumFreeWill: false,
     quantumAgency: false
-  },
-  quantumSpirituality: {
-    quantumMeditation: false,
-    quantumEnlightenment: false,
-    quantumTranscendence: false,
-    quantumUnity: false,
-    quantumDivinity: false
   },
   quantumSociology: {
     quantumSociety: false,
