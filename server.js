@@ -1299,6 +1299,34 @@ let simulationState = {
     quantumLabs: false,
     quantumResearch: false,
     quantumInnovation: false
+  },
+  quantumCertification: {
+    quantumStandards: false,
+    quantumCompliance: false,
+    quantumQuality: false,
+    quantumApproval: false,
+    quantumRecognition: false
+  },
+  quantumCompliance: {
+    quantumRegulations: false,
+    quantumLaws: false,
+    quantumPolicies: false,
+    quantumGuidelines: false,
+    quantumRequirements: false
+  },
+  quantumStandards: {
+    quantumSpecifications: false,
+    quantumProtocols: false,
+    quantumFormats: false,
+    quantumInterfaces: false,
+    quantumRequirements: false
+  },
+  quantumRegulations: {
+    quantumRules: false,
+    quantumLaws: false,
+    quantumPolicies: false,
+    quantumGuidelines: false,
+    quantumEnforcement: false
   }
 };
 
