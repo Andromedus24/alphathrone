@@ -543,6 +543,27 @@ let simulationState = {
     quantumProteomics: false,
     quantumMetabolomics: false,
     quantumPharmacogenomics: false
+  },
+  quantumAgriculture: {
+    cropOptimization: false,
+    soilAnalysis: false,
+    pestControl: false,
+    waterManagement: false,
+    yieldPrediction: false
+  },
+  quantumEnvironmental: {
+    airQuality: false,
+    waterQuality: false,
+    soilContamination: false,
+    biodiversity: false,
+    ecosystemHealth: false
+  },
+  quantumClimate: {
+    weatherPrediction: false,
+    climateModeling: false,
+    carbonSequestration: false,
+    renewableEnergy: false,
+    sustainability: false
   }
 };
 
