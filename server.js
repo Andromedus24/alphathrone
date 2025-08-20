@@ -606,6 +606,27 @@ let simulationState = {
     discoveries: [],
     breakthroughs: [],
     futureApplications: []
+  },
+  quantumArt: {
+    quantumPaintings: [],
+    quantumSculptures: [],
+    quantumInstallations: [],
+    quantumPerformance: false,
+    quantumAesthetics: false
+  },
+  quantumMusic: {
+    quantumComposition: false,
+    quantumHarmony: false,
+    quantumRhythm: false,
+    quantumInstruments: [],
+    quantumConcerts: false
+  },
+  quantumCreativity: {
+    quantumPoetry: false,
+    quantumLiterature: false,
+    quantumDesign: false,
+    quantumArchitecture: false,
+    quantumFashion: false
   }
 };
 
