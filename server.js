@@ -971,6 +971,27 @@ let simulationState = {
     quantumStorage: false,
     quantumAnalysis: false
   },
+  quantumAutomation: {
+    quantumProcesses: false,
+    quantumWorkflows: false,
+    quantumTasks: false,
+    quantumDecisions: false,
+    quantumActions: false
+  },
+  quantumOrchestration: {
+    quantumServices: false,
+    quantumComponents: false,
+    quantumIntegration: false,
+    quantumCoordination: false,
+    quantumManagement: false
+  },
+  quantumWorkflow: {
+    quantumSteps: false,
+    quantumSequences: false,
+    quantumDependencies: false,
+    quantumParallelization: false,
+    quantumOptimization: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
