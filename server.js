@@ -530,110 +530,26 @@ let simulationState = {
     quantumOptimization: false,
     quantumInnovation: false
   },
-  quantumSupplyChain: {
-    quantumProcurement: false,
-    quantumProduction: false,
-    quantumDistribution: false,
-    quantumRetail: false,
-    quantumReverse: false
-  },
-  quantumMedicine: {
-    quantumDiagnostics: false,
-    quantumImaging: false,
-    quantumTherapy: false,
-    quantumDrugDelivery: false,
-    quantumMonitoring: false
-  },
-  quantumDrugDiscovery: {
-    molecularDocking: false,
-    drugDesign: false,
-    toxicityPrediction: false,
-    pharmacokinetics: false,
-    drugRepurposing: false
-  },
-  quantumHealthcare: {
-    personalizedMedicine: false,
-    quantumGenomics: false,
-    quantumProteomics: false,
-    quantumMetabolomics: false,
-    quantumPharmacogenomics: false
-  },
-  quantumAgriculture: {
-    quantumCrops: false,
-    quantumSoil: false,
-    quantumWater: false,
-    quantumClimate: false,
-    quantumYield: false
-  },
-  quantumFoodProduction: {
-    quantumFarming: false,
-    quantumProcessing: false,
-    quantumPackaging: false,
-    quantumDistribution: false,
-    quantumQuality: false
-  },
-  quantumSustainability: {
-    quantumEnergy: false,
-    quantumResources: false,
-    quantumWaste: false,
-    quantumRecycling: false,
-    quantumConservation: false
-  },
-  quantumEnvironmental: {
-    airQuality: false,
-    waterQuality: false,
-    soilContamination: false,
-    biodiversity: false,
-    ecosystemHealth: false
-  },
-  quantumClimate: {
-    weatherPrediction: false,
-    climateModeling: false,
-    carbonSequestration: false,
-    renewableEnergy: false,
-    sustainability: false
-  },
-  quantumEnergy: {
-    fusionPower: false,
-    quantumBatteries: false,
-    quantumSolar: false,
-    quantumNuclear: false,
-    quantumStorage: false
-  },
-  quantumSpace: {
-    spaceExploration: false,
-    satelliteNavigation: false,
-    quantumCommunication: false,
-    quantumSensors: false,
-    quantumPropulsion: false
-  },
-  quantumDefense: {
-    quantumRadar: false,
-    quantumStealth: false,
-    quantumEncryption: false,
-    quantumSurveillance: false,
-    quantumWeapons: false
-  },
   quantumEducation: {
-    quantumCourses: [],
-    quantumLabs: [],
-    quantumSimulations: [],
-    quantumTutorials: [],
-    quantumCertification: false
+    quantumSchools: false,
+    quantumUniversities: false,
+    quantumTraining: false,
+    quantumCertification: false,
+    quantumLifelongLearning: false
   },
   quantumResearch: {
-    fundamentalPhysics: false,
-    appliedQuantum: false,
-    interdisciplinary: false,
-    collaboration: false,
-    innovation: false
+    quantumLabs: false,
+    quantumInstitutes: false,
+    quantumCollaboration: false,
+    quantumFunding: false,
+    quantumPublications: false
   },
   quantumInnovation: {
-    patents: [],
-    publications: [],
-    discoveries: [],
-    breakthroughs: [],
-    futureApplications: []
+    quantumStartups: false,
+    quantumIncubators: false,
+    quantumAccelerators: false,
+    quantumVentures: false,
+    quantumEcosystem: false
   },
   quantumArt: {
     quantumPaintings: [],
