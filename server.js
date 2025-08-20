@@ -459,6 +459,27 @@ let simulationState = {
     dilithium: false,
     falcon: false,
     sphincs: false
+  },
+  quantumSimulation: {
+    quantumChemistry: false,
+    quantumMaterials: false,
+    quantumBiology: false,
+    quantumFinance: false,
+    quantumLogistics: false
+  },
+  quantumChemistrySimulation: {
+    molecularOrbitals: false,
+    chemicalBonds: false,
+    reactionPathways: false,
+    transitionStates: false,
+    quantumTunneling: false
+  },
+  quantumMaterialsModeling: {
+    bandStructure: false,
+    densityOfStates: false,
+    phononSpectra: false,
+    magneticProperties: false,
+    opticalProperties: false
   }
 };
 
