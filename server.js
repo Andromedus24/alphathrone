@@ -323,6 +323,37 @@ let simulationState = {
     superfluid: false,
     quantumVortex: false,
     solitons: []
+  },
+  quantumInformation: {
+    qubits: [],
+    quantumBytes: [],
+    quantumMemory: [],
+    quantumProcessor: false,
+    quantumBus: false
+  },
+  errorCorrection: {
+    shorCode: false,
+    steaneCode: false,
+    surfaceCode: false,
+    stabilizerCodes: [],
+    faultTolerance: false,
+    threshold: 0.01
+  },
+  quantumCommunication: {
+    quantumChannels: [],
+    quantumRepeaters: [],
+    quantumMemories: [],
+    entanglementDistillation: false,
+    quantumKeyDistribution: false,
+    quantumTeleportation: false
+  },
+  quantumAlgorithms: {
+    grover: false,
+    shor: false,
+    deutschJozsa: false,
+    quantumFourierTransform: false,
+    quantumPhaseEstimation: false,
+    variationalQuantumEigensolver: false
   }
 };
 
