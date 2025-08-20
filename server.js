@@ -698,6 +698,27 @@ let simulationState = {
     quantumLove: false,
     quantumGrace: false
   },
+  quantumCulture: {
+    quantumHeritage: false,
+    quantumTraditions: false,
+    quantumCustoms: false,
+    quantumFestivals: false,
+    quantumCelebrations: false
+  },
+  quantumHeritage: {
+    quantumHistory: false,
+    quantumLegacy: false,
+    quantumPreservation: false,
+    quantumRestoration: false,
+    quantumConservation: false
+  },
+  quantumTraditions: {
+    quantumRituals: false,
+    quantumCeremonies: false,
+    quantumPractices: false,
+    quantumBeliefs: false,
+    quantumValues: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
