@@ -908,6 +908,27 @@ let simulationState = {
     quantumResponse: false,
     quantumRecovery: false
   },
+  quantumAnalytics: {
+    quantumData: false,
+    quantumMetrics: false,
+    quantumTrends: false,
+    quantumPatterns: false,
+    quantumInsights: false
+  },
+  quantumInsights: {
+    quantumUnderstanding: false,
+    quantumKnowledge: false,
+    quantumWisdom: false,
+    quantumIntelligence: false,
+    quantumAwareness: false
+  },
+  quantumIntelligence: {
+    quantumLearning: false,
+    quantumReasoning: false,
+    quantumProblemSolving: false,
+    quantumDecisionMaking: false,
+    quantumCreativity: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
