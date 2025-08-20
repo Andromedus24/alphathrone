@@ -1411,6 +1411,27 @@ let simulationState = {
     quantumFilters: false,
     quantumDrillDown: false,
     quantumRealTime: false
+  },
+  quantumAlerts: {
+    quantumThresholds: false,
+    quantumTriggers: false,
+    quantumEscalation: false,
+    quantumPrioritization: false,
+    quantumResponse: false
+  },
+  quantumNotifications: {
+    quantumMessages: false,
+    quantumChannels: false,
+    quantumDelivery: false,
+    quantumAcknowledgement: false,
+    quantumConfirmation: false
+  },
+  quantumCommunications: {
+    quantumChannels: false,
+    quantumProtocols: false,
+    quantumFormats: false,
+    quantumEncryption: false,
+    quantumAuthentication: false
   }
 };
 
