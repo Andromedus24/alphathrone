@@ -585,6 +585,27 @@ let simulationState = {
     quantumEncryption: false,
     quantumSurveillance: false,
     quantumWeapons: false
+  },
+  quantumEducation: {
+    quantumCourses: [],
+    quantumLabs: [],
+    quantumSimulations: [],
+    quantumTutorials: [],
+    quantumCertification: false
+  },
+  quantumResearch: {
+    fundamentalPhysics: false,
+    appliedQuantum: false,
+    interdisciplinary: false,
+    collaboration: false,
+    innovation: false
+  },
+  quantumInnovation: {
+    patents: [],
+    publications: [],
+    discoveries: [],
+    breakthroughs: [],
+    futureApplications: []
   }
 };
 
