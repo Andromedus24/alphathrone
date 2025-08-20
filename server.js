@@ -992,6 +992,27 @@ let simulationState = {
     quantumParallelization: false,
     quantumOptimization: false
   },
+  quantumIntegration: {
+    quantumAPIs: false,
+    quantumServices: false,
+    quantumSystems: false,
+    quantumPlatforms: false,
+    quantumEcosystems: false
+  },
+  quantumConnectivity: {
+    quantumNetworks: false,
+    quantumProtocols: false,
+    quantumStandards: false,
+    quantumInterfaces: false,
+    quantumChannels: false
+  },
+  quantumInteroperability: {
+    quantumCompatibility: false,
+    quantumStandards: false,
+    quantumProtocols: false,
+    quantumFormats: false,
+    quantumInterfaces: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
