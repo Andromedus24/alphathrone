@@ -1076,6 +1076,27 @@ let simulationState = {
     quantumOrder: false,
     quantumControl: false
   },
+  quantumPrecision: {
+    quantumMeasurement: false,
+    quantumCalibration: false,
+    quantumTolerance: false,
+    quantumResolution: false,
+    quantumSensitivity: false
+  },
+  quantumAccuracy: {
+    quantumTruth: false,
+    quantumValidity: false,
+    quantumCorrectness: false,
+    quantumAuthenticity: false,
+    quantumGenuineness: false
+  },
+  quantumFidelity: {
+    quantumQuality: false,
+    quantumFaithfulness: false,
+    quantumLoyalty: false,
+    quantumDevotion: false,
+    quantumCommitment: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
