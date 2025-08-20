@@ -614,6 +614,27 @@ let simulationState = {
     quantumUniverse: false,
     quantumDimensions: false
   },
+  quantumCommunication: {
+    quantumLanguage: false,
+    quantumTranslation: false,
+    quantumInterpretation: false,
+    quantumDialogue: false,
+    quantumDiscourse: false
+  },
+  quantumMedia: {
+    quantumNews: false,
+    quantumEntertainment: false,
+    quantumEducation: false,
+    quantumInformation: false,
+    quantumStorytelling: false
+  },
+  quantumJournalism: {
+    quantumReporting: false,
+    quantumInvestigation: false,
+    quantumAnalysis: false,
+    quantumFactChecking: false,
+    quantumTruth: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
