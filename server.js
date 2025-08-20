@@ -75,7 +75,27 @@ let simulationState = {
   },
   spinNetworks: [],
   quantumGates: [],
-  spacetimeCurvature: { x: 0, y: 0, z: 0, t: 0 }
+  spacetimeCurvature: { x: 0, y: 0, z: 0, t: 0 },
+  quantumComputing: {
+    qubits: [],
+    quantumCircuits: [],
+    algorithms: ['Grover', 'Shor', 'Deutsch-Jozsa', 'Quantum Fourier Transform'],
+    activeAlgorithm: null,
+    quantumMemory: [],
+    entanglementPairs: []
+  },
+  quantumTeleportation: {
+    stations: [],
+    teleportedParticles: [],
+    fidelity: 0.95,
+    quantumChannels: []
+  },
+  quantumCryptography: {
+    keyPairs: [],
+    encryptedMessages: [],
+    quantumKeyDistribution: false,
+    eavesdropping: false
+  }
 };
 
 // Advanced particle generation with multiple types
