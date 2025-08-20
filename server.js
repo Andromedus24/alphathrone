@@ -719,6 +719,27 @@ let simulationState = {
     quantumBeliefs: false,
     quantumValues: false
   },
+  quantumLiterature: {
+    quantumNovels: false,
+    quantumPoetry: false,
+    quantumDrama: false,
+    quantumEssays: false,
+    quantumCriticism: false
+  },
+  quantumPoetry: {
+    quantumVerse: false,
+    quantumRhythm: false,
+    quantumImagery: false,
+    quantumMetaphor: false,
+    quantumSymbolism: false
+  },
+  quantumStorytelling: {
+    quantumNarratives: false,
+    quantumCharacters: false,
+    quantumPlots: false,
+    quantumThemes: false,
+    quantumMessages: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
