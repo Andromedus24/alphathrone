@@ -551,6 +551,27 @@ let simulationState = {
     quantumVentures: false,
     quantumEcosystem: false
   },
+  quantumEntertainment: {
+    quantumMovies: false,
+    quantumMusic: false,
+    quantumGames: false,
+    quantumShows: false,
+    quantumExperiences: false
+  },
+  quantumGaming: {
+    quantumGraphics: false,
+    quantumPhysics: false,
+    quantumAI: false,
+    quantumMultiplayer: false,
+    quantumVirtualWorlds: false
+  },
+  quantumVirtualReality: {
+    quantumHeadsets: false,
+    quantumControllers: false,
+    quantumEnvironments: false,
+    quantumInteractions: false,
+    quantumPresence: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
