@@ -354,6 +354,26 @@ let simulationState = {
     quantumFourierTransform: false,
     quantumPhaseEstimation: false,
     variationalQuantumEigensolver: false
+  },
+  quantumGravity: {
+    loopQuantumGravity: false,
+    stringTheory: false,
+    causalSets: false,
+    spinFoam: false,
+    quantumRegge: false
+  },
+  holographicPrinciple: {
+    adsCft: false,
+    bulkBoundary: false,
+    entanglementEntropy: 0,
+    ryutakyanagi: false
+  },
+  quantumCosmology: {
+    bigBang: false,
+    inflation: false,
+    darkEnergy: false,
+    cosmicMicrowave: false,
+    gravitationalWaves: false
   }
 };
 
