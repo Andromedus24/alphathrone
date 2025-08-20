@@ -572,6 +572,27 @@ let simulationState = {
     quantumInteractions: false,
     quantumPresence: false
   },
+  quantumSports: {
+    quantumTraining: false,
+    quantumPerformance: false,
+    quantumAnalysis: false,
+    quantumCoaching: false,
+    quantumCompetition: false
+  },
+  quantumFitness: {
+    quantumWorkouts: false,
+    quantumNutrition: false,
+    quantumRecovery: false,
+    quantumMonitoring: false,
+    quantumOptimization: false
+  },
+  quantumWellness: {
+    quantumHealth: false,
+    quantumMindfulness: false,
+    quantumBalance: false,
+    quantumHarmony: false,
+    quantumVitality: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
