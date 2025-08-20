@@ -83,12 +83,18 @@ function generateParticles() {
   simulationState.particles = [];
   simulationState.entanglementGroups = [];
   simulationState.particleTrails = [];
+  simulationState.spinNetworks = [];
+  simulationState.quantumGates = [];
   
   const particleCounts = {
-    electron: 40,
-    photon: 30,
+    electron: 35,
+    photon: 25,
     quark: 20,
-    neutrino: 10
+    neutrino: 10,
+    gluon: 15,
+    wBoson: 8,
+    zBoson: 8,
+    higgs: 5
   };
   
   let particleId = 0;
@@ -110,8 +116,30 @@ function generateParticles() {
   // Create entanglement groups
   createEntanglementGroups();
   
+  // Initialize quantum gates
+  initializeQuantumGates();
+  
   // Initialize quantum state
   updateQuantumState();
+}
+
+function initializeQuantumGates() {
+  // Create quantum gates for advanced operations
+  const gateTypes = ['H', 'X', 'Y', 'Z', 'CNOT', 'SWAP'];
+  
+  for (let i = 0; i < 3; i++) {
+    simulationState.quantumGates.push({
+      id: i,
+      type: gateTypes[Math.floor(Math.random() * gateTypes.length)],
+      position: {
+        x: (Math.random() - 0.5) * 30,
+        y: (Math.random() - 0.5) * 30,
+        z: (Math.random() - 0.5) * 30
+      },
+      active: false,
+      targetParticles: []
+    });
+  }
 }
 
 function createParticle(type, id) {
@@ -969,4 +997,10 @@ server.listen(PORT, () => {
   console.log(`🌡️  Temperature: ${simulationState.temperature}K`);
   console.log(`💨 Pressure: ${simulationState.pressure}atm`);
   console.log(`🧪 Experiments: ${Object.keys(simulationState.experiments).join(', ')}`);
+  console.log(`🔴 Strong Force: ${simulationState.fields.strong.strength}`);
+  console.log(`🟡 Weak Force: ${simulationState.fields.weak.strength}`);
+  console.log(`🕸️  Spin Networks: ${simulationState.spinNetworks.length}`);
+  console.log(`⚛️  Quantum Gates: ${simulationState.quantumGates.length}`);
+  console.log(`🌌 Spacetime Curvature: (${simulationState.spacetimeCurvature.x.toFixed(3)}, ${simulationState.spacetimeCurvature.y.toFixed(3)}, ${simulationState.spacetimeCurvature.z.toFixed(3)})`);
+  console.log(`🚀 ALL ADVANCED FEATURES LOADED AND READY! 🌌⚛️🔬🧪`);
 });
