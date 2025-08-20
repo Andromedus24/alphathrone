@@ -946,6 +946,50 @@ function runSchrodingerCat() {
     }
 }
 
+function runQuantumEraser() {
+    if (window.simulator && window.simulator.socket) {
+        const isActive = window.simulator.experiments.quantumEraser?.active;
+        window.simulator.socket.emit(isActive ? 'stopExperiment' : 'startExperiment', 'quantumEraser');
+        
+        window.simulator.showNotification(
+            isActive ? '🧽 Quantum eraser stopped!' : '🧽 Quantum eraser started!'
+        );
+    }
+}
+
+function runDelayedChoice() {
+    if (window.simulator && window.simulator.socket) {
+        const isActive = window.simulator.experiments.delayedChoice?.active;
+        window.simulator.socket.emit(isActive ? 'stopExperiment' : 'startExperiment', 'delayedChoice');
+        
+        window.simulator.showNotification(
+            isActive ? '⏰ Delayed choice stopped!' : '⏰ Delayed choice started!'
+        );
+    }
+}
+
+function runQuantumZeno() {
+    if (window.simulator && window.simulator.socket) {
+        const isActive = window.simulator.experiments.quantumZeno?.active;
+        window.simulator.socket.emit(isActive ? 'stopExperiment' : 'startExperiment', 'quantumZeno');
+        
+        window.simulator.showNotification(
+            isActive ? '⏸️ Quantum Zeno stopped!' : '⏸️ Quantum Zeno started!'
+        );
+    }
+}
+
+function runQuantumWalk() {
+    if (window.simulator && window.simulator.socket) {
+        const isActive = window.simulator.experiments.quantumWalk?.active;
+        window.simulator.socket.emit(isActive ? 'stopExperiment' : 'startExperiment', 'quantumWalk');
+        
+        window.simulator.showNotification(
+            isActive ? '🚶 Quantum walk stopped!' : '🚶 Quantum walk started!'
+        );
+    }
+}
+
 // Initialize the simulator when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     window.simulator = new AdvancedQuantumChaosSimulator();
@@ -1012,6 +1056,18 @@ document.addEventListener('keydown', (event) => {
             break;
         case 's':
             runSchrodingerCat();
+            break;
+        case 'e':
+            runQuantumEraser();
+            break;
+        case 'd':
+            runDelayedChoice();
+            break;
+        case 'z':
+            runQuantumZeno();
+            break;
+        case 'w':
+            runQuantumWalk();
             break;
     }
 });
