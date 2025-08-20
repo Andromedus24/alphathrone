@@ -143,6 +143,33 @@ let simulationState = {
     equationOfState: -1,
     phantomEnergy: false,
     bigRip: false
+  },
+  quantumFieldTheory: {
+    fields: ['scalar', 'vector', 'spinor', 'tensor'],
+    vacuumEnergy: 0,
+    spontaneousSymmetryBreaking: false,
+    higgsMechanism: true,
+    renormalization: true
+  },
+  stringTheory: {
+    strings: [],
+    branes: [],
+    dimensions: 11,
+    supersymmetry: false,
+    mTheory: false,
+    calabiYau: []
+  },
+  extraDimensions: {
+    compactified: [],
+    kaluzaKlein: false,
+    braneWorld: false,
+    warpedGeometry: false
+  },
+  supersymmetry: {
+    superpartners: [],
+    susyBreaking: false,
+    rParity: true,
+    neutralinos: []
   }
 };
 
