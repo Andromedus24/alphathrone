@@ -1453,6 +1453,27 @@ let simulationState = {
     quantumAnalysis: false,
     quantumFixing: false,
     quantumTesting: false
+  },
+  quantumProfiling: {
+    quantumPerformance: false,
+    quantumMemory: false,
+    quantumCPU: false,
+    quantumNetwork: false,
+    quantumInefficiencies: false
+  },
+  quantumBenchmarking: {
+    quantumSpeed: false,
+    quantumThroughput: false,
+    quantumLatency: false,
+    quantumEfficiency: false,
+    quantumComparison: false
+  },
+  quantumOptimization: {
+    quantumAlgorithms: false,
+    quantumProcesses: false,
+    quantumSystems: false,
+    quantumResources: false,
+    quantumPerformance: false
   }
 };
 
