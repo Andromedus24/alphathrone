@@ -732,6 +732,27 @@ let simulationState = {
     quantumChannelCapacity: false,
     quantumDataCompression: false,
     quantumErrorCorrection: false
+  },
+  quantumChaosTheory: {
+    quantumBilliards: false,
+    quantumMaps: false,
+    quantumScars: false,
+    quantumEigenfunctions: false,
+    quantumLevelStatistics: false
+  },
+  quantumFractals: {
+    quantumMandelbrot: false,
+    quantumJulia: false,
+    quantumSierpinski: false,
+    quantumKoch: false,
+    quantumDimension: false
+  },
+  quantumComplexity: {
+    quantumAlgorithms: false,
+    quantumComplexityClasses: false,
+    quantumTuringMachines: false,
+    quantumCircuits: false,
+    quantumGates: false
   }
 };
 
