@@ -228,6 +228,38 @@ let simulationState = {
     raman: false,
     infrared: false,
     ultraviolet: false
+  },
+  quantumOptics: {
+    photons: [],
+    laserBeams: [],
+    opticalCavities: [],
+    beamSplitters: [],
+    mirrors: [],
+    interferometers: []
+  },
+  photonics: {
+    waveguides: [],
+    opticalFibers: [],
+    photonicCrystals: [],
+    plasmonics: false,
+    metamaterials: false,
+    slowLight: false
+  },
+  laserSystems: {
+    continuousWave: false,
+    pulsed: false,
+    modeLocked: false,
+    qSwitched: false,
+    frequencyDoubled: false,
+    ultrafast: false
+  },
+  opticalEffects: {
+    diffraction: false,
+    interference: false,
+    polarization: false,
+    birefringence: false,
+    opticalActivity: false,
+    nonlinearOptics: false
   }
 };
 
