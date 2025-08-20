@@ -774,6 +774,27 @@ let simulationState = {
     quantumMaintenance: false,
     quantumOptimization: false,
     quantumEfficiency: false
+  },
+  quantumBiotechnology: {
+    quantumDNA: false,
+    quantumProteins: false,
+    quantumEnzymes: false,
+    quantumMetabolism: false,
+    quantumGenetics: false
+  },
+  quantumMedicine: {
+    quantumDiagnostics: false,
+    quantumTherapeutics: false,
+    quantumPrevention: false,
+    quantumRehabilitation: false,
+    quantumWellness: false
+  },
+  quantumHealthcare: {
+    quantumHospitals: false,
+    quantumClinics: false,
+    quantumLabs: false,
+    quantumResearch: false,
+    quantumInnovation: false
   }
 };
 
