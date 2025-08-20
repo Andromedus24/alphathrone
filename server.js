@@ -593,6 +593,27 @@ let simulationState = {
     quantumHarmony: false,
     quantumVitality: false
   },
+  quantumTravel: {
+    quantumTransportation: false,
+    quantumNavigation: false,
+    quantumAccommodation: false,
+    quantumExperiences: false,
+    quantumAdventures: false
+  },
+  quantumTourism: {
+    quantumDestinations: false,
+    quantumAttractions: false,
+    quantumServices: false,
+    quantumGuides: false,
+    quantumMemories: false
+  },
+  quantumExploration: {
+    quantumSpace: false,
+    quantumOcean: false,
+    quantumEarth: false,
+    quantumUniverse: false,
+    quantumDimensions: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
