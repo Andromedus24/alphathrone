@@ -232,6 +232,51 @@ function updateQuantumFields() {
   // Quantum field fluctuations
   simulationState.fields.quantum.entanglement = 0.3 + 0.2 * Math.sin(time * 0.7);
   simulationState.fields.quantum.superposition = 0.7 + 0.2 * Math.cos(time * 0.4);
+  
+  // Strong nuclear force field
+  simulationState.fields.strong.strength = 0.8 + 0.2 * Math.sin(time * 0.6);
+  simulationState.fields.strong.gluonField = 0.6 + 0.3 * Math.cos(time * 0.8);
+  
+  // Weak nuclear force field
+  simulationState.fields.weak.strength = 0.4 + 0.1 * Math.sin(time * 0.9);
+  simulationState.fields.weak.wBosonField = 0.3 + 0.2 * Math.cos(time * 0.7);
+  
+  // Update spacetime curvature
+  updateSpacetimeCurvature(time);
+  
+  // Update quantum spin networks
+  updateQuantumSpinNetworks(time);
+}
+
+function updateSpacetimeCurvature(time) {
+  const chaos = simulationState.chaosLevel;
+  const fields = simulationState.fields;
+  
+  // Calculate spacetime curvature based on energy-momentum tensor
+  simulationState.spacetimeCurvature.x = Math.sin(time * 0.2) * chaos * fields.gravitational.curvature;
+  simulationState.spacetimeCurvature.y = Math.cos(time * 0.3) * chaos * fields.gravitational.curvature;
+  simulationState.spacetimeCurvature.z = Math.sin(time * 0.4) * chaos * fields.gravitational.curvature;
+  simulationState.spacetimeCurvature.t = time * 0.01 * chaos;
+}
+
+function updateQuantumSpinNetworks(time) {
+  // Create and update quantum spin networks
+  if (simulationState.spinNetworks.length < 5) {
+    simulationState.spinNetworks.push({
+      id: Date.now() + Math.random(),
+      nodes: [],
+      edges: [],
+      spin: Math.random() * Math.PI * 2,
+      energy: Math.random() * 100,
+      time: time
+    });
+  }
+  
+  // Update existing spin networks
+  simulationState.spinNetworks.forEach(network => {
+    network.spin += 0.01 * time;
+    network.energy = Math.abs(Math.sin(network.spin)) * 100;
+  });
 }
 
 function updateParticlePhysics(particle) {
