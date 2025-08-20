@@ -243,6 +243,8 @@ class AdvancedQuantumChaosSimulator {
         const gravFieldSlider = document.getElementById('gravFieldSlider');
         const temperatureSlider = document.getElementById('temperatureSlider');
         const pressureSlider = document.getElementById('pressureSlider');
+        const strongForceSlider = document.getElementById('strongForceSlider');
+        const weakForceSlider = document.getElementById('weakForceSlider');
         
         chaosSlider.addEventListener('input', (e) => {
             const level = parseFloat(e.target.value);
@@ -272,6 +274,16 @@ class AdvancedQuantumChaosSimulator {
         pressureSlider.addEventListener('input', (e) => {
             const pressure = parseFloat(e.target.value);
             this.updatePressure(pressure);
+        });
+        
+        strongForceSlider.addEventListener('input', (e) => {
+            const strength = parseFloat(e.target.value);
+            this.updateStrongForce(strength);
+        });
+        
+        weakForceSlider.addEventListener('input', (e) => {
+            const strength = parseFloat(e.target.value);
+            this.updateWeakForce(strength);
         });
         
         // Setup simulation mode buttons
@@ -350,6 +362,28 @@ class AdvancedQuantumChaosSimulator {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ pressure })
+        });
+    }
+
+    updateStrongForce(strength) {
+        // Update strong force field visualization
+        this.fieldVisualizations.forEach((line, index) => {
+            if (index % 3 === 0) { // Every third line for strong force
+                const material = line.material;
+                material.opacity = 0.1 + 0.3 * strength;
+                material.color.setHSL(0.0 + strength * 0.1, 0.8, 0.5); // Red hue
+            }
+        });
+    }
+
+    updateWeakForce(strength) {
+        // Update weak force field visualization
+        this.fieldVisualizations.forEach((line, index) => {
+            if (index % 3 === 1) { // Every third line for weak force
+                const material = line.material;
+                material.opacity = 0.1 + 0.2 * strength;
+                material.color.setHSL(0.15 + strength * 0.1, 0.8, 0.5); // Yellow hue
+            }
         });
     }
 
