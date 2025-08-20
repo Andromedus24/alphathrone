@@ -782,6 +782,27 @@ let simulationState = {
     quantumMetals: false,
     quantumAlloys: false
   },
+  quantumEngineering: {
+    quantumDesign: false,
+    quantumAnalysis: false,
+    quantumOptimization: false,
+    quantumTesting: false,
+    quantumManufacturing: false
+  },
+  quantumMechanics: {
+    quantumSystems: false,
+    quantumControl: false,
+    quantumAutomation: false,
+    quantumRobotics: false,
+    quantumIntelligence: false
+  },
+  quantumSystems: {
+    quantumIntegration: false,
+    quantumInterfaces: false,
+    quantumNetworks: false,
+    quantumProtocols: false,
+    quantumStandards: false
+  },
   quantumArt: {
     quantumPaintings: [],
     quantumSculptures: [],
