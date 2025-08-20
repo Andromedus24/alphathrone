@@ -480,6 +480,27 @@ let simulationState = {
     phononSpectra: false,
     magneticProperties: false,
     opticalProperties: false
+  },
+  quantumFinance: {
+    quantumPricing: false,
+    quantumRisk: false,
+    quantumPortfolio: false,
+    quantumArbitrage: false,
+    quantumOptions: false
+  },
+  quantumGameTheory: {
+    quantumPrisonersDilemma: false,
+    quantumNash: false,
+    quantumCooperation: false,
+    quantumEvolution: false,
+    quantumStrategies: false
+  },
+  quantumEconomics: {
+    quantumSupply: false,
+    quantumDemand: false,
+    quantumEquilibrium: false,
+    quantumMarkets: false,
+    quantumPricing: false
   }
 };
 
