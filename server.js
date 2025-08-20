@@ -522,6 +522,27 @@ let simulationState = {
     quantumDistribution: false,
     quantumRetail: false,
     quantumReverse: false
+  },
+  quantumMedicine: {
+    quantumDiagnostics: false,
+    quantumImaging: false,
+    quantumTherapy: false,
+    quantumDrugDelivery: false,
+    quantumMonitoring: false
+  },
+  quantumDrugDiscovery: {
+    molecularDocking: false,
+    drugDesign: false,
+    toxicityPrediction: false,
+    pharmacokinetics: false,
+    drugRepurposing: false
+  },
+  quantumHealthcare: {
+    personalizedMedicine: false,
+    quantumGenomics: false,
+    quantumProteomics: false,
+    quantumMetabolomics: false,
+    quantumPharmacogenomics: false
   }
 };
 
