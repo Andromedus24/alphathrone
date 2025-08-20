@@ -465,6 +465,46 @@ class AdvancedQuantumChaosSimulator {
                     emissiveIntensity: 0.2
                 });
                 break;
+            case 'gluon':
+                geometry = new THREE.OctahedronGeometry(0.2);
+                material = new THREE.MeshPhongMaterial({
+                    color: 0x0000ff,
+                    transparent: true,
+                    opacity: 0.7,
+                    emissive: 0x0000ff,
+                    emissiveIntensity: 0.5
+                });
+                break;
+            case 'wBoson':
+                geometry = new THREE.DodecahedronGeometry(0.3);
+                material = new THREE.MeshPhongMaterial({
+                    color: 0xff6600,
+                    transparent: true,
+                    opacity: 0.8,
+                    emissive: 0xff6600,
+                    emissiveIntensity: 0.4
+                });
+                break;
+            case 'zBoson':
+                geometry = new THREE.IcosahedronGeometry(0.3);
+                material = new THREE.MeshPhongMaterial({
+                    color: 0x9900ff,
+                    transparent: true,
+                    opacity: 0.8,
+                    emissive: 0x9900ff,
+                    emissiveIntensity: 0.4
+                });
+                break;
+            case 'higgs':
+                geometry = new THREE.TorusGeometry(0.2, 0.1, 8, 16);
+                material = new THREE.MeshPhongMaterial({
+                    color: 0xffcc00,
+                    transparent: true,
+                    opacity: 0.9,
+                    emissive: 0xffcc00,
+                    emissiveIntensity: 0.6
+                });
+                break;
             default:
                 geometry = new THREE.SphereGeometry(0.2, 8, 6);
                 material = new THREE.MeshPhongMaterial({
