@@ -260,6 +260,36 @@ let simulationState = {
     birefringence: false,
     opticalActivity: false,
     nonlinearOptics: false
+  },
+  quantumMaterials: {
+    superconductors: [],
+    topologicalInsulators: [],
+    quantumDots: [],
+    graphene: false,
+    nanotubes: [],
+    metamaterials: []
+  },
+  condensedMatter: {
+    crystals: [],
+    defects: [],
+    phonons: [],
+    magnons: [],
+    plasmons: [],
+    excitons: []
+  },
+  phaseTransitions: {
+    criticalTemperature: 0,
+    orderParameter: 0,
+    symmetryBreaking: false,
+    hysteresis: false,
+    nucleation: false
+  },
+  quantumTransport: {
+    conductivity: 0,
+    mobility: 0,
+    diffusion: 0,
+    quantumHall: false,
+    andersonLocalization: false
   }
 };
 
