@@ -1432,6 +1432,27 @@ let simulationState = {
     quantumFormats: false,
     quantumEncryption: false,
     quantumAuthentication: false
+  },
+  quantumLogging: {
+    quantumEvents: false,
+    quantumRecords: false,
+    quantumTimestamps: false,
+    quantumLevels: false,
+    quantumCategories: false
+  },
+  quantumTracing: {
+    quantumRequests: false,
+    quantumResponses: false,
+    quantumDependencies: false,
+    quantumPerformance: false,
+    quantumErrors: false
+  },
+  quantumDebugging: {
+    quantumBreakpoints: false,
+    quantumInspection: false,
+    quantumAnalysis: false,
+    quantumFixing: false,
+    quantumTesting: false
   }
 };
 
