@@ -1348,6 +1348,27 @@ let simulationState = {
     quantumObligation: false,
     quantumDuty: false,
     quantumCommitment: false
+  },
+  quantumRiskAssessment: {
+    quantumIdentification: false,
+    quantumAnalysis: false,
+    quantumEvaluation: false,
+    quantumPrioritization: false,
+    quantumDocumentation: false
+  },
+  quantumMitigation: {
+    quantumPrevention: false,
+    quantumReduction: false,
+    quantumTransfer: false,
+    quantumAcceptance: false,
+    quantumContingency: false
+  },
+  quantumResponse: {
+    quantumDetection: false,
+    quantumAnalysis: false,
+    quantumContainment: false,
+    quantumEradication: false,
+    quantumRecovery: false
   }
 };
 
