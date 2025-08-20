@@ -25,7 +25,9 @@ let simulationState = {
   fields: {
     electromagnetic: { strength: 1.0, frequency: 0.1, phase: 0 },
     gravitational: { strength: 0.5, curvature: 0.2 },
-    quantum: { entanglement: 0.3, superposition: 0.7 }
+    quantum: { entanglement: 0.3, superposition: 0.7 },
+    strong: { strength: 0.8, gluonField: 0.6 },
+    weak: { strength: 0.4, wBosonField: 0.3 }
   },
   time: 0,
   chaosLevel: 0.5,
@@ -33,7 +35,7 @@ let simulationState = {
   temperature: 300, // Kelvin
   pressure: 1.0, // atm
   magneticField: { x: 0, y: 0, z: 1 },
-  particleTypes: ['electron', 'photon', 'quark', 'neutrino', 'gluon'],
+  particleTypes: ['electron', 'photon', 'quark', 'neutrino', 'gluon', 'wBoson', 'zBoson', 'higgs'],
   activeTypes: ['electron', 'photon'],
   simulationMode: 'quantum', // quantum, classical, relativistic
   entanglementGroups: [],
@@ -61,8 +63,15 @@ let simulationState = {
     particleDecay: true,
     fieldInteractions: true,
     entanglement: true,
-    waveFunctionCollapse: true
-  }
+    waveFunctionCollapse: true,
+    spinOrbitCoupling: true,
+    quantumSpinNetworks: true,
+    gluonFieldEffects: true,
+    higgsMechanism: true
+  },
+  spinNetworks: [],
+  quantumGates: [],
+  spacetimeCurvature: { x: 0, y: 0, z: 0, t: 0 }
 };
 
 // Advanced particle generation with multiple types
@@ -103,10 +112,14 @@ function generateParticles() {
 
 function createParticle(type, id) {
   const baseProperties = {
-    electron: { mass: 9.1093837015e-31, charge: -1.602176634e-19, spin: 0.5 },
-    photon: { mass: 0, charge: 0, spin: 1 },
-    quark: { mass: 3.0e-30, charge: 0.333e-19, spin: 0.5 },
-    neutrino: { mass: 2.2e-36, charge: 0, spin: 0.5 }
+    electron: { mass: 9.1093837015e-31, charge: -1.602176634e-19, spin: 0.5, color: 'lepton' },
+    photon: { mass: 0, charge: 0, spin: 1, color: 'boson' },
+    quark: { mass: 3.0e-30, charge: 0.333e-19, spin: 0.5, color: 'quark' },
+    neutrino: { mass: 2.2e-36, charge: 0, spin: 0.5, color: 'lepton' },
+    gluon: { mass: 0, charge: 0, spin: 1, color: 'gluon' },
+    wBoson: { mass: 1.4e-25, charge: 1.602176634e-19, spin: 1, color: 'boson' },
+    zBoson: { mass: 1.6e-25, charge: 0, spin: 1, color: 'boson' },
+    higgs: { mass: 2.2e-25, charge: 0, spin: 0, color: 'scalar' }
   };
   
   const props = baseProperties[type];
@@ -128,12 +141,14 @@ function createParticle(type, id) {
       phase: Math.random() * Math.PI * 2,
       amplitude: Math.random(),
       spin: Math.random() * Math.PI * 2,
-      superposition: Math.random() > 0.5
+      superposition: Math.random() > 0.5,
+      spinDirection: { x: Math.random() - 0.5, y: Math.random() - 0.5, z: Math.random() - 0.5 }
     },
     energy: Math.random() * 100,
     mass: props.mass,
     charge: props.charge,
     spin: props.spin,
+    color: props.color,
     entangledWith: null,
     waveFunction: {
       real: Math.random() * 2 - 1,
@@ -143,7 +158,11 @@ function createParticle(type, id) {
     decayProducts: [],
     interactionHistory: [],
     trail: [],
-    experimentData: {}
+    experimentData: {},
+    spinNetworkNode: null,
+    quantumGate: null,
+    fieldCoupling: Math.random(),
+    gluonCharge: type === 'gluon' ? Math.floor(Math.random() * 8) : null
   };
 }
 
