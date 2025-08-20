@@ -410,6 +410,92 @@ function handleParticleInteractions(particle) {
       }
     }
   });
+  
+  // Handle strong force interactions (gluon exchange)
+  if (particle.color === 'quark' || particle.color === 'gluon') {
+    handleStrongForceInteractions(particle, nearbyParticles);
+  }
+  
+  // Handle weak force interactions
+  if (particle.type === 'wBoson' || particle.type === 'zBoson') {
+    handleWeakForceInteractions(particle, nearbyParticles);
+  }
+  
+  // Handle Higgs field interactions
+  if (particle.type === 'higgs') {
+    handleHiggsFieldInteractions(particle, nearbyParticles);
+  }
+}
+
+function handleStrongForceInteractions(particle, nearbyParticles) {
+  const strongField = simulationState.fields.strong;
+  const gluonField = strongField.gluonField;
+  
+  nearbyParticles.forEach(other => {
+    if (other.color === 'quark' || other.color === 'gluon') {
+      const distance = Math.sqrt(
+        (other.position.x - particle.position.x) ** 2 +
+        (other.position.y - particle.position.y) ** 2 +
+        (other.position.z - particle.position.z) ** 2
+      );
+      
+      if (distance < 1.5) {
+        // Strong force is attractive at short distances
+        const strongForce = gluonField * 0.002 / (distance ** 2);
+        const direction = {
+          x: (other.position.x - particle.position.x) / distance,
+          y: (other.position.y - particle.position.y) / distance,
+          z: (other.position.z - particle.position.z) / distance
+        };
+        
+        particle.velocity.x -= direction.x * strongForce;
+        particle.velocity.y -= direction.y * strongForce;
+        particle.velocity.z -= direction.z * strongForce;
+      }
+    }
+  });
+}
+
+function handleWeakForceInteractions(particle, nearbyParticles) {
+  const weakField = simulationState.fields.weak;
+  
+  nearbyParticles.forEach(other => {
+    if (other.type === 'electron' || other.type === 'neutrino') {
+      const distance = Math.sqrt(
+        (other.position.x - particle.position.x) ** 2 +
+        (other.position.y - particle.position.y) ** 2 +
+        (other.position.z - particle.position.z) ** 2
+      );
+      
+      if (distance < 1.0) {
+        // Weak force causes particle transformations
+        if (Math.random() < 0.001 * weakField.strength) {
+          // Simulate weak decay
+          particle.energy *= 0.9;
+          other.energy *= 0.9;
+        }
+      }
+    }
+  });
+}
+
+function handleHiggsFieldInteractions(particle, nearbyParticles) {
+  // Higgs field gives mass to particles
+  nearbyParticles.forEach(other => {
+    if (other.type !== 'higgs' && other.type !== 'photon' && other.type !== 'gluon') {
+      const distance = Math.sqrt(
+        (other.position.x - particle.position.x) ** 2 +
+        (other.position.y - particle.position.y) ** 2 +
+        (other.position.z - particle.position.z) ** 2
+      );
+      
+      if (distance < 2.0) {
+        // Higgs field effect on mass
+        const higgsEffect = 1.0 + 0.1 * Math.sin(simulationState.time * 0.1);
+        other.mass *= higgsEffect;
+      }
+    }
+  });
 }
 
 function updateWaveFunction(particle) {
