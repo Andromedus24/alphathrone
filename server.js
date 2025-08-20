@@ -669,6 +669,27 @@ let simulationState = {
     quantumLanguage: false,
     quantumRitual: false,
     quantumBelief: false
+  },
+  quantumLinguistics: {
+    quantumGrammar: false,
+    quantumSyntax: false,
+    quantumSemantics: false,
+    quantumPragmatics: false,
+    quantumPhonetics: false
+  },
+  quantumCommunication: {
+    quantumLanguage: false,
+    quantumTranslation: false,
+    quantumInterpretation: false,
+    quantumDialogue: false,
+    quantumDiscourse: false
+  },
+  quantumSemiotics: {
+    quantumSigns: false,
+    quantumSymbols: false,
+    quantumMeaning: false,
+    quantumContext: false,
+    quantumInterpretation: false
   }
 };
 
