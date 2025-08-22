@@ -1217,6 +1217,780 @@ function updateQuantumState() {
   quantumState.coherence = 1 - simulationState.chaosLevel;
 }
 
+// NEW: Real-time Multiplayer Support System
+class MultiplayerManager {
+  constructor(io) {
+    this.io = io;
+    this.rooms = new Map();
+    this.users = new Map();
+    this.collaborativeExperiments = new Map();
+    this.simulationSync = new Map();
+    this.chatHistory = new Map();
+    this.userPermissions = new Map();
+    
+    this.setupSocketHandlers();
+    this.setupRoomManagement();
+    this.setupCollaborativeFeatures();
+  }
+
+  setupSocketHandlers() {
+    this.io.on('connection', (socket) => {
+      console.log(`User connected: ${socket.id}`);
+      
+      // User authentication and room joining
+      socket.on('joinRoom', (data) => this.handleJoinRoom(socket, data));
+      socket.on('leaveRoom', (data) => this.handleLeaveRoom(socket, data));
+      socket.on('updateUserProfile', (data) => this.handleUpdateProfile(socket, data));
+      
+      // Real-time simulation synchronization
+      socket.on('simulationUpdate', (data) => this.handleSimulationUpdate(socket, data));
+      socket.on('particleInteraction', (data) => this.handleParticleInteraction(socket, data));
+      socket.on('fieldModification', (data) => this.handleFieldModification(socket, data));
+      
+      // Collaborative experiments
+      socket.on('startCollaborativeExperiment', (data) => this.handleStartExperiment(socket, data));
+      socket.on('experimentUpdate', (data) => this.handleExperimentUpdate(socket, data));
+      socket.on('experimentResult', (data) => this.handleExperimentResult(socket, data));
+      
+      // Real-time communication
+      socket.on('chatMessage', (data) => this.handleChatMessage(socket, data));
+      socket.on('voiceChat', (data) => this.handleVoiceChat(socket, data));
+      socket.on('screenShare', (data) => this.handleScreenShare(socket, data));
+      
+      // User interactions
+      socket.on('userAction', (data) => this.handleUserAction(socket, data));
+      socket.on('requestPermission', (data) => this.handlePermissionRequest(socket, data));
+      socket.on('grantPermission', (data) => this.handlePermissionGrant(socket, data));
+      
+      // Disconnection handling
+      socket.on('disconnect', () => this.handleDisconnect(socket));
+    });
+  }
+
+  handleJoinRoom(socket, data) {
+    const { roomId, username, avatar, permissions } = data;
+    
+    // Create room if it doesn't exist
+    if (!this.rooms.has(roomId)) {
+      this.rooms.set(roomId, {
+        id: roomId,
+        name: `Quantum Lab ${roomId}`,
+        users: new Set(),
+        experiments: new Map(),
+        simulationState: { ...simulationState },
+        settings: {
+          maxUsers: 20,
+          allowExperiments: true,
+          requireApproval: false,
+          privacyLevel: 'public'
+        },
+        createdAt: Date.now(),
+        lastActivity: Date.now()
+      });
+    }
+    
+    const room = this.rooms.get(roomId);
+    
+    // Check room capacity
+    if (room.users.size >= room.settings.maxUsers) {
+      socket.emit('roomError', { message: 'Room is full' });
+      return;
+    }
+    
+    // Add user to room
+    const user = {
+      id: socket.id,
+      username: username || `User_${socket.id.slice(0, 6)}`,
+      avatar: avatar || 'default',
+      permissions: permissions || ['view', 'chat'],
+      joinTime: Date.now(),
+      lastActivity: Date.now(),
+      isOnline: true,
+      currentExperiment: null,
+      contributionScore: 0
+    };
+    
+    room.users.add(socket.id);
+    this.users.set(socket.id, { ...user, roomId });
+    this.userPermissions.set(socket.id, user.permissions);
+    
+    // Join socket room
+    socket.join(roomId);
+    
+    // Notify room of new user
+    this.io.to(roomId).emit('userJoined', {
+      user: { id: socket.id, username: user.username, avatar: user.avatar },
+      roomInfo: {
+        userCount: room.users.size,
+        experimentCount: room.experiments.size
+      }
+    });
+    
+    // Send room state to new user
+    socket.emit('roomJoined', {
+      room: room,
+      users: Array.from(room.users).map(id => this.users.get(id)),
+      experiments: Array.from(room.experiments.values()),
+      simulationState: room.simulationState
+    });
+    
+    console.log(`User ${user.username} joined room ${roomId}`);
+  }
+
+  handleLeaveRoom(socket, data) {
+    const userId = socket.id;
+    const user = this.users.get(userId);
+    
+    if (!user) return;
+    
+    const roomId = user.roomId;
+    const room = this.rooms.get(roomId);
+    
+    if (room) {
+      room.users.delete(userId);
+      room.lastActivity = Date.now();
+      
+      // Remove user from room
+      socket.leave(roomId);
+      
+      // Notify room of user departure
+      this.io.to(roomId).emit('userLeft', {
+        userId: userId,
+        username: user.username,
+        roomInfo: {
+          userCount: room.users.size,
+          experimentCount: room.experiments.size
+        }
+      });
+      
+      // Clean up empty rooms
+      if (room.users.size === 0) {
+        this.rooms.delete(roomId);
+        console.log(`Room ${roomId} deleted (empty)`);
+      }
+      
+      console.log(`User ${user.username} left room ${roomId}`);
+    }
+    
+    // Clean up user data
+    this.users.delete(userId);
+    this.userPermissions.delete(userId);
+  }
+
+  handleSimulationUpdate(socket, data) {
+    const { roomId, simulationData, timestamp } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user || user.roomId !== roomId) return;
+    
+    const room = this.rooms.get(roomId);
+    if (!room) return;
+    
+    // Update room simulation state
+    room.simulationState = { ...room.simulationState, ...simulationData };
+    room.lastActivity = Date.now();
+    
+    // Broadcast to other users in room
+    socket.to(roomId).emit('simulationUpdated', {
+      userId: socket.id,
+      username: user.username,
+      simulationData: simulationData,
+      timestamp: timestamp
+    });
+    
+    // Update global simulation state if user has permission
+    if (this.hasPermission(socket.id, 'modify_simulation')) {
+      Object.assign(simulationState, simulationData);
+    }
+  }
+
+  handleParticleInteraction(socket, data) {
+    const { roomId, particleId, interactionType, parameters } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user || user.roomId !== roomId) return;
+    
+    const room = this.rooms.get(roomId);
+    if (!room) return;
+    
+    // Process particle interaction
+    const result = this.processParticleInteraction(particleId, interactionType, parameters);
+    
+    // Broadcast interaction to room
+    this.io.to(roomId).emit('particleInteractionResult', {
+      userId: socket.id,
+      username: user.username,
+      particleId: particleId,
+      interactionType: interactionType,
+      result: result,
+      timestamp: Date.now()
+    });
+    
+    // Update user contribution score
+    this.updateUserContribution(socket.id, 1);
+  }
+
+  processParticleInteraction(particleId, interactionType, parameters) {
+    // Advanced particle interaction processing
+    switch (interactionType) {
+      case 'measurement':
+        return this.processQuantumMeasurement(particleId, parameters);
+      case 'entanglement':
+        return this.processEntanglement(particleId, parameters);
+      case 'tunneling':
+        return this.processTunneling(particleId, parameters);
+      case 'decay':
+        return this.processParticleDecay(particleId, parameters);
+      case 'collision':
+        return this.processParticleCollision(particleId, parameters);
+      default:
+        return { success: false, error: 'Unknown interaction type' };
+    }
+  }
+
+  processQuantumMeasurement(particleId, parameters) {
+    const { measurementType, basis } = parameters;
+    
+    // Simulate quantum measurement
+    const measurementResult = {
+      type: measurementType,
+      basis: basis,
+      result: Math.random() > 0.5 ? 'up' : 'down',
+      uncertainty: Math.random() * 0.1,
+      timestamp: Date.now()
+    };
+    
+    return {
+      success: true,
+      measurement: measurementResult,
+      particleState: 'collapsed'
+    };
+  }
+
+  processEntanglement(particleId, parameters) {
+    const { targetParticleId, entanglementType } = parameters;
+    
+    // Create entanglement between particles
+    const entanglement = {
+      type: entanglementType,
+      particles: [particleId, targetParticleId],
+      strength: Math.random(),
+      correlation: Math.random() * 2 - 1,
+      timestamp: Date.now()
+    };
+    
+    return {
+      success: true,
+      entanglement: entanglement,
+      message: 'Particles successfully entangled'
+    };
+  }
+
+  processTunneling(particleId, parameters) {
+    const { barrierHeight, barrierWidth } = parameters;
+    
+    // Calculate tunneling probability
+    const probability = quantumEngine.calculateTunnelingProbability(
+      barrierHeight, barrierWidth, 100, 0.511
+    );
+    
+    const tunneled = Math.random() < probability;
+    
+    return {
+      success: true,
+      tunneled: tunneled,
+      probability: probability,
+      barrierInfo: { height: barrierHeight, width: barrierWidth }
+    };
+  }
+
+  processParticleDecay(particleId, parameters) {
+    const { decayMode, lifetime } = parameters;
+    
+    // Simulate particle decay
+    const decayProducts = this.generateDecayProducts(decayMode);
+    const decayTime = -lifetime * Math.log(Math.random());
+    
+    return {
+      success: true,
+      decayed: true,
+      decayProducts: decayProducts,
+      decayTime: decayTime,
+      mode: decayMode
+    };
+  }
+
+  processParticleCollision(particleId, parameters) {
+    const { targetParticleId, collisionEnergy } = parameters;
+    
+    // Simulate particle collision
+    const collisionResult = this.simulateCollision(particleId, targetParticleId, collisionEnergy);
+    
+    return {
+      success: true,
+      collision: collisionResult,
+      energyConserved: true,
+      momentumConserved: true
+    };
+  }
+
+  generateDecayProducts(decayMode) {
+    const decayModes = {
+      'beta_minus': ['electron', 'antineutrino'],
+      'beta_plus': ['positron', 'neutrino'],
+      'alpha': ['helium_nucleus'],
+      'gamma': ['photon']
+    };
+    
+    return decayModes[decayMode] || ['unknown_particle'];
+  }
+
+  simulateCollision(particle1Id, particle2Id, energy) {
+    // Simplified collision simulation
+    return {
+      products: ['new_particle_1', 'new_particle_2'],
+      energy: energy * 0.8, // Energy loss
+      momentum: { x: 0, y: 0, z: 0 },
+      collisionType: 'elastic'
+    };
+  }
+
+  handleStartExperiment(socket, data) {
+    const { roomId, experimentType, parameters, collaborators } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user || user.roomId !== roomId) return;
+    
+    const room = this.rooms.get(roomId);
+    if (!room) return;
+    
+    // Create collaborative experiment
+    const experimentId = `exp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const experiment = {
+      id: experimentId,
+      type: experimentType,
+      creator: socket.id,
+      collaborators: collaborators || [socket.id],
+      parameters: parameters,
+      status: 'running',
+      startTime: Date.now(),
+      results: [],
+      data: [],
+      participants: new Set([socket.id, ...collaborators])
+    };
+    
+    room.experiments.set(experimentId, experiment);
+    this.collaborativeExperiments.set(experimentId, experiment);
+    
+    // Notify room of new experiment
+    this.io.to(roomId).emit('experimentStarted', {
+      experiment: experiment,
+      creator: user.username
+    });
+    
+    // Update user's current experiment
+    user.currentExperiment = experimentId;
+    
+    console.log(`Collaborative experiment ${experimentType} started in room ${roomId}`);
+  }
+
+  handleExperimentUpdate(socket, data) {
+    const { experimentId, updateType, data: experimentData } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user) return;
+    
+    const experiment = this.collaborativeExperiments.get(experimentId);
+    if (!experiment || !experiment.participants.has(socket.id)) return;
+    
+    // Update experiment data
+    experiment.data.push({
+      userId: socket.id,
+      username: user.username,
+      updateType: updateType,
+      data: experimentData,
+      timestamp: Date.now()
+    });
+    
+    // Broadcast update to all participants
+    experiment.participants.forEach(participantId => {
+      this.io.to(participantId).emit('experimentUpdated', {
+        experimentId: experimentId,
+        update: {
+          userId: socket.id,
+          username: user.username,
+          updateType: updateType,
+          data: experimentData,
+          timestamp: Date.now()
+        }
+      });
+    });
+  }
+
+  handleExperimentResult(socket, data) {
+    const { experimentId, results, analysis } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user) return;
+    
+    const experiment = this.collaborativeExperiments.get(experimentId);
+    if (!experiment || !experiment.participants.has(socket.id)) return;
+    
+    // Finalize experiment
+    experiment.status = 'completed';
+    experiment.results = results;
+    experiment.analysis = analysis;
+    experiment.endTime = Date.now();
+    experiment.duration = experiment.endTime - experiment.startTime;
+    
+    // Calculate participant contributions
+    const participantContributions = {};
+    experiment.participants.forEach(participantId => {
+      const participant = this.users.get(participantId);
+      if (participant) {
+        participant.contributionScore += 10;
+        participantContributions[participantId] = participant.contributionScore;
+      }
+    });
+    
+    // Broadcast completion to all participants
+    experiment.participants.forEach(participantId => {
+      this.io.to(participantId).emit('experimentCompleted', {
+        experimentId: experimentId,
+        results: results,
+        analysis: analysis,
+        contributions: participantContributions,
+        duration: experiment.duration
+      });
+    });
+    
+    // Update user's current experiment
+    user.currentExperiment = null;
+    
+    console.log(`Collaborative experiment ${experimentId} completed`);
+  }
+
+  handleChatMessage(socket, data) {
+    const { roomId, message, messageType } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user || user.roomId !== roomId) return;
+    
+    const room = this.rooms.get(roomId);
+    if (!room) return;
+    
+    const chatMessage = {
+      id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      userId: socket.id,
+      username: user.username,
+      avatar: user.avatar,
+      message: message,
+      type: messageType || 'text',
+      timestamp: Date.now(),
+      roomId: roomId
+    };
+    
+    // Store in chat history
+    if (!this.chatHistory.has(roomId)) {
+      this.chatHistory.set(roomId, []);
+    }
+    this.chatHistory.get(roomId).push(chatMessage);
+    
+    // Limit chat history
+    if (this.chatHistory.get(roomId).length > 100) {
+      this.chatHistory.get(roomId).shift();
+    }
+    
+    // Broadcast to room
+    this.io.to(roomId).emit('chatMessage', chatMessage);
+    
+    // Update user activity
+    user.lastActivity = Date.now();
+  }
+
+  handleVoiceChat(socket, data) {
+    const { roomId, audioData, audioType } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user || user.roomId !== roomId) return;
+    
+    // Broadcast voice data to other users in room
+    socket.to(roomId).emit('voiceChat', {
+      userId: socket.id,
+      username: user.username,
+      audioData: audioData,
+      audioType: audioType,
+      timestamp: Date.now()
+    });
+  }
+
+  handleScreenShare(socket, data) {
+    const { roomId, screenData, screenType } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user || user.roomId !== roomId) return;
+    
+    // Broadcast screen share to other users in room
+    socket.to(roomId).emit('screenShare', {
+      userId: socket.id,
+      username: user.username,
+      screenData: screenData,
+      screenType: screenType,
+      timestamp: Date.now()
+    });
+  }
+
+  handleUserAction(socket, data) {
+    const { roomId, actionType, actionData } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user || user.roomId !== roomId) return;
+    
+    // Process user action
+    const actionResult = this.processUserAction(actionType, actionData, user);
+    
+    // Broadcast action to room
+    this.io.to(roomId).emit('userAction', {
+      userId: socket.id,
+      username: user.username,
+      actionType: actionType,
+      actionData: actionData,
+      result: actionResult,
+      timestamp: Date.now()
+    });
+    
+    // Update user contribution score
+    this.updateUserContribution(socket.id, 2);
+  }
+
+  processUserAction(actionType, actionData, user) {
+    switch (actionType) {
+      case 'particle_creation':
+        return this.processParticleCreation(actionData, user);
+      case 'field_modification':
+        return this.processFieldModification(actionData, user);
+      case 'experiment_suggestion':
+        return this.processExperimentSuggestion(actionData, user);
+      case 'parameter_adjustment':
+        return this.processParameterAdjustment(actionData, user);
+      default:
+        return { success: false, error: 'Unknown action type' };
+    }
+  }
+
+  processParticleCreation(actionData, user) {
+    const { particleType, position, energy } = actionData;
+    
+    // Create new particle using quantum engine
+    const particle = quantumEngine.createParticle(particleType, energy, position);
+    
+    return {
+      success: true,
+      particle: particle,
+      message: `${user.username} created a ${particleType} particle`
+    };
+  }
+
+  processFieldModification(actionData, user) {
+    const { fieldType, modification, parameters } = actionData;
+    
+    // Modify quantum fields
+    if (simulationState.fields[fieldType]) {
+      Object.assign(simulationState.fields[fieldType], modification);
+      
+      return {
+        success: true,
+        fieldType: fieldType,
+        modification: modification,
+        message: `${user.username} modified ${fieldType} field`
+      };
+    }
+    
+    return {
+      success: false,
+      error: 'Field type not found'
+    };
+  }
+
+  processExperimentSuggestion(actionData, user) {
+    const { experimentType, description, parameters } = actionData;
+    
+    return {
+      success: true,
+      suggestion: {
+        type: experimentType,
+        description: description,
+        parameters: parameters,
+        suggestedBy: user.username,
+        timestamp: Date.now()
+      },
+      message: `${user.username} suggested a new experiment`
+    };
+  }
+
+  processParameterAdjustment(actionData, user) {
+    const { parameter, value, reason } = actionData;
+    
+    // Adjust simulation parameters
+    if (simulationState[parameter] !== undefined) {
+      const oldValue = simulationState[parameter];
+      simulationState[parameter] = value;
+      
+      return {
+        success: true,
+        parameter: parameter,
+        oldValue: oldValue,
+        newValue: value,
+        reason: reason,
+        message: `${user.username} adjusted ${parameter} from ${oldValue} to ${value}`
+      };
+    }
+    
+    return {
+      success: false,
+      error: 'Parameter not found'
+    };
+  }
+
+  handlePermissionRequest(socket, data) {
+    const { roomId, permissionType, targetUserId } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user || user.roomId !== roomId) return;
+    
+    // Send permission request to target user
+    this.io.to(targetUserId).emit('permissionRequest', {
+      requesterId: socket.id,
+      requesterName: user.username,
+      permissionType: permissionType,
+      roomId: roomId,
+      timestamp: Date.now()
+    });
+  }
+
+  handlePermissionGrant(socket, data) {
+    const { requesterId, permissionType, granted } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user) return;
+    
+    if (granted) {
+      // Grant permission to requester
+      const requester = this.users.get(requesterId);
+      if (requester) {
+        requester.permissions.push(permissionType);
+        this.userPermissions.set(requesterId, requester.permissions);
+      }
+    }
+    
+    // Notify requester of decision
+    this.io.to(requesterId).emit('permissionResponse', {
+      granterId: socket.id,
+      granterName: user.username,
+      permissionType: permissionType,
+      granted: granted,
+      timestamp: Date.now()
+    });
+  }
+
+  handleDisconnect(socket) {
+    const userId = socket.id;
+    const user = this.users.get(userId);
+    
+    if (user) {
+      // Handle user leaving room
+      this.handleLeaveRoom(socket, {});
+      
+      console.log(`User ${user.username} disconnected`);
+    }
+  }
+
+  hasPermission(userId, permission) {
+    const userPerms = this.userPermissions.get(userId);
+    return userPerms && userPerms.includes(permission);
+  }
+
+  updateUserContribution(userId, points) {
+    const user = this.users.get(userId);
+    if (user) {
+      user.contributionScore += points;
+      user.lastActivity = Date.now();
+    }
+  }
+
+  setupRoomManagement() {
+    // Clean up inactive rooms every 5 minutes
+    setInterval(() => {
+      const now = Date.now();
+      const inactiveThreshold = 30 * 60 * 1000; // 30 minutes
+      
+      for (const [roomId, room] of this.rooms.entries()) {
+        if (now - room.lastActivity > inactiveThreshold) {
+          // Archive room data before deletion
+          this.archiveRoom(room);
+          this.rooms.delete(roomId);
+          console.log(`Room ${roomId} archived due to inactivity`);
+        }
+      }
+    }, 5 * 60 * 1000);
+  }
+
+  setupCollaborativeFeatures() {
+    // Synchronize simulation state across all rooms every second
+    setInterval(() => {
+      for (const [roomId, room] of this.rooms.entries()) {
+        if (room.users.size > 0) {
+          this.io.to(roomId).emit('simulationSync', {
+            state: room.simulationState,
+            timestamp: Date.now()
+          });
+        }
+      }
+    }, 1000);
+  }
+
+  archiveRoom(room) {
+    // Archive room data for future reference
+    const archive = {
+      roomId: room.id,
+      name: room.name,
+      users: Array.from(room.users),
+      experiments: Array.from(room.experiments.values()),
+      simulationState: room.simulationState,
+      createdAt: room.createdAt,
+      lastActivity: room.lastActivity,
+      archivedAt: Date.now()
+    };
+    
+    // Store archive (could be saved to database)
+    console.log(`Room archived:`, archive);
+  }
+
+  // Public methods for external access
+  getRoomInfo(roomId) {
+    return this.rooms.get(roomId);
+  }
+
+  getUserInfo(userId) {
+    return this.users.get(userId);
+  }
+
+  getActiveRooms() {
+    return Array.from(this.rooms.values());
+  }
+
+  getActiveUsers() {
+    return Array.from(this.users.values());
+  }
+
+  getCollaborativeExperiments() {
+    return Array.from(this.collaborativeExperiments.values());
+  }
+}
+
+// Initialize multiplayer manager
+const multiplayerManager = new MultiplayerManager(io);
+
 // Enhanced API routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
