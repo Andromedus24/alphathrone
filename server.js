@@ -1991,6 +1991,547 @@ class MultiplayerManager {
 // Initialize multiplayer manager
 const multiplayerManager = new MultiplayerManager(io);
 
+// NEW: Advanced Experiment Framework
+class AdvancedExperimentFramework {
+  constructor() {
+    this.experiments = new Map();
+    this.experimentTemplates = new Map();
+    this.dataCollectors = new Map();
+    this.analysisEngines = new Map();
+    this.resultsDatabase = new Map();
+    
+    this.initializeExperimentTemplates();
+    this.initializeDataCollectors();
+    this.initializeAnalysisEngines();
+  }
+
+  initializeExperimentTemplates() {
+    // Quantum Entanglement Experiments
+    this.experimentTemplates.set('bell_test', {
+      name: 'Bell Test Experiment',
+      description: 'Test quantum non-locality with entangled particles',
+      parameters: {
+        particleCount: { min: 2, max: 100, default: 10 },
+        measurementBases: { min: 2, max: 8, default: 4 },
+        correlationThreshold: { min: 0.1, max: 1.0, default: 0.7 }
+      },
+      setup: this.setupBellTest.bind(this),
+      run: this.runBellTest.bind(this),
+      analyze: this.analyzeBellTest.bind(this)
+    });
+
+    // Quantum Tunneling Experiments
+    this.experimentTemplates.set('tunneling_spectroscopy', {
+      name: 'Quantum Tunneling Spectroscopy',
+      description: 'Study tunneling probability vs barrier properties',
+      parameters: {
+        barrierHeights: { min: 10, max: 1000, default: 100 },
+        barrierWidths: { min: 0.1, max: 10, default: 1.0 },
+        particleEnergies: { min: 1, max: 500, default: 50 }
+      },
+      setup: this.setupTunnelingSpectroscopy.bind(this),
+      run: this.runTunnelingSpectroscopy.bind(this),
+      analyze: this.analyzeTunnelingSpectroscopy.bind(this)
+    });
+
+    // Particle Collision Experiments
+    this.experimentTemplates.set('collision_analysis', {
+      name: 'High-Energy Particle Collision Analysis',
+      description: 'Study particle interactions and decay products',
+      parameters: {
+        collisionEnergy: { min: 100, max: 10000, default: 1000 },
+        particleTypes: { options: ['electron', 'photon', 'quark'], default: ['electron'] },
+        detectorResolution: { min: 0.01, max: 1.0, default: 0.1 }
+      },
+      setup: this.setupCollisionAnalysis.bind(this),
+      run: this.runCollisionAnalysis.bind(this),
+      analyze: this.analyzeCollisionAnalysis.bind(this)
+    });
+
+    // Quantum Computing Experiments
+    this.experimentTemplates.set('quantum_algorithm', {
+      name: 'Quantum Algorithm Implementation',
+      description: 'Implement and test quantum algorithms',
+      parameters: {
+        algorithm: { options: ['Grover', 'Shor', 'Deutsch-Jozsa'], default: 'Grover' },
+        qubitCount: { min: 2, max: 10, default: 4 },
+        iterationCount: { min: 10, max: 1000, default: 100 }
+      },
+      setup: this.setupQuantumAlgorithm.bind(this),
+      run: this.runQuantumAlgorithm.bind(this),
+      analyze: this.analyzeQuantumAlgorithm.bind(this)
+    });
+
+    // Wave Function Evolution Experiments
+    this.experimentTemplates.set('wave_evolution', {
+      name: 'Wave Function Evolution Study',
+      description: 'Study quantum wave function dynamics',
+      parameters: {
+        initialState: { options: ['gaussian', 'square', 'exponential'], default: 'gaussian' },
+        potentialType: { options: ['harmonic', 'square', 'coulomb'], default: 'harmonic' },
+        evolutionTime: { min: 0.1, max: 10.0, default: 2.0 }
+      },
+      setup: this.setupWaveEvolution.bind(this),
+      run: this.runWaveEvolution.bind(this),
+      analyze: this.analyzeWaveEvolution.bind(this)
+    });
+  }
+
+  initializeDataCollectors() {
+    // Particle Data Collector
+    this.dataCollectors.set('particle', {
+      collect: (particles, timestamp) => ({
+        count: particles.length,
+        types: particles.map(p => p.type),
+        positions: particles.map(p => p.position),
+        velocities: particles.map(p => p.velocity),
+        energies: particles.map(p => p.energy),
+        timestamp: timestamp
+      }),
+      aggregate: (dataPoints) => {
+        const aggregated = {
+          totalParticles: dataPoints.reduce((sum, dp) => sum + dp.count, 0),
+          averageEnergy: dataPoints.reduce((sum, dp) => sum + dp.energies.reduce((s, e) => s + e, 0), 0) / dataPoints.reduce((sum, dp) => sum + dp.count, 0),
+          typeDistribution: {},
+          positionVariance: this.calculatePositionVariance(dataPoints),
+          velocityDistribution: this.calculateVelocityDistribution(dataPoints)
+        };
+        
+        // Calculate type distribution
+        dataPoints.forEach(dp => {
+          dp.types.forEach(type => {
+            aggregated.typeDistribution[type] = (aggregated.typeDistribution[type] || 0) + 1;
+          });
+        });
+        
+        return aggregated;
+      }
+    });
+
+    // Field Data Collector
+    this.dataCollectors.set('field', {
+      collect: (fields, timestamp) => ({
+        electromagnetic: {
+          strength: fields.electromagnetic.strength,
+          frequency: fields.electromagnetic.frequency,
+          phase: fields.electromagnetic.phase
+        },
+        gravitational: {
+          strength: fields.gravitational.strength,
+          curvature: fields.gravitational.curvature
+        },
+        quantum: {
+          entanglement: fields.quantum.entanglement,
+          superposition: fields.quantum.superposition
+        },
+        timestamp: timestamp
+      }),
+      aggregate: (dataPoints) => {
+        return {
+          averageEMStrength: dataPoints.reduce((sum, dp) => sum + dp.electromagnetic.strength, 0) / dataPoints.length,
+          averageGravStrength: dataPoints.reduce((sum, dp) => sum + dp.gravitational.strength, 0) / dataPoints.length,
+          averageQuantumEntanglement: dataPoints.reduce((sum, dp) => sum + dp.quantum.entanglement, 0) / dataPoints.length,
+          fieldCorrelations: this.calculateFieldCorrelations(dataPoints)
+        };
+      }
+    });
+
+    // Quantum State Data Collector
+    this.dataCollectors.set('quantum_state', {
+      collect: (quantumState, timestamp) => ({
+        superpositionCount: quantumState.superpositionCount,
+        collapsedCount: quantumState.collapsedCount,
+        uncertainty: quantumState.uncertainty,
+        coherence: quantumState.coherence,
+        totalEnergy: quantumState.totalEnergy,
+        entropy: quantumState.entropy,
+        timestamp: timestamp
+      }),
+      aggregate: (dataPoints) => {
+        return {
+          averageUncertainty: dataPoints.reduce((sum, dp) => sum + dp.uncertainty, 0) / dataPoints.length,
+          averageCoherence: dataPoints.reduce((sum, dp) => sum + dp.coherence, 0) / dataPoints.length,
+          energyConservation: this.checkEnergyConservation(dataPoints),
+          entropyEvolution: this.calculateEntropyEvolution(dataPoints)
+        };
+      }
+    });
+  }
+
+  initializeAnalysisEngines() {
+    // Statistical Analysis Engine
+    this.analysisEngines.set('statistical', {
+      analyze: (data) => {
+        const values = Array.isArray(data) ? data : Object.values(data);
+        const n = values.length;
+        
+        if (n === 0) return { error: 'No data to analyze' };
+        
+        const sum = values.reduce((s, v) => s + v, 0);
+        const mean = sum / n;
+        const variance = values.reduce((s, v) => s + Math.pow(v - mean, 2), 0) / n;
+        const stdDev = Math.sqrt(variance);
+        
+        const sorted = values.sort((a, b) => a - b);
+        const median = n % 2 === 0 ? (sorted[n/2 - 1] + sorted[n/2]) / 2 : sorted[Math.floor(n/2)];
+        
+        return {
+          count: n,
+          mean: mean,
+          median: median,
+          variance: variance,
+          standardDeviation: stdDev,
+          min: sorted[0],
+          max: sorted[n - 1],
+          range: sorted[n - 1] - sorted[0]
+        };
+      }
+    });
+
+    // Quantum Analysis Engine
+    this.analysisEngines.set('quantum', {
+      analyze: (data) => {
+        if (data.type === 'entanglement') {
+          return this.analyzeEntanglementData(data);
+        } else if (data.type === 'tunneling') {
+          return this.analyzeTunnelingData(data);
+        } else if (data.type === 'collision') {
+          return this.analyzeCollisionData(data);
+        }
+        return { error: 'Unknown quantum data type' };
+      }
+    });
+
+    // Machine Learning Analysis Engine
+    this.analysisEngines.set('machine_learning', {
+      analyze: (data) => {
+        // Simple pattern recognition and prediction
+        return this.performMLAnalysis(data);
+      }
+    });
+  }
+
+  // Experiment Setup Methods
+  setupBellTest(parameters) {
+    const { particleCount, measurementBases, correlationThreshold } = parameters;
+    
+    // Create entangled particle pairs
+    const particles = [];
+    for (let i = 0; i < particleCount; i += 2) {
+      const particle1 = quantumEngine.createParticle('electron', 100, { x: 0, y: 0, z: 0 });
+      const particle2 = quantumEngine.createParticle('electron', 100, { x: 0, y: 0, z: 0 });
+      
+      // Entangle particles
+      particle1.entangledWith = particle2.id;
+      particle2.entangledWith = particle1.id;
+      
+      particles.push(particle1, particle2);
+    }
+    
+    // Setup measurement apparatus
+    const measurementApparatus = {
+      bases: this.generateMeasurementBases(measurementBases),
+      detectors: particles.map(() => ({ state: 'ready', measurement: null })),
+      correlationThreshold: correlationThreshold
+    };
+    
+    return {
+      particles: particles,
+      apparatus: measurementApparatus,
+      parameters: parameters,
+      status: 'ready'
+    };
+  }
+
+  setupTunnelingSpectroscopy(parameters) {
+    const { barrierHeights, barrierWidths, particleEnergies } = parameters;
+    
+    // Create potential barriers
+    const barriers = [];
+    for (let i = 0; i < barrierHeights.length; i++) {
+      barriers.push({
+        height: barrierHeights[i],
+        width: barrierWidths[i],
+        position: { x: 5, y: 0, z: 0 },
+        particles: []
+      });
+    }
+    
+    // Create particles with different energies
+    const particles = particleEnergies.map(energy => 
+      quantumEngine.createParticle('electron', energy, { x: -5, y: 0, z: 0 })
+    );
+    
+    return {
+      barriers: barriers,
+      particles: particles,
+      parameters: parameters,
+      status: 'ready'
+    };
+  }
+
+  // Experiment Execution Methods
+  runBellTest(experiment) {
+    const { particles, apparatus } = experiment;
+    const results = [];
+    
+    // Run measurements on entangled pairs
+    for (let i = 0; i < particles.length; i += 2) {
+      const particle1 = particles[i];
+      const particle2 = particles[i + 1];
+      
+      // Measure in random bases
+      const basis1 = apparatus.bases[Math.floor(Math.random() * apparatus.bases.length)];
+      const basis2 = apparatus.bases[Math.floor(Math.random() * apparatus.bases.length)];
+      
+      const measurement1 = this.performMeasurement(particle1, basis1);
+      const measurement2 = this.performMeasurement(particle2, basis2);
+      
+      // Calculate correlation
+      const correlation = this.calculateCorrelation(measurement1, measurement2, basis1, basis2);
+      
+      results.push({
+        pair: [particle1.id, particle2.id],
+        measurements: [measurement1, measurement2],
+        correlation: correlation,
+        bases: [basis1, basis2]
+      });
+    }
+    
+    return {
+      results: results,
+      totalCorrelation: results.reduce((sum, r) => sum + r.correlation, 0) / results.length,
+      violationDetected: Math.abs(results.reduce((sum, r) => sum + r.correlation, 0) / results.length) > apparatus.correlationThreshold
+    };
+  }
+
+  runTunnelingSpectroscopy(experiment) {
+    const { barriers, particles } = experiment;
+    const results = [];
+    
+    // Test each particle against each barrier
+    particles.forEach(particle => {
+      barriers.forEach(barrier => {
+        const probability = quantumEngine.calculateTunnelingProbability(
+          barrier.height, barrier.width, particle.energy, particle.mass
+        );
+        
+        const tunneled = Math.random() < probability;
+        
+        results.push({
+          particleId: particle.id,
+          barrierHeight: barrier.height,
+          barrierWidth: barrier.width,
+          particleEnergy: particle.energy,
+          tunnelingProbability: probability,
+          tunneled: tunneled
+        });
+      });
+    });
+    
+    return {
+      results: results,
+      averageProbability: results.reduce((sum, r) => sum + r.tunnelingProbability, 0) / results.length,
+      totalTunneled: results.filter(r => r.tunneled).length
+    };
+  }
+
+  // Analysis Methods
+  analyzeBellTest(data) {
+    const correlations = data.results.map(r => r.correlation);
+    const statisticalAnalysis = this.analysisEngines.get('statistical').analyze(correlations);
+    
+    // Check for Bell inequality violation
+    const bellViolation = Math.abs(statisticalAnalysis.mean) > 2;
+    
+    return {
+      statistical: statisticalAnalysis,
+      bellViolation: bellViolation,
+      quantumNonLocality: bellViolation,
+      confidence: this.calculateConfidence(data.results.length, statisticalAnalysis.standardDeviation),
+      interpretation: bellViolation ? 
+        'Strong evidence for quantum non-locality' : 
+        'Results consistent with local hidden variable theories'
+    };
+  }
+
+  analyzeTunnelingSpectroscopy(data) {
+    const probabilities = data.results.map(r => r.tunnelingProbability);
+    const statisticalAnalysis = this.analysisEngines.get('statistical').analyze(probabilities);
+    
+    // Analyze tunneling behavior
+    const tunnelingBehavior = this.analyzeTunnelingBehavior(data.results);
+    
+    return {
+      statistical: statisticalAnalysis,
+      tunnelingBehavior: tunnelingBehavior,
+      barrierEffectiveness: this.calculateBarrierEffectiveness(data.results),
+      energyDependence: this.analyzeEnergyDependence(data.results),
+      interpretation: 'Analysis of quantum tunneling probability vs barrier properties'
+    };
+  }
+
+  // Utility Methods
+  generateMeasurementBases(count) {
+    const bases = [];
+    for (let i = 0; i < count; i++) {
+      const angle = (i * Math.PI) / count;
+      bases.push({
+        name: `Basis_${i}`,
+        angle: angle,
+        vector: { x: Math.cos(angle), y: Math.sin(angle), z: 0 }
+      });
+    }
+    return bases;
+  }
+
+  performMeasurement(particle, basis) {
+    // Simulate quantum measurement
+    const random = Math.random();
+    const result = random > 0.5 ? 'up' : 'down';
+    
+    // Collapse particle state
+    particle.quantumState = 'collapsed';
+    
+    return {
+      result: result,
+      basis: basis,
+      uncertainty: Math.random() * 0.1,
+      timestamp: Date.now()
+    };
+  }
+
+  calculateCorrelation(measurement1, measurement2, basis1, basis2) {
+    // Calculate correlation between measurements
+    const angleDiff = Math.abs(basis1.angle - basis2.angle);
+    const expectedCorrelation = Math.cos(2 * angleDiff);
+    
+    const actualCorrelation = (measurement1.result === measurement2.result ? 1 : -1);
+    
+    return actualCorrelation * expectedCorrelation;
+  }
+
+  calculatePositionVariance(dataPoints) {
+    // Calculate spatial variance of particles
+    const allPositions = dataPoints.flatMap(dp => dp.positions);
+    const centerX = allPositions.reduce((sum, p) => sum + p.x, 0) / allPositions.length;
+    const centerY = allPositions.reduce((sum, p) => sum + p.y, 0) / allPositions.length;
+    const centerZ = allPositions.reduce((sum, p) => sum + p.z, 0) / allPositions.length;
+    
+    return {
+      center: { x: centerX, y: centerY, z: centerZ },
+      variance: allPositions.reduce((sum, p) => 
+        sum + Math.pow(p.x - centerX, 2) + Math.pow(p.y - centerY, 2) + Math.pow(p.z - centerZ, 2), 0
+      ) / allPositions.length
+    };
+  }
+
+  calculateVelocityDistribution(dataPoints) {
+    const allVelocities = dataPoints.flatMap(dp => dp.velocities);
+    const speeds = allVelocities.map(v => Math.sqrt(v.x**2 + v.y**2 + v.z**2));
+    
+    return {
+      averageSpeed: speeds.reduce((sum, s) => sum + s, 0) / speeds.length,
+      maxSpeed: Math.max(...speeds),
+      minSpeed: Math.min(...speeds),
+      distribution: this.createHistogram(speeds, 10)
+    };
+  }
+
+  createHistogram(data, bins) {
+    const min = Math.min(...data);
+    const max = Math.max(...data);
+    const binSize = (max - min) / bins;
+    
+    const histogram = new Array(bins).fill(0);
+    data.forEach(value => {
+      const binIndex = Math.min(Math.floor((value - min) / binSize), bins - 1);
+      histogram[binIndex]++;
+    });
+    
+    return {
+      histogram: histogram,
+      binEdges: Array.from({length: bins + 1}, (_, i) => min + i * binSize)
+    };
+  }
+
+  calculateConfidence(sampleSize, standardDeviation) {
+    // Calculate confidence interval (95%)
+    const standardError = standardDeviation / Math.sqrt(sampleSize);
+    const confidenceInterval = 1.96 * standardError; // 95% confidence
+    
+    return {
+      lower: -confidenceInterval,
+      upper: confidenceInterval,
+      level: 0.95,
+      standardError: standardError
+    };
+  }
+
+  // Public API
+  createExperiment(type, parameters) {
+    const template = this.experimentTemplates.get(type);
+    if (!template) {
+      throw new Error(`Unknown experiment type: ${type}`);
+    }
+    
+    const experimentId = `exp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const experiment = {
+      id: experimentId,
+      type: type,
+      template: template,
+      parameters: parameters,
+      setup: template.setup(parameters),
+      status: 'created',
+      createdAt: Date.now(),
+      results: null,
+      analysis: null
+    };
+    
+    this.experiments.set(experimentId, experiment);
+    return experiment;
+  }
+
+  runExperiment(experimentId) {
+    const experiment = this.experiments.get(experimentId);
+    if (!experiment) {
+      throw new Error(`Experiment not found: ${experimentId}`);
+    }
+    
+    experiment.status = 'running';
+    experiment.results = experiment.template.run(experiment.setup);
+    experiment.status = 'completed';
+    experiment.completedAt = Date.now();
+    
+    return experiment;
+  }
+
+  analyzeExperiment(experimentId) {
+    const experiment = this.experiments.get(experimentId);
+    if (!experiment || !experiment.results) {
+      throw new Error(`Cannot analyze experiment: ${experimentId}`);
+    }
+    
+    experiment.analysis = experiment.template.analyze(experiment.results);
+    return experiment.analysis;
+  }
+
+  getExperiment(experimentId) {
+    return this.experiments.get(experimentId);
+  }
+
+  getAllExperiments() {
+    return Array.from(this.experiments.values());
+  }
+
+  deleteExperiment(experimentId) {
+    return this.experiments.delete(experimentId);
+  }
+}
+
+// Initialize the advanced experiment framework
+const experimentFramework = new AdvancedExperimentFramework();
+
 // Enhanced API routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
