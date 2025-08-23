@@ -8,28 +8,38 @@
     "dev": "nodemon server.js",
     "build": "webpack --mode production",
     "test": "jest",
-    "vercel-build": "echo 'Build completed'"
+    "vercel-build": "echo 'Build completed'",
+    "use-model": "python use_model.py --interactive",
+    "model-prompt": "python use_model.py --prompt"
   },
-  "keywords": ["quantum", "chaos", "simulation", "physics", "visualization", "psychedelic"],
+  "keywords": [
+    "quantum",
+    "chaos",
+    "simulation",
+    "physics",
+    "visualization",
+    "psychedelic"
+  ],
   "author": "Quantum Chaos Team",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
-    "socket.io": "^4.7.2",
-    "three": "^0.155.0",
-    "mathjs": "^11.11.0",
     "cors": "^2.8.5",
-    "tone": "^14.7.77",
-    "fft-js": "^0.0.12",
-    "simplex-noise": "^4.0.1",
-    "gl-matrix": "^3.4.3",
     "dat.gui": "^0.7.9",
-    "stats.js": "^0.17.0"
+    "express": "^4.18.2",
+    "fft-js": "^0.0.12",
+    "gl-matrix": "^3.4.3",
+    "mathjs": "^11.11.0",
+    "simplex-noise": "^4.0.1",
+    "socket.io": "^4.7.2",
+    "stats.js": "^0.17.0",
+    "three": "^0.155.0",
+    "tone": "^14.7.77"
   },
   "devDependencies": {
+    "jest": "^29.6.2",
     "nodemon": "^3.0.1",
+    "vercel": "^46.0.2",
     "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4",
-    "jest": "^29.6.2"
+    "webpack-cli": "^5.1.4"
   }
 }
