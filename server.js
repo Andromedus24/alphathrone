@@ -7689,3 +7689,40 @@ class QuantumTeleportationSystem {
   }
 }
 const quantumTeleportation = new QuantumTeleportationSystem();
+
+// NEW: Advanced Quantum Sensing and Metrology System
+class QuantumSensingSystem {
+  constructor() {
+    this.quantumSensors = new Map();
+    this.metrologyProtocols = new Map();
+    this.precisionMeasurements = new Map();
+    this.initializeSensingSystem();
+    console.log('📡 Quantum Sensing System initialized');
+  }
+  initializeSensingSystem() {
+    this.setupQuantumSensors();
+    this.setupMetrologyProtocols();
+  }
+  setupQuantumSensors() {
+    this.quantumSensors.set('atomic_clock', { name: 'Atomic Clock Sensor', precision: '10^-18', type: 'time' });
+    this.quantumSensors.set('magnetometer', { name: 'Quantum Magnetometer', precision: '10^-15 T', type: 'magnetic' });
+    this.quantumSensors.set('gravimeter', { name: 'Quantum Gravimeter', precision: '10^-9 m/s²', type: 'gravitational' });
+    this.quantumSensors.set('interferometer', { name: 'Quantum Interferometer', precision: '10^-12 m', type: 'optical' });
+  }
+  setupMetrologyProtocols() {
+    this.metrologyProtocols.set('heisenberg', { name: 'Heisenberg Limit Protocol', description: 'Ultimate precision limit', improvement: '√N' });
+    this.metrologyProtocols.set('squeezed_states', { name: 'Squeezed States Protocol', description: 'Reduced uncertainty in one quadrature', improvement: 'e^-2r' });
+    this.metrologyProtocols.set('cat_states', { name: 'Cat States Protocol', description: 'Macroscopic superposition states', improvement: 'N' });
+  }
+  performPrecisionMeasurement(sensorType, measurementType, parameters) {
+    const sensor = this.quantumSensors.get(sensorType);
+    const measurementId = `measurement_${sensorType}_${Date.now()}`;
+    const precision = sensor.precision;
+    this.precisionMeasurements.set(measurementId, { sensor, measurementType, parameters, precision, timestamp: Date.now() });
+    return { measurementId, precision, sensor: sensor.name };
+  }
+  getSensingStatus() {
+    return { sensors: Array.from(this.quantumSensors.keys()), protocols: Array.from(this.metrologyProtocols.keys()), measurements: this.precisionMeasurements.size };
+  }
+}
+const quantumSensing = new QuantumSensingSystem();
