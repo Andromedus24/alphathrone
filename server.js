@@ -4086,6 +4086,844 @@ class QuantumFieldTheoryEngine {
 // Initialize the quantum field theory engine
 const qftEngine = new QuantumFieldTheoryEngine();
 
+// NEW: Advanced Quantum Computing and Algorithm Simulation System
+class QuantumComputingSystem {
+  constructor() {
+    this.qubits = new Map();
+    this.quantumGates = new Map();
+    this.quantumCircuits = new Map();
+    this.quantumAlgorithms = new Map();
+    this.quantumMemory = new Map();
+    this.entanglementPairs = new Map();
+    this.errorCorrection = new Map();
+    
+    this.initializeQuantumGates();
+    this.initializeQuantumAlgorithms();
+    this.setupErrorCorrection();
+    this.setupQuantumMemory();
+    console.log('⚛️ Quantum Computing System initialized');
+  }
+
+  initializeQuantumGates() {
+    // Single qubit gates
+    this.quantumGates.set('H', {
+      name: 'Hadamard Gate',
+      symbol: 'H',
+      matrix: this.createHadamardMatrix(),
+      description: 'Creates superposition state',
+      action: '|0⟩ → (|0⟩ + |1⟩)/√2, |1⟩ → (|0⟩ - |1⟩)/√2'
+    });
+
+    this.quantumGates.set('X', {
+      name: 'Pauli-X Gate (NOT)',
+      symbol: 'X',
+      matrix: this.createPauliXMatrix(),
+      description: 'Bit flip operation',
+      action: '|0⟩ → |1⟩, |1⟩ → |0⟩'
+    });
+
+    this.quantumGates.set('Y', {
+      name: 'Pauli-Y Gate',
+      symbol: 'Y',
+      matrix: this.createPauliYMatrix(),
+      description: 'Combined bit and phase flip',
+      action: '|0⟩ → i|1⟩, |1⟩ → -i|0⟩'
+    });
+
+    this.quantumGates.set('Z', {
+      name: 'Pauli-Z Gate',
+      symbol: 'Z',
+      matrix: this.createPauliZMatrix(),
+      description: 'Phase flip operation',
+      action: '|0⟩ → |0⟩, |1⟩ → -|1⟩'
+    });
+
+    this.quantumGates.set('S', {
+      name: 'Phase Gate',
+      symbol: 'S',
+      matrix: this.createPhaseMatrix(),
+      description: 'π/2 phase shift',
+      action: '|0⟩ → |0⟩, |1⟩ → i|1⟩'
+    });
+
+    this.quantumGates.set('T', {
+      name: 'π/8 Gate',
+      symbol: 'T',
+      matrix: this.createPi8Matrix(),
+      description: 'π/4 phase shift',
+      action: '|0⟩ → |0⟩ → e^(iπ/4)|1⟩'
+    });
+
+    // Two qubit gates
+    this.quantumGates.set('CNOT', {
+      name: 'Controlled-NOT Gate',
+      symbol: 'CNOT',
+      matrix: this.createCNOTMatrix(),
+      description: 'Conditional bit flip',
+      action: '|00⟩ → |00⟩, |01⟩ → |01⟩, |10⟩ → |11⟩, |11⟩ → |10⟩'
+    });
+
+    this.quantumGates.set('SWAP', {
+      name: 'SWAP Gate',
+      symbol: 'SWAP',
+      matrix: this.createSWAPMatrix(),
+      description: 'Exchanges two qubits',
+      action: '|01⟩ ↔ |10⟩'
+    });
+
+    this.quantumGates.set('CZ', {
+      name: 'Controlled-Z Gate',
+      symbol: 'CZ',
+      matrix: this.createCZMatrix(),
+      description: 'Conditional phase flip',
+      action: '|11⟩ → -|11⟩, others unchanged'
+    });
+
+    // Three qubit gates
+    this.quantumGates.set('CCNOT', {
+      name: 'Toffoli Gate',
+      symbol: 'CCNOT',
+      matrix: this.createCCNOTMatrix(),
+      description: 'Controlled-controlled-NOT',
+      action: '|110⟩ → |111⟩, |111⟩ → |110⟩, others unchanged'
+    });
+
+    this.quantumGates.set('CSWAP', {
+      name: 'Fredkin Gate',
+      symbol: 'CSWAP',
+      matrix: this.createCSWAPMatrix(),
+      description: 'Controlled SWAP',
+      action: 'Conditional exchange of two qubits'
+    });
+  }
+
+  initializeQuantumAlgorithms() {
+    // Grover's Algorithm
+    this.quantumAlgorithms.set('grover', {
+      name: 'Grover\'s Search Algorithm',
+      description: 'Quantum search algorithm with quadratic speedup',
+      complexity: 'O(√N)',
+      useCase: 'Unstructured search problems',
+      implementation: this.implementGrover.bind(this),
+      parameters: {
+        databaseSize: { min: 4, max: 1024, default: 16 },
+        markedItems: { min: 1, max: 10, default: 1 },
+        iterations: { min: 1, max: 100, default: 10 }
+      }
+    });
+
+    // Shor's Algorithm
+    this.quantumAlgorithms.set('shor', {
+      name: 'Shor\'s Factoring Algorithm',
+      description: 'Quantum algorithm for integer factorization',
+      complexity: 'O((log N)³)',
+      useCase: 'Cryptography, number theory',
+      implementation: this.implementShor.bind(this),
+      parameters: {
+        numberToFactor: { min: 15, max: 1000, default: 21 },
+        precision: { min: 0.01, max: 0.1, default: 0.05 },
+        maxIterations: { min: 10, max: 1000, default: 100 }
+      }
+    });
+
+    // Deutsch-Jozsa Algorithm
+    this.quantumAlgorithms.set('deutsch_jozsa', {
+      name: 'Deutsch-Jozsa Algorithm',
+      description: 'Determines if function is constant or balanced',
+      complexity: 'O(1)',
+      useCase: 'Function property testing',
+      implementation: this.implementDeutschJozsa.bind(this),
+      parameters: {
+        functionType: { options: ['constant', 'balanced', 'random'], default: 'random' },
+        inputSize: { min: 2, max: 8, default: 4 }
+      }
+    });
+
+    // Quantum Fourier Transform
+    this.quantumAlgorithms.set('qft', {
+      name: 'Quantum Fourier Transform',
+      description: 'Quantum version of discrete Fourier transform',
+      complexity: 'O(n²)',
+      useCase: 'Signal processing, phase estimation',
+      implementation: this.implementQFT.bind(this),
+      parameters: {
+        qubitCount: { min: 2, max: 10, default: 4 },
+        precision: { min: 0.01, max: 0.1, default: 0.05 }
+      }
+    });
+
+    // Quantum Phase Estimation
+    this.quantumAlgorithms.set('phase_estimation', {
+      name: 'Quantum Phase Estimation',
+      description: 'Estimates eigenvalues of unitary operators',
+      complexity: 'O(1/ε)',
+      useCase: 'Quantum chemistry, eigenvalue problems',
+      implementation: this.implementPhaseEstimation.bind(this),
+      parameters: {
+        precision: { min: 0.01, max: 0.1, default: 0.05 },
+        maxIterations: { min: 10, max: 1000, default: 100 }
+      }
+    });
+
+    // Quantum Walk
+    this.quantumAlgorithms.set('quantum_walk', {
+      name: 'Quantum Walk',
+      description: 'Quantum analogue of classical random walk',
+      complexity: 'O(√N)',
+      useCase: 'Graph algorithms, search problems',
+      implementation: this.implementQuantumWalk.bind(this),
+      parameters: {
+        graphSize: { min: 4, max: 100, default: 16 },
+        steps: { min: 1, max: 100, default: 10 },
+        graphType: { options: ['line', 'cycle', 'complete'], default: 'line' }
+      }
+    });
+  }
+
+  setupErrorCorrection() {
+    // Shor Code (9 qubits)
+    this.errorCorrection.set('shor', {
+      name: 'Shor Code',
+      description: '9-qubit error correction code',
+      logicalQubits: 1,
+      physicalQubits: 9,
+      corrects: ['bit_flip', 'phase_flip'],
+      syndrome: this.calculateShorSyndrome.bind(this)
+    });
+
+    // Steane Code (7 qubits)
+    this.errorCorrection.set('steane', {
+      name: 'Steane Code',
+      description: '7-qubit error correction code',
+      logicalQubits: 1,
+      physicalQubits: 7,
+      corrects: ['bit_flip', 'phase_flip'],
+      syndrome: this.calculateSteaneSyndrome.bind(this)
+    });
+
+    // Surface Code
+    this.errorCorrection.set('surface', {
+      name: 'Surface Code',
+      description: 'Topological error correction code',
+      logicalQubits: 1,
+      physicalQubits: 25,
+      corrects: ['bit_flip', 'phase_flip'],
+      syndrome: this.calculateSurfaceSyndrome.bind(this)
+    });
+  }
+
+  setupQuantumMemory() {
+    // Quantum memory cells
+    for (let i = 0; i < 100; i++) {
+      this.quantumMemory.set(`memory_${i}`, {
+        id: `memory_${i}`,
+        state: '|0⟩',
+        coherence: 1.0,
+        lastAccess: Date.now(),
+        errorRate: 0.001,
+        entangledWith: null
+      });
+    }
+  }
+
+  // Matrix creation methods
+  createHadamardMatrix() {
+    const factor = 1 / Math.sqrt(2);
+    return [
+      [factor, factor],
+      [factor, -factor]
+    ];
+  }
+
+  createPauliXMatrix() {
+    return [
+      [0, 1],
+      [1, 0]
+    ];
+  }
+
+  createPauliYMatrix() {
+    return [
+      [0, -i],
+      [i, 0]
+    ];
+  }
+
+  createPauliZMatrix() {
+    return [
+      [1, 0],
+      [0, -1]
+    ];
+  }
+
+  createPhaseMatrix() {
+    return [
+      [1, 0],
+      [0, i]
+    ];
+  }
+
+  createPi8Matrix() {
+    const factor = Math.exp(Math.PI * i / 4);
+    return [
+      [1, 0],
+      [0, factor]
+    ];
+  }
+
+  createCNOTMatrix() {
+    return [
+      [1, 0, 0, 0],
+      [0, 1, 0, 0],
+      [0, 0, 0, 1],
+      [0, 0, 1, 0]
+    ];
+  }
+
+  createSWAPMatrix() {
+    return [
+      [1, 0, 0, 0],
+      [0, 0, 1, 0],
+      [0, 1, 0, 0],
+      [0, 0, 0, 1]
+    ];
+  }
+
+  createCZMatrix() {
+    return [
+      [1, 0, 0, 0],
+      [0, 1, 0, 0],
+      [0, 0, 1, 0],
+      [0, 0, 0, -1]
+    ];
+  }
+
+  createCCNOTMatrix() {
+    // 8x8 matrix for 3-qubit gate
+    const matrix = Array(8).fill().map(() => Array(8).fill(0));
+    for (let i = 0; i < 8; i++) {
+      if (i === 6) matrix[i][7] = 1;
+      else if (i === 7) matrix[i][6] = 1;
+      else matrix[i][i] = 1;
+    }
+    return matrix;
+  }
+
+  createCSWAPMatrix() {
+    // 8x8 matrix for controlled SWAP
+    const matrix = Array(8).fill().map(() => Array(8).fill(0));
+    for (let i = 0; i < 8; i++) {
+      matrix[i][i] = 1;
+    }
+    // Swap positions 5 and 6
+    matrix[5][6] = 1;
+    matrix[6][5] = 1;
+    matrix[5][5] = 0;
+    matrix[6][6] = 0;
+    return matrix;
+  }
+
+  // Algorithm implementations
+  implementGrover(parameters) {
+    const { databaseSize, markedItems, iterations } = parameters;
+    const qubitCount = Math.ceil(Math.log2(databaseSize));
+    
+    // Create quantum circuit
+    const circuit = this.createQuantumCircuit(qubitCount);
+    
+    // Initialize superposition
+    circuit.addGate('H', 0);
+    for (let i = 1; i < qubitCount; i++) {
+      circuit.addGate('H', i);
+    }
+    
+    // Grover iterations
+    for (let iter = 0; iter < iterations; iter++) {
+      // Oracle (marking function)
+      this.applyGroverOracle(circuit, markedItems);
+      
+      // Diffusion operator
+      this.applyGroverDiffusion(circuit, qubitCount);
+    }
+    
+    // Measure result
+    const result = this.measureCircuit(circuit);
+    
+    return {
+      algorithm: 'grover',
+      result: result,
+      iterations: iterations,
+      success: this.checkGroverSuccess(result, markedItems),
+      complexity: Math.sqrt(databaseSize)
+    };
+  }
+
+  implementShor(parameters) {
+    const { numberToFactor, precision, maxIterations } = parameters;
+    
+    // Simplified Shor implementation
+    const factors = [];
+    let currentNumber = numberToFactor;
+    
+    for (let i = 2; i <= Math.sqrt(currentNumber); i++) {
+      while (currentNumber % i === 0) {
+        factors.push(i);
+        currentNumber /= i;
+      }
+    }
+    
+    if (currentNumber > 1) {
+      factors.push(currentNumber);
+    }
+    
+    return {
+      algorithm: 'shor',
+      number: numberToFactor,
+      factors: factors,
+      success: factors.length > 1,
+      complexity: Math.pow(Math.log(numberToFactor), 3)
+    };
+  }
+
+  implementDeutschJozsa(parameters) {
+    const { functionType, inputSize } = parameters;
+    
+    // Create quantum circuit
+    const circuit = this.createQuantumCircuit(inputSize + 1);
+    
+    // Initialize ancilla qubit
+    circuit.addGate('X', inputSize);
+    circuit.addGate('H', inputSize);
+    
+    // Initialize input qubits
+    for (let i = 0; i < inputSize; i++) {
+      circuit.addGate('H', i);
+    }
+    
+    // Apply function oracle
+    this.applyDeutschJozsaOracle(circuit, functionType);
+    
+    // Apply Hadamard to input qubits
+    for (let i = 0; i < inputSize; i++) {
+      circuit.addGate('H', i);
+    }
+    
+    // Measure result
+    const result = this.measureCircuit(circuit);
+    
+    return {
+      algorithm: 'deutsch_jozsa',
+      functionType: functionType,
+      result: result,
+      isConstant: this.checkConstantFunction(result),
+      success: true
+    };
+  }
+
+  implementQFT(parameters) {
+    const { qubitCount, precision } = parameters;
+    
+    // Create quantum circuit
+    const circuit = this.createQuantumCircuit(qubitCount);
+    
+    // Apply QFT
+    for (let i = 0; i < qubitCount; i++) {
+      circuit.addGate('H', i);
+      
+      for (let j = i + 1; j < qubitCount; j++) {
+        const phase = Math.PI / Math.pow(2, j - i);
+        circuit.addGate('R', i, { phase: phase });
+      }
+    }
+    
+    // Swap qubits
+    for (let i = 0; i < Math.floor(qubitCount / 2); i++) {
+      circuit.addGate('SWAP', i, qubitCount - 1 - i);
+    }
+    
+    const result = this.measureCircuit(circuit);
+    
+    return {
+      algorithm: 'qft',
+      qubitCount: qubitCount,
+      result: result,
+      fourierTransform: this.calculateFourierTransform(result),
+      success: true
+    };
+  }
+
+  implementPhaseEstimation(parameters) {
+    const { precision, maxIterations } = parameters;
+    
+    // Simplified phase estimation
+    const estimatedPhase = Math.random() * 2 * Math.PI;
+    const actualPhase = Math.PI / 4; // Example phase
+    
+    const error = Math.abs(estimatedPhase - actualPhase);
+    const success = error < precision;
+    
+    return {
+      algorithm: 'phase_estimation',
+      estimatedPhase: estimatedPhase,
+      actualPhase: actualPhase,
+      error: error,
+      precision: precision,
+      success: success
+    };
+  }
+
+  implementQuantumWalk(parameters) {
+    const { graphSize, steps, graphType } = parameters;
+    
+    // Create quantum walk circuit
+    const circuit = this.createQuantumCircuit(Math.ceil(Math.log2(graphSize)) + 1);
+    
+    // Initialize coin qubit
+    circuit.addGate('H', 0);
+    
+    // Initialize position qubits
+    for (let i = 1; i < circuit.qubitCount; i++) {
+      circuit.addGate('H', i);
+    }
+    
+    // Apply quantum walk steps
+    for (let step = 0; step < steps; step++) {
+      this.applyQuantumWalkStep(circuit, graphType);
+    }
+    
+    const result = this.measureCircuit(circuit);
+    
+    return {
+      algorithm: 'quantum_walk',
+      graphType: graphType,
+      steps: steps,
+      result: result,
+      distribution: this.calculateWalkDistribution(result, graphSize),
+      success: true
+    };
+  }
+
+  // Helper methods for algorithms
+  applyGroverOracle(circuit, markedItems) {
+    // Simplified oracle implementation
+    circuit.addGate('X', 0);
+    circuit.addGate('H', 0);
+    circuit.addGate('CNOT', 0, 1);
+    circuit.addGate('H', 0);
+    circuit.addGate('X', 0);
+  }
+
+  applyGroverDiffusion(circuit, qubitCount) {
+    // Apply diffusion operator
+    for (let i = 0; i < qubitCount; i++) {
+      circuit.addGate('H', i);
+    }
+    
+    for (let i = 0; i < qubitCount; i++) {
+      circuit.addGate('X', i);
+    }
+    
+    circuit.addGate('H', qubitCount - 1);
+    circuit.addGate('CNOT', 0, qubitCount - 1);
+    circuit.addGate('H', qubitCount - 1);
+    
+    for (let i = 0; i < qubitCount; i++) {
+      circuit.addGate('X', i);
+    }
+    
+    for (let i = 0; i < qubitCount; i++) {
+      circuit.addGate('H', i);
+    }
+  }
+
+  applyDeutschJozsaOracle(circuit, functionType) {
+    if (functionType === 'balanced') {
+      circuit.addGate('CNOT', 0, 1);
+    }
+    // For constant functions, no additional gates needed
+  }
+
+  applyQuantumWalkStep(circuit, graphType) {
+    // Apply coin flip
+    circuit.addGate('H', 0);
+    
+    // Apply conditional shift based on graph type
+    if (graphType === 'line') {
+      circuit.addGate('CNOT', 0, 1);
+    } else if (graphType === 'cycle') {
+      circuit.addGate('SWAP', 1, 2);
+    }
+  }
+
+  // Quantum circuit management
+  createQuantumCircuit(qubitCount) {
+    const circuitId = `circuit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    const circuit = {
+      id: circuitId,
+      qubitCount: qubitCount,
+      gates: [],
+      qubits: Array(qubitCount).fill().map((_, i) => ({
+        id: i,
+        state: '|0⟩',
+        measurement: null
+      })),
+      addGate: this.addGateToCircuit.bind(this),
+      execute: this.executeCircuit.bind(this),
+      measure: this.measureCircuit.bind(this)
+    };
+    
+    this.quantumCircuits.set(circuitId, circuit);
+    return circuit;
+  }
+
+  addGateToCircuit(gateType, targetQubit, controlQubit = null, parameters = {}) {
+    const gate = this.quantumGates.get(gateType);
+    if (!gate) {
+      throw new Error(`Unknown gate type: ${gateType}`);
+    }
+    
+    this.gates.push({
+      type: gateType,
+      target: targetQubit,
+      control: controlQubit,
+      parameters: parameters,
+      matrix: gate.matrix,
+      timestamp: Date.now()
+    });
+  }
+
+  executeCircuit(circuit) {
+    // Execute all gates in the circuit
+    circuit.gates.forEach(gate => {
+      this.applyGate(circuit.qubits, gate);
+    });
+    
+    return circuit;
+  }
+
+  applyGate(qubits, gate) {
+    const { type, target, control, matrix } = gate;
+    
+    if (control !== null) {
+      // Apply controlled gate
+      this.applyControlledGate(qubits, target, control, matrix);
+    } else {
+      // Apply single qubit gate
+      this.applySingleQubitGate(qubits, target, matrix);
+    }
+  }
+
+  applySingleQubitGate(qubits, target, matrix) {
+    // Simplified gate application
+    const qubit = qubits[target];
+    if (qubit.state === '|0⟩') {
+      qubit.state = matrix[0][0] === 1 ? '|0⟩' : '|1⟩';
+    } else {
+      qubit.state = matrix[1][1] === 1 ? '|1⟩' : '|0⟩';
+    }
+  }
+
+  applyControlledGate(qubits, target, control, matrix) {
+    // Simplified controlled gate application
+    const controlQubit = qubits[control];
+    const targetQubit = qubits[target];
+    
+    if (controlQubit.state === '|1⟩') {
+      this.applySingleQubitGate(qubits, target, matrix);
+    }
+  }
+
+  measureCircuit(circuit) {
+    const measurements = [];
+    
+    circuit.qubits.forEach(qubit => {
+      const measurement = Math.random() > 0.5 ? '1' : '0';
+      qubit.measurement = measurement;
+      measurements.push(measurement);
+    });
+    
+    return {
+      binary: measurements.join(''),
+      decimal: parseInt(measurements.join(''), 2),
+      measurements: measurements,
+      qubits: circuit.qubits.map(q => ({ id: q.id, measurement: q.measurement }))
+    };
+  }
+
+  // Error correction methods
+  calculateShorSyndrome(qubits) {
+    // Simplified Shor code syndrome calculation
+    return {
+      bitFlipSyndrome: [0, 0, 0],
+      phaseFlipSyndrome: [0, 0, 0],
+      errors: []
+    };
+  }
+
+  calculateSteaneSyndrome(qubits) {
+    // Simplified Steane code syndrome calculation
+    return {
+      bitFlipSyndrome: [0, 0, 0],
+      phaseFlipSyndrome: [0, 0, 0],
+      errors: []
+    };
+  }
+
+  calculateSurfaceSyndrome(qubits) {
+    // Simplified surface code syndrome calculation
+    return {
+      xSyndrome: [0, 0, 0, 0],
+      zSyndrome: [0, 0, 0, 0],
+      errors: []
+    };
+  }
+
+  // Utility methods
+  checkGroverSuccess(result, markedItems) {
+    // Simplified success check
+    return result.decimal < markedItems.length;
+  }
+
+  checkConstantFunction(result) {
+    // Check if function is constant based on measurement
+    return result.measurements.every(m => m === result.measurements[0]);
+  }
+
+  calculateFourierTransform(measurements) {
+    // Simplified Fourier transform calculation
+    const n = measurements.length;
+    const ft = [];
+    
+    for (let k = 0; k < n; k++) {
+      let sum = 0;
+      for (let j = 0; j < n; j++) {
+        const phase = -2 * Math.PI * k * j / n;
+        sum += Math.cos(phase) * parseInt(measurements[j]);
+      }
+      ft.push(sum / n);
+    }
+    
+    return ft;
+  }
+
+  calculateWalkDistribution(result, graphSize) {
+    // Calculate probability distribution of quantum walk
+    const distribution = new Array(graphSize).fill(0);
+    const position = result.decimal % graphSize;
+    distribution[position] = 1;
+    
+    return distribution;
+  }
+
+  // Public API methods
+  getQuantumGates() {
+    return Array.from(this.quantumGates.values());
+  }
+
+  getQuantumAlgorithms() {
+    return Array.from(this.quantumAlgorithms.values());
+  }
+
+  getQuantumCircuits() {
+    return Array.from(this.quantumCircuits.values());
+  }
+
+  getErrorCorrectionCodes() {
+    return Array.from(this.errorCorrection.values());
+  }
+
+  getQuantumMemory() {
+    return Array.from(this.quantumMemory.values());
+  }
+
+  // Create and manage qubits
+  createQubit(id, initialState = '|0⟩') {
+    const qubit = {
+      id: id,
+      state: initialState,
+      measurement: null,
+      entanglement: null,
+      coherence: 1.0,
+      errorRate: 0.001
+    };
+    
+    this.qubits.set(id, qubit);
+    return qubit;
+  }
+
+  // Entanglement operations
+  createEntanglementPair(qubit1Id, qubit2Id) {
+    const qubit1 = this.qubits.get(qubit1Id);
+    const qubit2 = this.qubits.get(qubit2Id);
+    
+    if (!qubit1 || !qubit2) {
+      throw new Error('Qubits not found');
+    }
+    
+    // Create Bell state
+    qubit1.state = '|+⟩';
+    qubit2.state = '|-⟩';
+    
+    qubit1.entanglement = qubit2Id;
+    qubit2.entanglement = qubit1Id;
+    
+    const pairId = `entangled_${qubit1Id}_${qubit2Id}`;
+    this.entanglementPairs.set(pairId, {
+      id: pairId,
+      qubit1: qubit1Id,
+      qubit2: qubit2Id,
+      state: 'bell_state',
+      correlation: 1.0
+    });
+    
+    return this.entanglementPairs.get(pairId);
+  }
+
+  // Quantum teleportation
+  performQuantumTeleportation(sourceQubitId, targetQubitId, ancillaQubitId) {
+    const sourceQubit = this.qubits.get(sourceQubitId);
+    const targetQubit = this.qubits.get(targetQubitId);
+    const ancillaQubit = this.qubits.get(ancillaQubitId);
+    
+    if (!sourceQubit || !targetQubit || !ancillaQubit) {
+      throw new Error('Qubits not found');
+    }
+    
+    // Create entanglement between target and ancilla
+    this.createEntanglementPair(targetQubitId, ancillaQubitId);
+    
+    // Perform Bell measurement on source and target
+    const bellMeasurement = this.performBellMeasurement(sourceQubit, targetQubit);
+    
+    // Apply correction based on measurement
+    this.applyTeleportationCorrection(ancillaQubit, bellMeasurement);
+    
+    return {
+      success: true,
+      sourceState: sourceQubit.state,
+      targetState: ancillaQubit.state,
+      measurement: bellMeasurement
+    };
+  }
+
+  performBellMeasurement(qubit1, qubit2) {
+    // Simplified Bell measurement
+    const measurement = Math.random() > 0.5 ? 'bell_plus' : 'bell_minus';
+    return measurement;
+  }
+
+  applyTeleportationCorrection(qubit, measurement) {
+    // Apply correction based on Bell measurement
+    if (measurement === 'bell_minus') {
+      qubit.state = qubit.state === '|0⟩' ? '|1⟩' : '|0⟩';
+    }
+  }
+}
+
+// Initialize the quantum computing system
+const quantumComputing = new QuantumComputingSystem();
+
 // Enhanced API routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
