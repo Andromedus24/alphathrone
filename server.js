@@ -3444,6 +3444,648 @@ class AIParticlePredictor {
 // Initialize the AI particle predictor
 const aiPredictor = new AIParticlePredictor();
 
+// NEW: Advanced Quantum Field Theory Simulation Engine
+class QuantumFieldTheoryEngine {
+  constructor() {
+    this.fields = new Map();
+    this.fieldOperators = new Map();
+    this.vacuumStates = new Map();
+    this.fieldEquations = new Map();
+    this.renormalizationSchemes = new Map();
+    this.feynmanDiagrams = new Map();
+    
+    this.initializeFieldTypes();
+    this.initializeFieldOperators();
+    this.initializeVacuumStates();
+    this.setupFieldEquations();
+    this.setupRenormalizationSchemes();
+    console.log('🌊 Quantum Field Theory Engine initialized');
+  }
+
+  initializeFieldTypes() {
+    // Scalar Field (Higgs-like)
+    this.fields.set('scalar', {
+      type: 'scalar',
+      components: 1,
+      mass: 125, // GeV
+      spin: 0,
+      charge: 0,
+      color: 'white',
+      interactions: ['self', 'gauge', 'fermion'],
+      lagrangian: 'L = 1/2(∂φ)² - 1/2m²φ² - λ/4!φ⁴',
+      propagator: '1/(p² - m² + iε)',
+      vertices: ['φ⁴', 'φ²A²', 'φψ̄ψ']
+    });
+
+    // Vector Field (Photon-like)
+    this.fields.set('vector', {
+      type: 'vector',
+      components: 4,
+      mass: 0,
+      spin: 1,
+      charge: 0,
+      color: 'white',
+      interactions: ['self', 'fermion', 'scalar'],
+      lagrangian: 'L = -1/4F_μνF^μν + ψ̄γ^μA_μψ',
+      propagator: '(-g_μν + p_μp_ν/p²)/(p² + iε)',
+      vertices: ['A³', 'A⁴', 'ψ̄γAψ', 'φ²A²']
+    });
+
+    // Spinor Field (Fermion-like)
+    this.fields.set('spinor', {
+      type: 'spinor',
+      components: 4,
+      mass: 0.511, // MeV (electron)
+      spin: 1/2,
+      charge: -1,
+      color: 'white',
+      interactions: ['gauge', 'scalar', 'self'],
+      lagrangian: 'L = ψ̄(iγ^μ∂_μ - m)ψ + gψ̄γ^μA_μψ',
+      propagator: '(iγ^μp_μ + m)/(p² - m² + iε)',
+      vertices: ['ψ̄γAψ', 'ψ̄φψ', 'ψ̄ψψ̄ψ']
+    });
+
+    // Tensor Field (Graviton-like)
+    this.fields.set('tensor', {
+      type: 'tensor',
+      components: 10,
+      mass: 0,
+      spin: 2,
+      charge: 0,
+      color: 'white',
+      interactions: ['self', 'matter', 'scalar'],
+      lagrangian: 'L = √(-g)R + L_matter',
+      propagator: '(P_μνρσ)/(p² + iε)',
+      vertices: ['h³', 'h⁴', 'hT', 'hφ²']
+    });
+  }
+
+  initializeFieldOperators() {
+    // Creation and annihilation operators
+    this.fieldOperators.set('creation', {
+      name: 'Creation Operator',
+      symbol: 'a†',
+      action: 'Creates a particle',
+      commutation: '[a, a†] = 1',
+      matrix: this.createOperatorMatrix('creation')
+    });
+
+    this.fieldOperators.set('annihilation', {
+      name: 'Annihilation Operator',
+      symbol: 'a',
+      action: 'Destroys a particle',
+      commutation: '[a, a†] = 1',
+      matrix: this.createOperatorMatrix('annihilation')
+    });
+
+    this.fieldOperators.set('number', {
+      name: 'Number Operator',
+      symbol: 'N = a†a',
+      action: 'Counts particles',
+      eigenvalues: 'n = 0, 1, 2, ...',
+      matrix: this.createOperatorMatrix('number')
+    });
+
+    this.fieldOperators.set('field', {
+      name: 'Field Operator',
+      symbol: 'φ(x)',
+      action: 'Field at position x',
+      expansion: 'φ(x) = Σ_k (a_k e^(ikx) + a_k† e^(-ikx))',
+      matrix: this.createOperatorMatrix('field')
+    });
+  }
+
+  initializeVacuumStates() {
+    // Ground state vacuum
+    this.vacuumStates.set('ground', {
+      name: 'Ground State Vacuum',
+      energy: 0,
+      particleCount: 0,
+      fluctuations: 0,
+      properties: {
+        zeroPointEnergy: 0.5 * Math.PI,
+        casimirEffect: true,
+        hawkingRadiation: false,
+        unruhEffect: false
+      }
+    });
+
+    // Excited vacuum states
+    this.vacuumStates.set('excited', {
+      name: 'Excited Vacuum State',
+      energy: 1.0,
+      particleCount: 1,
+      fluctuations: 0.1,
+      properties: {
+        zeroPointEnergy: 1.5 * Math.PI,
+        casimirEffect: true,
+        hawkingRadiation: true,
+        unruhEffect: true
+      }
+    });
+
+    // False vacuum (metastable)
+    this.vacuumStates.set('false', {
+      name: 'False Vacuum State',
+      energy: 0.8,
+      particleCount: 0,
+      fluctuations: 0.3,
+      properties: {
+        zeroPointEnergy: 0.8 * Math.PI,
+        casimirEffect: true,
+        hawkingRadiation: false,
+        unruhEffect: false,
+        metastable: true,
+        decayRate: 0.001
+      }
+    });
+  }
+
+  setupFieldEquations() {
+    // Klein-Gordon equation for scalar fields
+    this.fieldEquations.set('klein_gordon', {
+      name: 'Klein-Gordon Equation',
+      equation: '(∂²/∂t² - ∇² + m²)φ = 0',
+      type: 'scalar',
+      solutions: ['plane_wave', 'gaussian_packet', 'soliton'],
+      dispersion: 'ω² = k² + m²',
+      solve: this.solveKleinGordon.bind(this)
+    });
+
+    // Dirac equation for spinor fields
+    this.fieldEquations.set('dirac', {
+      name: 'Dirac Equation',
+      equation: '(iγ^μ∂_μ - m)ψ = 0',
+      type: 'spinor',
+      solutions: ['plane_wave', 'gaussian_packet', 'bound_state'],
+      dispersion: 'ω² = k² + m²',
+      solve: this.solveDirac.bind(this)
+    });
+
+    // Maxwell equations for vector fields
+    this.fieldEquations.set('maxwell', {
+      name: 'Maxwell Equations',
+      equations: ['∇·E = ρ/ε₀', '∇×B = μ₀J + μ₀ε₀∂E/∂t', '∇·B = 0', '∇×E = -∂B/∂t'],
+      type: 'vector',
+      solutions: ['plane_wave', 'gaussian_packet', 'standing_wave'],
+      dispersion: 'ω² = c²k²',
+      solve: this.solveMaxwell.bind(this)
+    });
+
+    // Einstein equations for tensor fields
+    this.fieldEquations.set('einstein', {
+      name: 'Einstein Field Equations',
+      equation: 'R_μν - 1/2Rg_μν = 8πGT_μν',
+      type: 'tensor',
+      solutions: ['schwarzschild', 'kerr', 'gravitational_wave'],
+      dispersion: 'ω² = c²k²',
+      solve: this.solveEinstein.bind(this)
+    });
+  }
+
+  setupRenormalizationSchemes() {
+    // Dimensional regularization
+    this.renormalizationSchemes.set('dimensional', {
+      name: 'Dimensional Regularization',
+      method: 'Extend to d = 4 - ε dimensions',
+      advantages: ['Gauge invariant', 'Preserves symmetries', 'Systematic'],
+      disadvantages: ['Complex', 'Not intuitive'],
+      formula: '∫d⁴k/(2π)⁴ → μ^(4-d)∫d^dk/(2π)^d'
+    });
+
+    // Pauli-Villars regularization
+    this.renormalizationSchemes.set('pauli_villars', {
+      name: 'Pauli-Villars Regularization',
+      method: 'Add massive regulator fields',
+      advantages: ['Physical interpretation', 'Simple'],
+      disadvantages: ['Breaks gauge invariance', 'Not systematic'],
+      formula: '1/(p² - m²) → 1/(p² - m²) - 1/(p² - M²)'
+    });
+
+    // Lattice regularization
+    this.renormalizationSchemes.set('lattice', {
+      name: 'Lattice Regularization',
+      method: 'Discretize spacetime on a lattice',
+      advantages: ['Non-perturbative', 'Numerical approach'],
+      disadvantages: ['Breaks Lorentz invariance', 'Computationally expensive'],
+      formula: '∂_μ → (φ(x+μ) - φ(x))/a'
+    });
+  }
+
+  // Field equation solvers
+  solveKleinGordon(parameters) {
+    const { mass, waveVector, amplitude, position, time } = parameters;
+    const k = Math.sqrt(waveVector.x**2 + waveVector.y**2 + waveVector.z**2);
+    const omega = Math.sqrt(k**2 + mass**2);
+    
+    const solution = amplitude * Math.cos(omega * time - 
+      waveVector.x * position.x - waveVector.y * position.y - waveVector.z * position.z);
+    
+    return {
+      type: 'klein_gordon_solution',
+      field: solution,
+      energy: omega,
+      momentum: k,
+      mass: mass,
+      parameters: parameters
+    };
+  }
+
+  solveDirac(parameters) {
+    const { mass, waveVector, amplitude, position, time, spin } = parameters;
+    const k = Math.sqrt(waveVector.x**2 + waveVector.y**2 + waveVector.z**2);
+    const omega = Math.sqrt(k**2 + mass**2);
+    
+    // Simplified Dirac solution (4-component spinor)
+    const solution = {
+      upper: amplitude * Math.exp(-i * (omega * time - k * position.x)),
+      lower: (k / (omega + mass)) * amplitude * Math.exp(-i * (omega * time - k * position.x))
+    };
+    
+    return {
+      type: 'dirac_solution',
+      spinor: solution,
+      energy: omega,
+      momentum: k,
+      mass: mass,
+      spin: spin,
+      parameters: parameters
+    };
+  }
+
+  solveMaxwell(parameters) {
+    const { waveVector, amplitude, position, time, polarization } = parameters;
+    const k = Math.sqrt(waveVector.x**2 + waveVector.y**2 + waveVector.z**2);
+    const omega = k; // c = 1
+    
+    const solution = {
+      electric: amplitude * Math.cos(omega * time - k * position.x) * polarization,
+      magnetic: amplitude * Math.cos(omega * time - k * position.x) * 
+        this.crossProduct(waveVector, polarization),
+      energy: omega,
+      momentum: k,
+      polarization: polarization,
+      parameters: parameters
+    };
+    
+    return {
+      type: 'maxwell_solution',
+      fields: solution,
+      energy: omega,
+      momentum: k,
+      polarization: polarization,
+      parameters: parameters
+    };
+  }
+
+  solveEinstein(parameters) {
+    const { mass, angularMomentum, position, time, metric } = parameters;
+    
+    // Simplified Schwarzschild solution
+    const r = Math.sqrt(position.x**2 + position.y**2 + position.z**2);
+    const rs = 2 * mass; // Schwarzschild radius
+    
+    const solution = {
+      metric: {
+        g00: -(1 - rs/r),
+        g11: 1/(1 - rs/r),
+        g22: r**2,
+        g33: r**2 * Math.sin(position.y)**2
+      },
+      curvature: rs / (2 * r**3),
+      eventHorizon: rs
+    };
+    
+    return {
+      type: 'einstein_solution',
+      spacetime: solution,
+      mass: mass,
+      angularMomentum: angularMomentum,
+      parameters: parameters
+    };
+  }
+
+  // Field interactions and Feynman diagrams
+  createFeynmanDiagram(interaction) {
+    const diagramId = `feynman_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    const diagram = {
+      id: diagramId,
+      type: interaction.type,
+      vertices: interaction.vertices,
+      propagators: interaction.propagators,
+      externalLines: interaction.externalLines,
+      loops: interaction.loops,
+      symmetryFactor: interaction.symmetryFactor,
+      amplitude: this.calculateFeynmanAmplitude(interaction)
+    };
+    
+    this.feynmanDiagrams.set(diagramId, diagram);
+    return diagram;
+  }
+
+  calculateFeynmanAmplitude(interaction) {
+    // Simplified Feynman amplitude calculation
+    let amplitude = 1.0;
+    
+    // Vertex factors
+    interaction.vertices.forEach(vertex => {
+      amplitude *= this.getVertexFactor(vertex);
+    });
+    
+    // Propagator factors
+    interaction.propagators.forEach(propagator => {
+      amplitude *= this.getPropagatorFactor(propagator);
+    });
+    
+    // Loop factors
+    if (interaction.loops > 0) {
+      amplitude *= Math.pow(1 / (16 * Math.PI**2), interaction.loops);
+    }
+    
+    return amplitude;
+  }
+
+  getVertexFactor(vertex) {
+    const vertexFactors = {
+      'φ⁴': 1.0,
+      'ψ̄γAψ': 1.0,
+      'A³': 1.0,
+      'h³': 1.0,
+      'φ²A²': 1.0
+    };
+    
+    return vertexFactors[vertex] || 1.0;
+  }
+
+  getPropagatorFactor(propagator) {
+    const { type, mass, momentum } = propagator;
+    
+    switch (type) {
+      case 'scalar':
+        return 1 / (momentum**2 - mass**2 + 1e-10);
+      case 'vector':
+        return 1 / (momentum**2 + 1e-10);
+      case 'spinor':
+        return 1 / (momentum**2 - mass**2 + 1e-10);
+      case 'tensor':
+        return 1 / (momentum**2 + 1e-10);
+      default:
+        return 1.0;
+    }
+  }
+
+  // Field quantization
+  quantizeField(fieldType, parameters) {
+    const field = this.fields.get(fieldType);
+    if (!field) throw new Error(`Unknown field type: ${fieldType}`);
+    
+    const quantizedField = {
+      type: fieldType,
+      operators: this.createFieldOperators(field, parameters),
+      vacuum: this.vacuumStates.get('ground'),
+      excitations: [],
+      correlation: this.calculateFieldCorrelation(field, parameters)
+    };
+    
+    return quantizedField;
+  }
+
+  createFieldOperators(field, parameters) {
+    const operators = {
+      creation: this.fieldOperators.get('creation'),
+      annihilation: this.fieldOperators.get('annihilation'),
+      number: this.fieldOperators.get('number'),
+      field: this.fieldOperators.get('field')
+    };
+    
+    // Customize operators for specific field
+    if (field.type === 'spinor') {
+      operators.creation.symbol = 'b†';
+      operators.annihilation.symbol = 'b';
+    }
+    
+    return operators;
+  }
+
+  calculateFieldCorrelation(field, parameters) {
+    const { position1, position2, time } = parameters;
+    const distance = Math.sqrt(
+      Math.pow(position2.x - position1.x, 2) +
+      Math.pow(position2.y - position1.y, 2) +
+      Math.pow(position2.z - position1.z, 2)
+    );
+    
+    // Simplified correlation function
+    const correlation = Math.exp(-distance / field.mass) / (4 * Math.PI * distance);
+    
+    return {
+      value: correlation,
+      distance: distance,
+      time: time,
+      fieldType: field.type
+    };
+  }
+
+  // Advanced field operations
+  performFieldTransformation(field, transformation) {
+    switch (transformation.type) {
+      case 'gauge':
+        return this.performGaugeTransformation(field, transformation);
+      case 'lorentz':
+        return this.performLorentzTransformation(field, transformation);
+      case 'conformal':
+        return this.performConformalTransformation(field, transformation);
+      default:
+        throw new Error(`Unknown transformation type: ${transformation.type}`);
+    }
+  }
+
+  performGaugeTransformation(field, transformation) {
+    const { gaugeParameter, fieldType } = transformation;
+    
+    if (fieldType === 'vector') {
+      // A_μ → A_μ + ∂_μΛ
+      return {
+        ...field,
+        transformed: true,
+        gaugeParameter: gaugeParameter,
+        transformation: 'A_μ → A_μ + ∂_μΛ'
+      };
+    } else if (fieldType === 'spinor') {
+      // ψ → e^(iΛ)ψ
+      return {
+        ...field,
+        transformed: true,
+        gaugeParameter: gaugeParameter,
+        transformation: 'ψ → e^(iΛ)ψ'
+      };
+    }
+    
+    return field;
+  }
+
+  performLorentzTransformation(field, transformation) {
+    const { boost, rotation } = transformation;
+    
+    // Simplified Lorentz transformation
+    const gamma = 1 / Math.sqrt(1 - boost**2);
+    
+    return {
+      ...field,
+      transformed: true,
+      boost: boost,
+      rotation: rotation,
+      lorentzFactor: gamma
+    };
+  }
+
+  performConformalTransformation(field, transformation) {
+    const { scale, position } = transformation;
+    
+    // Simplified conformal transformation
+    return {
+      ...field,
+      transformed: true,
+      scale: scale,
+      position: position,
+      transformation: 'φ(x) → Ω(x)φ(x)'
+    };
+  }
+
+  // Utility methods
+  createOperatorMatrix(type) {
+    const size = 4; // 4x4 matrix for simplicity
+    const matrix = [];
+    
+    for (let i = 0; i < size; i++) {
+      matrix[i] = [];
+      for (let j = 0; j < size; j++) {
+        switch (type) {
+          case 'creation':
+            matrix[i][j] = i === j - 1 ? Math.sqrt(j) : 0;
+            break;
+          case 'annihilation':
+            matrix[i][j] = i === j + 1 ? Math.sqrt(i) : 0;
+            break;
+          case 'number':
+            matrix[i][j] = i === j ? i : 0;
+            break;
+          case 'field':
+            matrix[i][j] = i === j ? 1 : 0;
+            break;
+          default:
+            matrix[i][j] = 0;
+        }
+      }
+    }
+    
+    return matrix;
+  }
+
+  crossProduct(v1, v2) {
+    return {
+      x: v1.y * v2.z - v1.z * v2.y,
+      y: v1.z * v2.x - v1.x * v2.z,
+      z: v1.x * v2.y - v1.y * v2.x
+    };
+  }
+
+  // Public API methods
+  getFieldInfo(fieldType) {
+    return this.fields.get(fieldType);
+  }
+
+  getAllFields() {
+    return Array.from(this.fields.values());
+  }
+
+  getFieldOperators() {
+    return Array.from(this.fieldOperators.values());
+  }
+
+  getVacuumStates() {
+    return Array.from(this.vacuumStates.values());
+  }
+
+  getFieldEquations() {
+    return Array.from(this.fieldEquations.values());
+  }
+
+  getRenormalizationSchemes() {
+    return Array.from(this.renormalizationSchemes.values());
+  }
+
+  getFeynmanDiagrams() {
+    return Array.from(this.feynmanDiagrams.values());
+  }
+
+  // Field simulation methods
+  simulateFieldEvolution(fieldType, initialConditions, timeSteps) {
+    const field = this.fields.get(fieldType);
+    const equation = this.getFieldEquation(fieldType);
+    
+    if (!field || !equation) {
+      throw new Error(`Field or equation not found for type: ${fieldType}`);
+    }
+    
+    const evolution = [];
+    const dt = 0.01;
+    
+    for (let i = 0; i < timeSteps; i++) {
+      const time = i * dt;
+      const solution = equation.solve({
+        ...initialConditions,
+        time: time
+      });
+      
+      evolution.push({
+        time: time,
+        field: solution,
+        energy: this.calculateFieldEnergy(solution, field),
+        momentum: this.calculateFieldMomentum(solution, field)
+      });
+    }
+    
+    return evolution;
+  }
+
+  getFieldEquation(fieldType) {
+    const field = this.fields.get(fieldType);
+    if (!field) return null;
+    
+    // Map field types to equations
+    const equationMap = {
+      'scalar': 'klein_gordon',
+      'spinor': 'dirac',
+      'vector': 'maxwell',
+      'tensor': 'einstein'
+    };
+    
+    const equationKey = equationMap[fieldType];
+    return this.fieldEquations.get(equationKey);
+  }
+
+  calculateFieldEnergy(solution, field) {
+    // Simplified energy calculation
+    const amplitude = solution.field || solution.spinor?.upper || 1.0;
+    const frequency = solution.energy || 1.0;
+    
+    return 0.5 * amplitude**2 * frequency**2;
+  }
+
+  calculateFieldMomentum(solution, field) {
+    // Simplified momentum calculation
+    const amplitude = solution.field || solution.spinor?.upper || 1.0;
+    const waveVector = solution.momentum || 1.0;
+    
+    return amplitude**2 * waveVector;
+  }
+}
+
+// Initialize the quantum field theory engine
+const qftEngine = new QuantumFieldTheoryEngine();
+
 // Enhanced API routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
