@@ -1224,7 +1224,6 @@ class MultiplayerManager {
     this.rooms = new Map();
     this.users = new Map();
     this.collaborativeExperiments = new Map();
-    this.simulationSync = new Map();
     this.chatHistory = new Map();
     this.userPermissions = new Map();
     
@@ -3708,3 +3707,600 @@ class PerformanceOptimizer {
 
 // Initialize the performance optimizer and AI system
 const performanceOptimizer = new PerformanceOptimizer();
+
+// NEW: Real-time Multiplayer Collaboration System
+class MultiplayerCollaborationSystem {
+  constructor(io) {
+    this.io = io;
+    this.rooms = new Map();
+    this.users = new Map();
+    this.collaborativeExperiments = new Map();
+    this.chatSystem = new Map();
+    this.permissionSystem = new Map();
+    this.voiceChat = new Map();
+    this.screenSharing = new Map();
+    
+    this.setupSocketHandlers();
+    this.initializeCollaborationFeatures();
+  }
+
+  setupSocketHandlers() {
+    this.io.on('connection', (socket) => {
+      console.log(`🔗 User connected: ${socket.id}`);
+      
+      // User management
+      socket.on('joinRoom', (data) => this.handleJoinRoom(socket, data));
+      socket.on('leaveRoom', (data) => this.handleLeaveRoom(socket, data));
+      socket.on('createRoom', (data) => this.handleCreateRoom(socket, data));
+      socket.on('updateUserProfile', (data) => this.handleUpdateProfile(socket, data));
+      
+      // Real-time collaboration
+      socket.on('startCollaborativeExperiment', (data) => this.handleStartExperiment(socket, data));
+      socket.on('experimentUpdate', (data) => this.handleExperimentUpdate(socket, data));
+      socket.on('experimentResult', (data) => this.handleExperimentResult(socket, data));
+      socket.on('requestCollaboration', (data) => this.handleCollaborationRequest(socket, data));
+      
+      // Communication
+      socket.on('chatMessage', (data) => this.handleChatMessage(socket, data));
+      socket.on('voiceChat', (data) => this.handleVoiceChat(socket, data));
+      socket.on('screenShare', (data) => this.handleScreenShare(socket, data));
+      
+      // Permissions and security
+      socket.on('requestPermission', (data) => this.handlePermissionRequest(socket, data));
+      socket.on('grantPermission', (data) => this.handlePermissionGrant(socket, data));
+      socket.on('reportUser', (data) => this.handleUserReport(socket, data));
+      
+      // Disconnection
+      socket.on('disconnect', () => this.handleDisconnect(socket));
+    });
+  }
+
+  handleJoinRoom(socket, data) {
+    const { roomId, username, avatar, permissions } = data;
+    
+    // Create room if it doesn't exist
+    if (!this.rooms.has(roomId)) {
+      this.rooms.set(roomId, {
+        id: roomId,
+        name: `Quantum Lab ${roomId}`,
+        users: new Set(),
+        experiments: new Map(),
+        settings: {
+          maxUsers: 50,
+          allowExperiments: true,
+          requireApproval: false,
+          privacyLevel: 'public',
+          allowVoiceChat: true,
+          allowScreenSharing: true
+        },
+        createdAt: Date.now(),
+        lastActivity: Date.now()
+      });
+    }
+    
+    const room = this.rooms.get(roomId);
+    
+    // Check room capacity
+    if (room.users.size >= room.settings.maxUsers) {
+      socket.emit('roomError', { message: 'Room is full' });
+      return;
+    }
+    
+    // Add user to room
+    const user = {
+      id: socket.id,
+      username: username || `User_${socket.id.slice(0, 6)}`,
+      avatar: avatar || 'default',
+      permissions: permissions || ['view', 'chat'],
+      joinTime: Date.now(),
+      lastActivity: Date.now(),
+      isOnline: true,
+      currentExperiment: null,
+      contributionScore: 0,
+      expertise: ['quantum_physics', 'simulation'],
+      badges: ['newcomer']
+    };
+    
+    room.users.add(socket.id);
+    this.users.set(socket.id, { ...user, roomId });
+    this.permissionSystem.set(socket.id, user.permissions);
+    
+    // Join socket room
+    socket.join(roomId);
+    
+    // Notify room of new user
+    this.io.to(roomId).emit('userJoined', {
+      user: { id: socket.id, username: user.username, avatar: user.avatar },
+      roomInfo: {
+        userCount: room.users.size,
+        experimentCount: room.experiments.size
+      }
+    });
+    
+    // Send room state to new user
+    socket.emit('roomJoined', {
+      room: room,
+      users: Array.from(room.users).map(id => this.users.get(id)),
+      experiments: Array.from(room.experiments.values()),
+      chatHistory: this.chatSystem.get(roomId) || []
+    });
+    
+    console.log(`🔗 User ${user.username} joined room ${roomId}`);
+  }
+
+  handleCreateRoom(socket, data) {
+    const { roomName, settings, isPrivate } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user) return;
+    
+    const roomId = `room_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const room = {
+      id: roomId,
+      name: roomName || `Quantum Lab ${roomId}`,
+      creator: socket.id,
+      users: new Set([socket.id]),
+      experiments: new Map(),
+      settings: {
+        maxUsers: settings?.maxUsers || 50,
+        allowExperiments: settings?.allowExperiments !== false,
+        requireApproval: settings?.requireApproval || false,
+        privacyLevel: isPrivate ? 'private' : 'public',
+        allowVoiceChat: settings?.allowVoiceChat !== false,
+        allowScreenSharing: settings?.allowScreenSharing !== false
+      },
+      createdAt: Date.now(),
+      lastActivity: Date.now()
+    };
+    
+    this.rooms.set(roomId, room);
+    
+    // Update user's room
+    user.roomId = roomId;
+    this.users.set(socket.id, user);
+    
+    // Join the new room
+    socket.join(roomId);
+    
+    // Notify user of room creation
+    socket.emit('roomCreated', { room: room });
+    
+    console.log(`🏗️ Room ${roomName} created by ${user.username}`);
+  }
+
+  handleStartExperiment(socket, data) {
+    const { roomId, experimentType, parameters, collaborators } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user || user.roomId !== roomId) return;
+    
+    const room = this.rooms.get(roomId);
+    if (!room) return;
+    
+    // Create collaborative experiment
+    const experimentId = `exp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const experiment = {
+      id: experimentId,
+      type: experimentType,
+      creator: socket.id,
+      collaborators: collaborators || [socket.id],
+      parameters: parameters,
+      status: 'running',
+      startTime: Date.now(),
+      results: [],
+      data: [],
+      participants: new Set([socket.id, ...collaborators]),
+      chat: [],
+      version: 1.0
+    };
+    
+    room.experiments.set(experimentId, experiment);
+    this.collaborativeExperiments.set(experimentId, experiment);
+    
+    // Notify room of new experiment
+    this.io.to(roomId).emit('experimentStarted', {
+      experiment: experiment,
+      creator: user.username
+    });
+    
+    // Update user's current experiment
+    user.currentExperiment = experimentId;
+    
+    console.log(`🧪 Collaborative experiment ${experimentType} started in room ${roomId}`);
+  }
+
+  handleExperimentUpdate(socket, data) {
+    const { experimentId, updateType, data: experimentData, timestamp } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user) return;
+    
+    const experiment = this.collaborativeExperiments.get(experimentId);
+    if (!experiment || !experiment.participants.has(socket.id)) return;
+    
+    // Update experiment data
+    experiment.data.push({
+      userId: socket.id,
+      username: user.username,
+      updateType: updateType,
+      data: experimentData,
+      timestamp: timestamp || Date.now()
+    });
+    
+    // Broadcast update to all participants
+    experiment.participants.forEach(participantId => {
+      this.io.to(participantId).emit('experimentUpdated', {
+        experimentId: experimentId,
+        update: {
+          userId: socket.id,
+          username: user.username,
+          updateType: updateType,
+          data: experimentData,
+          timestamp: timestamp || Date.now()
+        }
+      });
+    });
+    
+    // Update user contribution score
+    this.updateUserContribution(socket.id, 1);
+  }
+
+  handleChatMessage(socket, data) {
+    const { roomId, message, messageType, replyTo } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user || user.roomId !== roomId) return;
+    
+    const chatMessage = {
+      id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      userId: socket.id,
+      username: user.username,
+      avatar: user.avatar,
+      message: message,
+      type: messageType || 'text',
+      timestamp: Date.now(),
+      roomId: roomId,
+      replyTo: replyTo,
+      reactions: new Map(),
+      edited: false,
+      deleted: false
+    };
+    
+    // Store in chat history
+    if (!this.chatSystem.has(roomId)) {
+      this.chatSystem.set(roomId, []);
+    }
+    this.chatSystem.get(roomId).push(chatMessage);
+    
+    // Limit chat history
+    if (this.chatSystem.get(roomId).length > 1000) {
+      this.chatSystem.get(roomId).shift();
+    }
+    
+    // Broadcast to room
+    this.io.to(roomId).emit('chatMessage', chatMessage);
+    
+    // Update user activity
+    user.lastActivity = Date.now();
+  }
+
+  handleVoiceChat(socket, data) {
+    const { roomId, audioData, audioType, isActive } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user || user.roomId !== roomId) return;
+    
+    // Update voice chat status
+    if (!this.voiceChat.has(roomId)) {
+      this.voiceChat.set(roomId, new Map());
+    }
+    
+    if (isActive) {
+      this.voiceChat.get(roomId).set(socket.id, {
+        userId: socket.id,
+        username: user.username,
+        isActive: true,
+        lastAudio: Date.now()
+      });
+    } else {
+      this.voiceChat.get(roomId).delete(socket.id);
+    }
+    
+    // Broadcast voice data to other users in room
+    socket.to(roomId).emit('voiceChat', {
+      userId: socket.id,
+      username: user.username,
+      audioData: audioData,
+      audioType: audioType,
+      isActive: isActive,
+      timestamp: Date.now()
+    });
+  }
+
+  handleScreenShare(socket, data) {
+    const { roomId, screenData, screenType, isSharing } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user || user.roomId !== roomId) return;
+    
+    // Update screen sharing status
+    if (!this.screenSharing.has(roomId)) {
+      this.screenSharing.set(roomId, new Map());
+    }
+    
+    if (isSharing) {
+      this.screenSharing.get(roomId).set(socket.id, {
+        userId: socket.id,
+        username: user.username,
+        isSharing: true,
+        lastUpdate: Date.now()
+      });
+    } else {
+      this.screenSharing.get(roomId).delete(socket.id);
+    }
+    
+    // Broadcast screen share to other users in room
+    socket.to(roomId).emit('screenShare', {
+      userId: socket.id,
+      username: user.username,
+      screenData: screenData,
+      screenType: screenType,
+      isSharing: isSharing,
+      timestamp: Date.now()
+    });
+  }
+
+  handlePermissionRequest(socket, data) {
+    const { roomId, permissionType, targetUserId, reason } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user || user.roomId !== roomId) return;
+    
+    // Send permission request to target user
+    this.io.to(targetUserId).emit('permissionRequest', {
+      requesterId: socket.id,
+      requesterName: user.username,
+      permissionType: permissionType,
+      roomId: roomId,
+      reason: reason,
+      timestamp: Date.now()
+    });
+  }
+
+  handlePermissionGrant(socket, data) {
+    const { requesterId, permissionType, granted, conditions } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user) return;
+    
+    if (granted) {
+      // Grant permission to requester
+      const requester = this.users.get(requesterId);
+      if (requester) {
+        requester.permissions.push(permissionType);
+        this.permissionSystem.set(requesterId, requester.permissions);
+        
+        // Apply conditions if specified
+        if (conditions) {
+          requester.permissions.push(...conditions);
+        }
+      }
+    }
+    
+    // Notify requester of decision
+    this.io.to(requesterId).emit('permissionResponse', {
+      granterId: socket.id,
+      granterName: user.username,
+      permissionType: permissionType,
+      granted: granted,
+      conditions: conditions,
+      timestamp: Date.now()
+    });
+  }
+
+  handleUserReport(socket, data) {
+    const { roomId, reportedUserId, reason, evidence } = data;
+    const user = this.users.get(socket.id);
+    
+    if (!user || user.roomId !== roomId) return;
+    
+    // Create report
+    const report = {
+      id: `report_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      reporterId: socket.id,
+      reporterName: user.username,
+      reportedUserId: reportedUserId,
+      reason: reason,
+      evidence: evidence,
+      timestamp: Date.now(),
+      status: 'pending',
+      moderatorId: null,
+      resolution: null
+    };
+    
+    // Store report (in a real system, this would go to a database)
+    console.log(`🚨 User report created:`, report);
+    
+    // Notify room moderators
+    this.notifyModerators(roomId, report);
+    
+    // Send confirmation to reporter
+    socket.emit('reportSubmitted', { reportId: report.id });
+  }
+
+  notifyModerators(roomId, report) {
+    const room = this.rooms.get(roomId);
+    if (!room) return;
+    
+    // Find moderators in the room
+    const moderators = Array.from(room.users).filter(userId => {
+      const user = this.users.get(userId);
+      return user && user.permissions.includes('moderate');
+    });
+    
+    // Notify moderators
+    moderators.forEach(moderatorId => {
+      this.io.to(moderatorId).emit('newReport', { report: report });
+    });
+  }
+
+  updateUserContribution(userId, points) {
+    const user = this.users.get(userId);
+    if (user) {
+      user.contributionScore += points;
+      user.lastActivity = Date.now();
+      
+      // Award badges based on contribution
+      this.awardBadges(user);
+    }
+  }
+
+  awardBadges(user) {
+    const badges = [];
+    
+    if (user.contributionScore >= 100) badges.push('contributor');
+    if (user.contributionScore >= 500) badges.push('expert');
+    if (user.contributionScore >= 1000) badges.push('master');
+    if (user.contributionScore >= 5000) badges.push('legend');
+    
+    // Add new badges
+    const newBadges = badges.filter(badge => !user.badges.includes(badge));
+    if (newBadges.length > 0) {
+      user.badges.push(...newBadges);
+      console.log(`🏆 User ${user.username} earned badges: ${newBadges.join(', ')}`);
+    }
+  }
+
+  handleDisconnect(socket) {
+    const userId = socket.id;
+    const user = this.users.get(userId);
+    
+    if (user) {
+      // Handle user leaving room
+      this.handleLeaveRoom(socket, {});
+      
+      console.log(`🔌 User ${user.username} disconnected`);
+    }
+  }
+
+  handleLeaveRoom(socket, data) {
+    const userId = socket.id;
+    const user = this.users.get(userId);
+    
+    if (!user) return;
+    
+    const roomId = user.roomId;
+    const room = this.rooms.get(roomId);
+    
+    if (room) {
+      room.users.delete(userId);
+      room.lastActivity = Date.now();
+      
+      // Remove user from room
+      socket.leave(roomId);
+      
+      // Notify room of user departure
+      this.io.to(roomId).emit('userLeft', {
+        userId: userId,
+        username: user.username,
+        roomInfo: {
+          userCount: room.users.size,
+          experimentCount: room.experiments.size
+        }
+      });
+      
+      // Clean up empty rooms
+      if (room.users.size === 0) {
+        this.rooms.delete(roomId);
+        console.log(`🗑️ Room ${roomId} deleted (empty)`);
+      }
+      
+      console.log(`👋 User ${user.username} left room ${roomId}`);
+    }
+    
+    // Clean up user data
+    this.users.delete(userId);
+    this.permissionSystem.delete(userId);
+  }
+
+  initializeCollaborationFeatures() {
+    // Clean up inactive rooms every 5 minutes
+    setInterval(() => {
+      const now = Date.now();
+      const inactiveThreshold = 30 * 60 * 1000; // 30 minutes
+      
+      for (const [roomId, room] of this.rooms.entries()) {
+        if (now - room.lastActivity > inactiveThreshold) {
+          this.archiveRoom(room);
+          this.rooms.delete(roomId);
+          console.log(`📦 Room ${roomId} archived due to inactivity`);
+        }
+      }
+    }, 5 * 60 * 1000);
+    
+    // Synchronize collaboration state every second
+    setInterval(() => {
+      for (const [roomId, room] of this.rooms.entries()) {
+        if (room.users.size > 0) {
+          this.io.to(roomId).emit('collaborationSync', {
+            roomId: roomId,
+            userCount: room.users.size,
+            experimentCount: room.experiments.size,
+            timestamp: Date.now()
+          });
+        }
+      }
+    }, 1000);
+  }
+
+  archiveRoom(room) {
+    // Archive room data for future reference
+    const archive = {
+      roomId: room.id,
+      name: room.name,
+      users: Array.from(room.users),
+      experiments: Array.from(room.experiments.values()),
+      createdAt: room.createdAt,
+      lastActivity: room.lastActivity,
+      archivedAt: Date.now()
+    };
+    
+    console.log(`📦 Room archived:`, archive);
+  }
+
+  // Public API methods
+  getRoomInfo(roomId) {
+    return this.rooms.get(roomId);
+  }
+
+  getUserInfo(userId) {
+    return this.users.get(userId);
+  }
+
+  getActiveRooms() {
+    return Array.from(this.rooms.values());
+  }
+
+  getActiveUsers() {
+    return Array.from(this.users.values());
+  }
+
+  getCollaborativeExperiments() {
+    return Array.from(this.collaborativeExperiments.values());
+  }
+
+  getRoomChatHistory(roomId) {
+    return this.chatSystem.get(roomId) || [];
+  }
+
+  getVoiceChatUsers(roomId) {
+    return Array.from((this.voiceChat.get(roomId) || new Map()).values());
+  }
+
+  getScreenSharingUsers(roomId) {
+    return Array.from((this.screenSharing.get(roomId) || new Map()).values());
+  }
+}
+
+// Initialize the multiplayer collaboration system
+const multiplayerSystem = new MultiplayerCollaborationSystem(io);
