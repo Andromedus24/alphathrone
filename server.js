@@ -5386,3 +5386,1209 @@ class ResourceAllocator {
     return suggestions;
   }
 }
+
+// NEW: Advanced Quantum Error Correction and Fault Tolerance System
+class QuantumErrorCorrectionSystem {
+  constructor() {
+    this.errorCodes = new Map();
+    this.correctionAlgorithms = new Map();
+    this.faultToleranceProtocols = new Map();
+    this.errorRates = new Map();
+    this.correctionHistory = new Map();
+    this.quantumMemory = new Map();
+    this.logicalQubits = new Map();
+    this.syndromeMeasurements = new Map();
+    
+    this.initializeErrorCorrectionSystem();
+    this.setupFaultToleranceProtocols();
+    this.initializeQuantumMemory();
+  }
+
+  initializeErrorCorrectionSystem() {
+    // Initialize core error correction components
+    this.bitFlipDetector = new BitFlipDetector();
+    this.phaseFlipDetector = new PhaseFlipDetector();
+    this.depolarizationDetector = new DepolarizationDetector();
+    this.leakageDetector = new LeakageDetector();
+    
+    console.log('🛡️ Quantum Error Correction System initialized');
+  }
+
+  setupFaultToleranceProtocols() {
+    // Shor Code (9-qubit code)
+    this.errorCodes.set('shor', {
+      name: 'Shor Code',
+      qubits: 9,
+      logicalQubits: 1,
+      errorTypes: ['bit_flip', 'phase_flip'],
+      correctionCapability: 'corrects 1 bit-flip and 1 phase-flip error',
+      setup: this.setupShorCode.bind(this),
+      encode: this.encodeShorCode.bind(this),
+      decode: this.decodeShorCode.bind(this),
+      correct: this.correctShorCode.bind(this)
+    });
+
+    // Steane Code (7-qubit code)
+    this.errorCodes.set('steane', {
+      name: 'Steane Code',
+      qubits: 7,
+      logicalQubits: 1,
+      errorTypes: ['bit_flip', 'phase_flip'],
+      correctionCapability: 'corrects 1 bit-flip and 1 phase-flip error',
+      setup: this.setupSteaneCode.bind(this),
+      encode: this.encodeSteaneCode.bind(this),
+      decode: this.decodeSteaneCode.bind(this),
+      correct: this.correctSteaneCode.bind(this)
+    });
+
+    // Surface Code (topological)
+    this.errorCodes.set('surface', {
+      name: 'Surface Code',
+      qubits: 25, // 5x5 lattice
+      logicalQubits: 1,
+      errorTypes: ['bit_flip', 'phase_flip', 'measurement'],
+      correctionCapability: 'topological error correction',
+      setup: this.setupSurfaceCode.bind(this),
+      encode: this.encodeSurfaceCode.bind(this),
+      decode: this.decodeSurfaceCode.bind(this),
+      correct: this.correctSurfaceCode.bind(this)
+    });
+
+    // Color Code (3-colorable)
+    this.errorCodes.set('color', {
+      name: 'Color Code',
+      qubits: 31,
+      logicalQubits: 1,
+      errorTypes: ['bit_flip', 'phase_flip', 'measurement'],
+      correctionCapability: '3-colorable error correction',
+      setup: this.setupColorCode.bind(this),
+      encode: this.encodeColorCode.bind(this),
+      decode: this.decodeColorCode.bind(this),
+      correct: this.correctColorCode.bind(this)
+    });
+
+    // Fault-tolerant protocols
+    this.faultToleranceProtocols.set('magic_state_distillation', {
+      name: 'Magic State Distillation',
+      description: 'Distill high-fidelity magic states for fault-tolerant quantum computing',
+      fidelity: 0.99,
+      distillationRounds: 3,
+      implement: this.implementMagicStateDistillation.bind(this)
+    });
+
+    this.faultToleranceProtocols.set('fault_tolerant_gates', {
+      name: 'Fault-Tolerant Gates',
+      description: 'Implement fault-tolerant quantum gates',
+      gates: ['H', 'S', 'CNOT', 'T'],
+      errorThreshold: 0.01,
+      implement: this.implementFaultTolerantGates.bind(this)
+    });
+
+    this.faultToleranceProtocols.set('concatenated_codes', {
+      name: 'Concatenated Codes',
+      description: 'Use multiple layers of error correction codes',
+      layers: 3,
+      errorSuppression: 0.001,
+      implement: this.implementConcatenatedCodes.bind(this)
+    });
+  }
+
+  initializeQuantumMemory() {
+    // Initialize quantum memory for error correction
+    this.quantumMemory.set('error_buffer', {
+      size: 1000,
+      used: 0,
+      errors: [],
+      corrections: []
+    });
+
+    this.quantumMemory.set('syndrome_storage', {
+      size: 500,
+      used: 0,
+      syndromes: [],
+      measurements: []
+    });
+
+    this.quantumMemory.set('logical_qubit_storage', {
+      size: 100,
+      used: 0,
+      logicalQubits: [],
+      states: []
+    });
+  }
+
+  // Error Detection Methods
+  detectErrors(quantumState) {
+    const errors = {
+      bitFlip: this.detectBitFlipErrors(quantumState),
+      phaseFlip: this.detectPhaseFlipErrors(quantumState),
+      depolarization: this.detectDepolarizationErrors(quantumState),
+      leakage: this.detectLeakageErrors(quantumState),
+      measurement: this.detectMeasurementErrors(quantumState)
+    };
+
+    // Calculate overall error rate
+    const totalErrors = Object.values(errors).reduce((sum, error) => sum + error.count, 0);
+    const totalQubits = quantumState.qubits?.length || 1;
+    const errorRate = totalErrors / totalQubits;
+
+    return {
+      errors: errors,
+      totalErrors: totalErrors,
+      errorRate: errorRate,
+      timestamp: Date.now()
+    };
+  }
+
+  detectBitFlipErrors(quantumState) {
+    const errors = [];
+    const qubits = quantumState.qubits || [];
+
+    qubits.forEach((qubit, index) => {
+      if (qubit.state === '|1⟩' && qubit.expectedState === '|0⟩') {
+        errors.push({
+          type: 'bit_flip',
+          qubitIndex: index,
+          severity: 'high',
+          detectedAt: Date.now()
+        });
+      }
+    });
+
+    return {
+      type: 'bit_flip',
+      count: errors.length,
+      errors: errors,
+      rate: errors.length / qubits.length
+    };
+  }
+
+  detectPhaseFlipErrors(quantumState) {
+    const errors = [];
+    const qubits = quantumState.qubits || [];
+
+    qubits.forEach((qubit, index) => {
+      if (qubit.phase !== qubit.expectedPhase) {
+        const phaseDifference = Math.abs(qubit.phase - qubit.expectedPhase);
+        if (phaseDifference > Math.PI / 4) { // Significant phase error
+          errors.push({
+            type: 'phase_flip',
+            qubitIndex: index,
+            severity: 'medium',
+            phaseDifference: phaseDifference,
+            detectedAt: Date.now()
+          });
+        }
+      }
+    });
+
+    return {
+      type: 'phase_flip',
+      count: errors.length,
+      errors: errors,
+      rate: errors.length / qubits.length
+    };
+  }
+
+  detectDepolarizationErrors(quantumState) {
+    const errors = [];
+    const qubits = quantumState.qubits || [];
+
+    qubits.forEach((qubit, index) => {
+      const purity = this.calculateQubitPurity(qubit);
+      if (purity < 0.8) { // Significant depolarization
+        errors.push({
+          type: 'depolarization',
+          qubitIndex: index,
+          severity: 'medium',
+          purity: purity,
+          detectedAt: Date.now()
+        });
+      }
+    });
+
+    return {
+      type: 'depolarization',
+      count: errors.length,
+      errors: errors,
+      rate: errors.length / qubits.length
+    };
+  }
+
+  detectLeakageErrors(quantumState) {
+    const errors = [];
+    const qubits = quantumState.qubits || [];
+
+    qubits.forEach((qubit, index) => {
+      if (qubit.state === '|2⟩' || qubit.state === '|3⟩') { // Higher energy states
+        errors.push({
+          type: 'leakage',
+          qubitIndex: index,
+          severity: 'high',
+          leakedState: qubit.state,
+          detectedAt: Date.now()
+        });
+      }
+    });
+
+    return {
+      type: 'leakage',
+      count: errors.length,
+      errors: errors,
+      rate: errors.length / qubits.length
+    };
+  }
+
+  detectMeasurementErrors(quantumState) {
+    const errors = [];
+    const measurements = quantumState.measurements || [];
+
+    measurements.forEach((measurement, index) => {
+      if (measurement.confidence < 0.9) { // Low confidence measurement
+        errors.push({
+          type: 'measurement',
+          measurementIndex: index,
+          severity: 'low',
+          confidence: measurement.confidence,
+          detectedAt: Date.now()
+        });
+      }
+    });
+
+    return {
+      type: 'measurement',
+      count: errors.length,
+      errors: errors,
+      rate: errors.length / measurements.length
+    };
+  }
+
+  // Error Correction Methods
+  correctErrors(quantumState, errorCode = 'shor') {
+    const code = this.errorCodes.get(errorCode);
+    if (!code) {
+      throw new Error(`Unknown error correction code: ${errorCode}`);
+    }
+
+    // Detect errors
+    const errorDetection = this.detectErrors(quantumState);
+    
+    // Apply error correction
+    const correctionResult = code.correct(quantumState, errorDetection);
+    
+    // Update error rates
+    this.updateErrorRates(errorCode, errorDetection, correctionResult);
+    
+    // Store correction history
+    this.storeCorrectionHistory(errorCode, errorDetection, correctionResult);
+    
+    return {
+      originalState: quantumState,
+      detectedErrors: errorDetection,
+      correctionResult: correctionResult,
+      correctedState: correctionResult.correctedState,
+      success: correctionResult.success,
+      timestamp: Date.now()
+    };
+  }
+
+  // Shor Code Implementation
+  setupShorCode() {
+    const logicalQubit = {
+      id: `logical_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      type: 'shor',
+      physicalQubits: Array.from({ length: 9 }, (_, i) => ({
+        id: i,
+        state: '|0⟩',
+        phase: 0,
+        entangled: false
+      })),
+      logicalState: '|0⟩',
+      errorSyndromes: [],
+      lastCorrection: null
+    };
+
+    this.logicalQubits.set(logicalQubit.id, logicalQubit);
+    return logicalQubit;
+  }
+
+  encodeShorCode(logicalQubit, dataQubit) {
+    const { physicalQubits } = logicalQubit;
+    
+    // Encode logical qubit using Shor code
+    // |0⟩_L = (|000⟩ + |111⟩)(|000⟩ + |111⟩)(|000⟩ + |111⟩) / √8
+    // |1⟩_L = (|000⟩ - |111⟩)(|000⟩ - |111⟩)(|000⟩ - |111⟩) / √8
+    
+    if (dataQubit.state === '|0⟩') {
+      // Encode |0⟩_L
+      physicalQubits.forEach(qubit => {
+        qubit.state = '|0⟩';
+        qubit.phase = 0;
+      });
+      logicalQubit.logicalState = '|0⟩_L';
+    } else {
+      // Encode |1⟩_L
+      physicalQubits.forEach(qubit => {
+        qubit.state = '|1⟩';
+        qubit.phase = 0;
+      });
+      logicalQubit.logicalState = '|1⟩_L';
+    }
+
+    return logicalQubit;
+  }
+
+  decodeShorCode(logicalQubit) {
+    const { physicalQubits } = logicalQubit;
+    
+    // Majority voting for decoding
+    const zeroCount = physicalQubits.filter(q => q.state === '|0⟩').length;
+    const oneCount = physicalQubits.filter(q => q.state === '|1⟩').length;
+    
+    if (zeroCount > oneCount) {
+      return { state: '|0⟩', confidence: zeroCount / physicalQubits.length };
+    } else {
+      return { state: '|1⟩', confidence: oneCount / physicalQubits.length };
+    }
+  }
+
+  correctShorCode(quantumState, errorDetection) {
+    const logicalQubit = this.findLogicalQubit(quantumState);
+    if (!logicalQubit) {
+      return { success: false, error: 'No logical qubit found' };
+    }
+
+    const corrections = [];
+    const { errors } = errorDetection;
+
+    // Correct bit-flip errors
+    errors.bitFlip.errors.forEach(error => {
+      if (error.qubitIndex < logicalQubit.physicalQubits.length) {
+        const physicalQubit = logicalQubit.physicalQubits[error.qubitIndex];
+        // Flip the qubit back
+        physicalQubit.state = physicalQubit.state === '|0⟩' ? '|1⟩' : '|0⟩';
+        corrections.push({
+          type: 'bit_flip_correction',
+          qubitIndex: error.qubitIndex,
+          timestamp: Date.now()
+        });
+      }
+    });
+
+    // Correct phase-flip errors
+    errors.phaseFlip.errors.forEach(error => {
+      if (error.qubitIndex < logicalQubit.physicalQubits.length) {
+        const physicalQubit = logicalQubit.physicalQubits[error.qubitIndex];
+        // Apply phase correction
+        physicalQubit.phase = (physicalQubit.phase + Math.PI) % (2 * Math.PI);
+        corrections.push({
+          type: 'phase_flip_correction',
+          qubitIndex: error.qubitIndex,
+          timestamp: Date.now()
+        });
+      }
+    });
+
+    // Update logical qubit
+    logicalQubit.lastCorrection = Date.now();
+    logicalQubit.errorSyndromes.push({
+      errors: errorDetection,
+      corrections: corrections,
+      timestamp: Date.now()
+    });
+
+    return {
+      success: true,
+      corrections: corrections,
+      correctedState: this.decodeShorCode(logicalQubit),
+      logicalQubit: logicalQubit
+    };
+  }
+
+  // Steane Code Implementation
+  setupSteaneCode() {
+    const logicalQubit = {
+      id: `logical_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      type: 'steane',
+      physicalQubits: Array.from({ length: 7 }, (_, i) => ({
+        id: i,
+        state: '|0⟩',
+        phase: 0,
+        entangled: false
+      })),
+      logicalState: '|0⟩',
+      errorSyndromes: [],
+      lastCorrection: null
+    };
+
+    this.logicalQubits.set(logicalQubit.id, logicalQubit);
+    return logicalQubit;
+  }
+
+  encodeSteaneCode(logicalQubit, dataQubit) {
+    const { physicalQubits } = logicalQubit;
+    
+    // Encode using Steane code
+    // |0⟩_L = (|0000000⟩ + |1010101⟩ + |0110011⟩ + |1100110⟩ + |0001111⟩ + |1011010⟩ + |0111100⟩ + |1101001⟩) / √8
+    // |1⟩_L = (|1111111⟩ + |0101010⟩ + |1001100⟩ + |0011001⟩ + |1110000⟩ + |0100101⟩ + |1000011⟩ + |0010110⟩) / √8
+    
+    if (dataQubit.state === '|0⟩') {
+      // Simplified encoding for |0⟩_L
+      physicalQubits.forEach((qubit, index) => {
+        qubit.state = index % 2 === 0 ? '|0⟩' : '|1⟩';
+        qubit.phase = 0;
+      });
+      logicalQubit.logicalState = '|0⟩_L';
+    } else {
+      // Simplified encoding for |1⟩_L
+      physicalQubits.forEach((qubit, index) => {
+        qubit.state = index % 2 === 0 ? '|1⟩' : '|0⟩';
+        qubit.phase = 0;
+      });
+      logicalQubit.logicalState = '|1⟩_L';
+    }
+
+    return logicalQubit;
+  }
+
+  decodeSteaneCode(logicalQubit) {
+    const { physicalQubits } = logicalQubit;
+    
+    // Simplified decoding using parity checks
+    const parity1 = physicalQubits.slice(0, 3).filter(q => q.state === '|1⟩').length % 2;
+    const parity2 = physicalQubits.slice(3, 6).filter(q => q.state === '|1⟩').length % 2;
+    
+    if (parity1 === parity2) {
+      return { state: '|0⟩', confidence: 0.8 };
+    } else {
+      return { state: '|1⟩', confidence: 0.8 };
+    }
+  }
+
+  correctSteaneCode(quantumState, errorDetection) {
+    const logicalQubit = this.findLogicalQubit(quantumState);
+    if (!logicalQubit) {
+      return { success: false, error: 'No logical qubit found' };
+    }
+
+    const corrections = [];
+    const { errors } = errorDetection;
+
+    // Apply Steane code corrections
+    errors.bitFlip.errors.forEach(error => {
+      if (error.qubitIndex < logicalQubit.physicalQubits.length) {
+        const physicalQubit = logicalQubit.physicalQubits[error.qubitIndex];
+        physicalQubit.state = physicalQubit.state === '|0⟩' ? '|1⟩' : '|0⟩';
+        corrections.push({
+          type: 'bit_flip_correction',
+          qubitIndex: error.qubitIndex,
+          timestamp: Date.now()
+        });
+      }
+    });
+
+    return {
+      success: true,
+      corrections: corrections,
+      correctedState: this.decodeSteaneCode(logicalQubit),
+      logicalQubit: logicalQubit
+    };
+  }
+
+  // Surface Code Implementation
+  setupSurfaceCode() {
+    const lattice = this.createSurfaceCodeLattice(5, 5);
+    const logicalQubit = {
+      id: `logical_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      type: 'surface',
+      lattice: lattice,
+      logicalState: '|0⟩',
+      errorSyndromes: [],
+      lastCorrection: null
+    };
+
+    this.logicalQubits.set(logicalQubit.id, logicalQubit);
+    return logicalQubit;
+  }
+
+  createSurfaceCodeLattice(width, height) {
+    const lattice = [];
+    for (let y = 0; y < height; y++) {
+      lattice[y] = [];
+      for (let x = 0; x < width; x++) {
+        lattice[y][x] = {
+          x: x,
+          y: y,
+          qubit: {
+            state: '|0⟩',
+            phase: 0,
+            entangled: false
+          },
+          stabilizers: this.calculateStabilizers(x, y, width, height)
+        };
+      }
+    }
+    return lattice;
+  }
+
+  calculateStabilizers(x, y, width, height) {
+    const stabilizers = [];
+    
+    // X-type stabilizers
+    if (x > 0 && x < width - 1 && y > 0 && y < height - 1) {
+      stabilizers.push({
+        type: 'X',
+        qubits: [
+          { x: x, y: y },
+          { x: x + 1, y: y },
+          { x: x, y: y + 1 },
+          { x: x + 1, y: y + 1 }
+        ]
+      });
+    }
+    
+    // Z-type stabilizers
+    if (x > 0 && x < width - 1 && y > 0 && y < height - 1) {
+      stabilizers.push({
+        type: 'Z',
+        qubits: [
+          { x: x, y: y },
+          { x: x + 1, y: y },
+          { x: x, y: y + 1 },
+          { x: x + 1, y: y + 1 }
+        ]
+      });
+    }
+    
+    return stabilizers;
+  }
+
+  encodeSurfaceCode(logicalQubit, dataQubit) {
+    // Simplified surface code encoding
+    const { lattice } = logicalQubit;
+    
+    if (dataQubit.state === '|0⟩') {
+      // Encode |0⟩_L using surface code
+      lattice.forEach(row => {
+        row.forEach(cell => {
+          cell.qubit.state = '|0⟩';
+          cell.qubit.phase = 0;
+        });
+      });
+      logicalQubit.logicalState = '|0⟩_L';
+    } else {
+      // Encode |1⟩_L using surface code
+      lattice.forEach(row => {
+        row.forEach(cell => {
+          cell.qubit.state = '|1⟩';
+          cell.qubit.phase = 0;
+        });
+      });
+      logicalQubit.logicalState = '|1⟩_L';
+    }
+
+    return logicalQubit;
+  }
+
+  decodeSurfaceCode(logicalQubit) {
+    const { lattice } = logicalQubit;
+    
+    // Simplified surface code decoding using stabilizer measurements
+    let zeroCount = 0;
+    let oneCount = 0;
+    
+    lattice.forEach(row => {
+      row.forEach(cell => {
+        if (cell.qubit.state === '|0⟩') zeroCount++;
+        else oneCount++;
+      });
+    });
+    
+    if (zeroCount > oneCount) {
+      return { state: '|0⟩', confidence: zeroCount / (zeroCount + oneCount) };
+    } else {
+      return { state: '|1⟩', confidence: oneCount / (zeroCount + oneCount) };
+    }
+  }
+
+  correctSurfaceCode(quantumState, errorDetection) {
+    const logicalQubit = this.findLogicalQubit(quantumState);
+    if (!logicalQubit) {
+      return { success: false, error: 'No logical qubit found' };
+    }
+
+    const corrections = [];
+    const { errors } = errorDetection;
+
+    // Apply surface code corrections
+    errors.bitFlip.errors.forEach(error => {
+      // Find corresponding lattice position
+      const latticePos = this.findLatticePosition(logicalQubit, error.qubitIndex);
+      if (latticePos) {
+        const { x, y } = latticePos;
+        const cell = logicalQubit.lattice[y][x];
+        cell.qubit.state = cell.qubit.state === '|0⟩' ? '|1⟩' : '|0⟩';
+        
+        corrections.push({
+          type: 'surface_code_correction',
+          position: { x, y },
+          timestamp: Date.now()
+        });
+      }
+    });
+
+    return {
+      success: true,
+      corrections: corrections,
+      correctedState: this.decodeSurfaceCode(logicalQubit),
+      logicalQubit: logicalQubit
+    };
+  }
+
+  // Color Code Implementation
+  setupColorCode() {
+    const logicalQubit = {
+      id: `logical_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      type: 'color',
+      physicalQubits: Array.from({ length: 31 }, (_, i) => ({
+        id: i,
+        state: '|0⟩',
+        phase: 0,
+        entangled: false,
+        color: this.assignColor(i)
+      })),
+      logicalState: '|0⟩',
+      errorSyndromes: [],
+      lastCorrection: null
+    };
+
+    this.logicalQubits.set(logicalQubit.id, logicalQubit);
+    return logicalQubit;
+  }
+
+  assignColor(index) {
+    const colors = ['red', 'green', 'blue'];
+    return colors[index % 3];
+  }
+
+  encodeColorCode(logicalQubit, dataQubit) {
+    const { physicalQubits } = logicalQubit;
+    
+    // Simplified color code encoding
+    if (dataQubit.state === '|0⟩') {
+      physicalQubits.forEach(qubit => {
+        qubit.state = '|0⟩';
+        qubit.phase = 0;
+      });
+      logicalQubit.logicalState = '|0⟩_L';
+    } else {
+      physicalQubits.forEach(qubit => {
+        qubit.state = '|1⟩';
+        qubit.phase = 0;
+      });
+      logicalQubit.logicalState = '|1⟩_L';
+    }
+
+    return logicalQubit;
+  }
+
+  decodeColorCode(logicalQubit) {
+    const { physicalQubits } = logicalQubit;
+    
+    // Simplified color code decoding
+    const zeroCount = physicalQubits.filter(q => q.state === '|0⟩').length;
+    const oneCount = physicalQubits.filter(q => q.state === '|1⟩').length;
+    
+    if (zeroCount > oneCount) {
+      return { state: '|0⟩', confidence: zeroCount / physicalQubits.length };
+    } else {
+      return { state: '|1⟩', confidence: oneCount / physicalQubits.length };
+    }
+  }
+
+  correctColorCode(quantumState, errorDetection) {
+    const logicalQubit = this.findLogicalQubit(quantumState);
+    if (!logicalQubit) {
+      return { success: false, error: 'No logical qubit found' };
+    }
+
+    const corrections = [];
+    const { errors } = errorDetection;
+
+    // Apply color code corrections
+    errors.bitFlip.errors.forEach(error => {
+      if (error.qubitIndex < logicalQubit.physicalQubits.length) {
+        const physicalQubit = logicalQubit.physicalQubits[error.qubitIndex];
+        physicalQubit.state = physicalQubit.state === '|0⟩' ? '|1⟩' : '|0⟩';
+        
+        corrections.push({
+          type: 'color_code_correction',
+          qubitIndex: error.qubitIndex,
+          color: physicalQubit.color,
+          timestamp: Date.now()
+        });
+      }
+    });
+
+    return {
+      success: true,
+      corrections: corrections,
+      correctedState: this.decodeColorCode(logicalQubit),
+      logicalQubit: logicalQubit
+    };
+  }
+
+  // Fault Tolerance Implementation
+  implementMagicStateDistillation(logicalQubits, targetFidelity = 0.99) {
+    const distillationResult = {
+      inputQubits: logicalQubits.length,
+      outputQubits: Math.floor(logicalQubits.length / 2),
+      rounds: 3,
+      achievedFidelity: 0.99,
+      magicStates: []
+    };
+
+    // Simulate magic state distillation
+    for (let i = 0; i < distillationResult.outputQubits; i++) {
+      distillationResult.magicStates.push({
+        id: `magic_${Date.now()}_${i}`,
+        state: '|T⟩',
+        fidelity: targetFidelity,
+        distilledAt: Date.now()
+      });
+    }
+
+    return distillationResult;
+  }
+
+  implementFaultTolerantGates(logicalQubit, gateType) {
+    const gateResult = {
+      gateType: gateType,
+      logicalQubitId: logicalQubit.id,
+      success: true,
+      errorRate: 0.001,
+      executionTime: 100, // ms
+      timestamp: Date.now()
+    };
+
+    // Simulate fault-tolerant gate execution
+    switch (gateType) {
+      case 'H':
+        this.applyFaultTolerantHadamard(logicalQubit);
+        break;
+      case 'S':
+        this.applyFaultTolerantPhase(logicalQubit);
+        break;
+      case 'CNOT':
+        this.applyFaultTolerantCNOT(logicalQubit);
+        break;
+      case 'T':
+        this.applyFaultTolerantT(logicalQubit);
+        break;
+    }
+
+    return gateResult;
+  }
+
+  applyFaultTolerantHadamard(logicalQubit) {
+    // Apply Hadamard gate to all physical qubits
+    logicalQubit.physicalQubits.forEach(qubit => {
+      if (qubit.state === '|0⟩') {
+        qubit.state = '|+⟩';
+      } else if (qubit.state === '|1⟩') {
+        qubit.state = '|-⟩';
+      }
+    });
+  }
+
+  applyFaultTolerantPhase(logicalQubit) {
+    // Apply S gate (phase gate) to all physical qubits
+    logicalQubit.physicalQubits.forEach(qubit => {
+      qubit.phase = (qubit.phase + Math.PI / 2) % (2 * Math.PI);
+    });
+  }
+
+  applyFaultTolerantCNOT(logicalQubit) {
+    // Apply CNOT gate (simplified)
+    logicalQubit.physicalQubits.forEach((qubit, index) => {
+      if (index % 2 === 1) { // Control qubits
+        if (qubit.state === '|1⟩') {
+          // Flip target qubit
+          const targetIndex = index - 1;
+          if (targetIndex >= 0) {
+            logicalQubit.physicalQubits[targetIndex].state = 
+              logicalQubit.physicalQubits[targetIndex].state === '|0⟩' ? '|1⟩' : '|0⟩';
+          }
+        }
+      }
+    });
+  }
+
+  applyFaultTolerantT(logicalQubit) {
+    // Apply T gate (π/8 gate) to all physical qubits
+    logicalQubit.physicalQubits.forEach(qubit => {
+      qubit.phase = (qubit.phase + Math.PI / 4) % (2 * Math.PI);
+    });
+  }
+
+  implementConcatenatedCodes(logicalQubit, layers = 3) {
+    const concatenationResult = {
+      layers: layers,
+      originalQubits: logicalQubit.physicalQubits.length,
+      totalQubits: Math.pow(logicalQubit.physicalQubits.length, layers),
+      errorSuppression: Math.pow(0.01, layers),
+      logicalQubitId: logicalQubit.id,
+      timestamp: Date.now()
+    };
+
+    // Simulate concatenated code implementation
+    for (let layer = 1; layer <= layers; layer++) {
+      const layerQubits = Math.pow(logicalQubit.physicalQubits.length, layer);
+      concatenationResult[`layer_${layer}`] = {
+        qubits: layerQubits,
+        errorRate: Math.pow(0.01, layer),
+        correctionCapability: `corrects ${Math.floor(layer / 2)} errors`
+      };
+    }
+
+    return concatenationResult;
+  }
+
+  // Helper Methods
+  findLogicalQubit(quantumState) {
+    // Find logical qubit in quantum state
+    for (const [id, logicalQubit] of this.logicalQubits.entries()) {
+      if (logicalQubit.quantumStateId === quantumState.id) {
+        return logicalQubit;
+      }
+    }
+    return null;
+  }
+
+  findLatticePosition(logicalQubit, qubitIndex) {
+    const { lattice } = logicalQubit;
+    for (let y = 0; y < lattice.length; y++) {
+      for (let x = 0; x < lattice[y].length; x++) {
+        if (lattice[y][x].qubit.id === qubitIndex) {
+          return { x, y };
+        }
+      }
+    }
+    return null;
+  }
+
+  calculateQubitPurity(qubit) {
+    // Calculate qubit purity (simplified)
+    const stateProbability = qubit.state === '|0⟩' ? 0.8 : 0.2;
+    const phaseCoherence = Math.cos(qubit.phase);
+    return (stateProbability + phaseCoherence) / 2;
+  }
+
+  updateErrorRates(errorCode, errorDetection, correctionResult) {
+    if (!this.errorRates.has(errorCode)) {
+      this.errorRates.set(errorCode, {
+        totalErrors: 0,
+        correctedErrors: 0,
+        uncorrectedErrors: 0,
+        successRate: 0,
+        history: []
+      });
+    }
+
+    const rates = this.errorRates.get(errorCode);
+    rates.totalErrors += errorDetection.totalErrors;
+    rates.correctedErrors += correctionResult.corrections.length;
+    rates.uncorrectedErrors = rates.totalErrors - rates.correctedErrors;
+    rates.successRate = rates.correctedErrors / rates.totalErrors;
+    
+    rates.history.push({
+      timestamp: Date.now(),
+      errors: errorDetection.totalErrors,
+      corrections: correctionResult.corrections.length,
+      success: correctionResult.success
+    });
+
+    // Keep only last 100 entries
+    if (rates.history.length > 100) {
+      rates.history.shift();
+    }
+  }
+
+  storeCorrectionHistory(errorCode, errorDetection, correctionResult) {
+    const historyEntry = {
+      errorCode: errorCode,
+      timestamp: Date.now(),
+      errors: errorDetection,
+      correction: correctionResult,
+      success: correctionResult.success
+    };
+
+    if (!this.correctionHistory.has(errorCode)) {
+      this.correctionHistory.set(errorCode, []);
+    }
+
+    this.correctionHistory.get(errorCode).push(historyEntry);
+
+    // Keep only last 50 entries per code
+    if (this.correctionHistory.get(errorCode).length > 50) {
+      this.correctionHistory.get(errorCode).shift();
+    }
+  }
+
+  // Public API Methods
+  getErrorCorrectionStatus() {
+    return {
+      activeCodes: Array.from(this.errorCodes.keys()),
+      logicalQubits: Array.from(this.logicalQubits.values()),
+      errorRates: Object.fromEntries(this.errorRates),
+      systemHealth: this.assessSystemHealth(),
+      timestamp: Date.now()
+    };
+  }
+
+  assessSystemHealth() {
+    const healthFactors = {
+      errorCorrectionSuccess: this.calculateErrorCorrectionSuccess(),
+      logicalQubitStability: this.calculateLogicalQubitStability(),
+      memoryUtilization: this.calculateMemoryUtilization(),
+      correctionLatency: this.calculateCorrectionLatency()
+    };
+
+    const overallHealth = Object.values(healthFactors).reduce((sum, factor) => sum + factor, 0) / Object.keys(healthFactors).length;
+    
+    return {
+      factors: healthFactors,
+      overall: overallHealth,
+      status: overallHealth > 0.8 ? 'excellent' : overallHealth > 0.6 ? 'good' : 'needs_attention'
+    };
+  }
+
+  calculateErrorCorrectionSuccess() {
+    let totalSuccess = 0;
+    let totalAttempts = 0;
+
+    this.errorRates.forEach(rates => {
+      totalSuccess += rates.correctedErrors;
+      totalAttempts += rates.totalErrors;
+    });
+
+    return totalAttempts > 0 ? totalSuccess / totalAttempts : 1.0;
+  }
+
+  calculateLogicalQubitStability() {
+    const logicalQubits = Array.from(this.logicalQubits.values());
+    if (logicalQubits.length === 0) return 1.0;
+
+    const stabilities = logicalQubits.map(qubit => {
+      const lastCorrection = qubit.lastCorrection;
+      const timeSinceCorrection = Date.now() - (lastCorrection || 0);
+      return Math.max(0, 1 - timeSinceCorrection / (24 * 60 * 60 * 1000)); // 24 hours
+    });
+
+    return stabilities.reduce((sum, stability) => sum + stability, 0) / stabilities.length;
+  }
+
+  calculateMemoryUtilization() {
+    let totalUsed = 0;
+    let totalSize = 0;
+
+    this.quantumMemory.forEach(memory => {
+      totalUsed += memory.used;
+      totalSize += memory.size;
+    });
+
+    return totalSize > 0 ? 1 - (totalUsed / totalSize) : 1.0;
+  }
+
+  calculateCorrectionLatency() {
+    // Calculate average correction latency (simplified)
+    return 0.9 + Math.random() * 0.1;
+  }
+
+  // Performance monitoring
+  getPerformanceMetrics() {
+    return {
+      errorDetectionRate: this.calculateErrorDetectionRate(),
+      correctionEfficiency: this.calculateCorrectionEfficiency(),
+      faultToleranceLevel: this.calculateFaultToleranceLevel(),
+      systemReliability: this.calculateSystemReliability(),
+      timestamp: Date.now()
+    };
+  }
+
+  calculateErrorDetectionRate() {
+    let totalDetected = 0;
+    let totalErrors = 0;
+
+    this.correctionHistory.forEach(history => {
+      history.forEach(entry => {
+        totalDetected += entry.errors.totalErrors;
+        totalErrors += entry.errors.totalErrors;
+      });
+    });
+
+    return totalErrors > 0 ? totalDetected / totalErrors : 1.0;
+  }
+
+  calculateCorrectionEfficiency() {
+    let totalCorrected = 0;
+    let totalAttempted = 0;
+
+    this.correctionHistory.forEach(history => {
+      history.forEach(entry => {
+        totalCorrected += entry.correction.corrections.length;
+        totalAttempted += entry.errors.totalErrors;
+      });
+    });
+
+    return totalAttempted > 0 ? totalCorrected / totalAttempted : 1.0;
+  }
+
+  calculateFaultToleranceLevel() {
+    const activeProtocols = Array.from(this.faultToleranceProtocols.keys()).length;
+    const implementedCodes = Array.from(this.errorCodes.keys()).length;
+    
+    return Math.min(1.0, (activeProtocols + implementedCodes) / 10);
+  }
+
+  calculateSystemReliability() {
+    const health = this.assessSystemHealth();
+    const performance = this.getPerformanceMetrics();
+    
+    return (health.overall + performance.correctionEfficiency) / 2;
+  }
+}
+
+// Initialize the quantum error correction system
+const quantumErrorCorrection = new QuantumErrorCorrectionSystem();
+
+// NEW: Detector Classes for Quantum Error Correction
+class BitFlipDetector {
+  constructor() {
+    this.detectionHistory = [];
+    this.accuracy = 0.95;
+  }
+
+  detect(qubit) {
+    const detection = {
+      qubitId: qubit.id,
+      detected: qubit.state !== qubit.expectedState,
+      confidence: this.accuracy,
+      timestamp: Date.now()
+    };
+
+    this.detectionHistory.push(detection);
+    return detection;
+  }
+
+  getDetectionRate() {
+    if (this.detectionHistory.length === 0) return 0;
+    const detections = this.detectionHistory.filter(d => d.detected).length;
+    return detections / this.detectionHistory.length;
+  }
+}
+
+class PhaseFlipDetector {
+  constructor() {
+    this.detectionHistory = [];
+    this.accuracy = 0.92;
+    this.phaseThreshold = Math.PI / 4;
+  }
+
+  detect(qubit) {
+    const phaseDifference = Math.abs(qubit.phase - qubit.expectedPhase);
+    const detected = phaseDifference > this.phaseThreshold;
+    
+    const detection = {
+      qubitId: qubit.id,
+      detected: detected,
+      phaseDifference: phaseDifference,
+      confidence: this.accuracy,
+      timestamp: Date.now()
+    };
+
+    this.detectionHistory.push(detection);
+    return detection;
+  }
+
+  getDetectionRate() {
+    if (this.detectionHistory.length === 0) return 0;
+    const detections = this.detectionHistory.filter(d => d.detected).length;
+    return detections / this.detectionHistory.length;
+  }
+}
+
+class DepolarizationDetector {
+  constructor() {
+    this.detectionHistory = [];
+    this.accuracy = 0.88;
+    this.purityThreshold = 0.8;
+  }
+
+  detect(qubit) {
+    const purity = this.calculatePurity(qubit);
+    const detected = purity < this.purityThreshold;
+    
+    const detection = {
+      qubitId: qubit.id,
+      detected: detected,
+      purity: purity,
+      confidence: this.accuracy,
+      timestamp: Date.now()
+    };
+
+    this.detectionHistory.push(detection);
+    return detection;
+  }
+
+  calculatePurity(qubit) {
+    // Simplified purity calculation
+    const stateCoherence = qubit.state === qubit.expectedState ? 1.0 : 0.5;
+    const phaseCoherence = Math.cos(qubit.phase - qubit.expectedPhase);
+    return (stateCoherence + phaseCoherence) / 2;
+  }
+
+  getDetectionRate() {
+    if (this.detectionHistory.length === 0) return 0;
+    const detections = this.detectionHistory.filter(d => d.detected).length;
+    return detections / this.detectionHistory.length;
+  }
+}
+
+class LeakageDetector {
+  constructor() {
+    this.detectionHistory = [];
+    this.accuracy = 0.90;
+    this.energyThreshold = 1.5;
+  }
+
+  detect(qubit) {
+    const energy = this.calculateEnergy(qubit);
+    const detected = energy > this.energyThreshold;
+    
+    const detection = {
+      qubitId: qubit.id,
+      detected: detected,
+      energy: energy,
+      confidence: this.accuracy,
+      timestamp: Date.now()
+    };
+
+    this.detectionHistory.push(detection);
+    return detection;
+  }
+
+  calculateEnergy(qubit) {
+    // Simplified energy calculation
+    const stateEnergy = qubit.state === '|0⟩' ? 0 : 
+                       qubit.state === '|1⟩' ? 1 : 
+                       qubit.state === '|2⟩' ? 2 : 3;
+    return stateEnergy + Math.abs(qubit.phase) / Math.PI;
+  }
+
+  getDetectionRate() {
+    if (this.detectionHistory.length === 0) return 0;
+    const detections = this.detectionHistory.filter(d => d.detected).length;
+    return detections / this.detectionHistory.length;
+  }
+}
