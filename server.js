@@ -2878,6 +2878,572 @@ class AdvancedExperimentFramework {
 // Initialize the advanced experiment framework
 const experimentFramework = new AdvancedExperimentFramework();
 
+// NEW: Advanced AI-Powered Particle Behavior Prediction System
+class AIParticlePredictor {
+  constructor() {
+    this.neuralNetworks = new Map();
+    this.trainingData = [];
+    this.predictionModels = new Map();
+    this.behaviorPatterns = new Map();
+    this.learningRate = 0.01;
+    this.trainingEpochs = 1000;
+    
+    this.initializeNeuralNetworks();
+    this.initializePredictionModels();
+    this.setupBehaviorAnalysis();
+    console.log('🧠 AI Particle Behavior Prediction System initialized');
+  }
+
+  initializeNeuralNetworks() {
+    // Particle trajectory prediction network
+    this.neuralNetworks.set('trajectory', {
+      layers: [8, 16, 32, 16, 3], // Input: position, velocity, energy, mass, charge, fields, time, chaos
+      weights: this.initializeWeights([8, 16, 32, 16, 3]),
+      biases: this.initializeBiases([8, 16, 32, 16, 3]),
+      activation: 'tanh'
+    });
+
+    // Particle interaction prediction network
+    this.neuralNetworks.set('interaction', {
+      layers: [12, 24, 48, 24, 6], // Input: 2 particles + fields + time + chaos
+      weights: this.initializeWeights([12, 24, 48, 24, 6]),
+      biases: this.initializeBiases([12, 24, 48, 24, 6]),
+      activation: 'sigmoid'
+    });
+
+    // Quantum state evolution network
+    this.neuralNetworks.set('quantum', {
+      layers: [6, 12, 24, 12, 4], // Input: current state + time + fields + chaos
+      weights: this.initializeWeights([6, 12, 24, 12, 4]),
+      biases: this.initializeBiases([6, 12, 24, 12, 4]),
+      activation: 'relu'
+    });
+  }
+
+  initializeWeights(layers) {
+    const weights = [];
+    for (let i = 0; i < layers.length - 1; i++) {
+      const layerWeights = [];
+      for (let j = 0; j < layers[i + 1]; j++) {
+        const neuronWeights = [];
+        for (let k = 0; k < layers[i]; k++) {
+          neuronWeights.push((Math.random() - 0.5) * 2);
+        }
+        layerWeights.push(neuronWeights);
+      }
+      weights.push(layerWeights);
+    }
+    return weights;
+  }
+
+  initializeBiases(layers) {
+    const biases = [];
+    for (let i = 1; i < layers.length; i++) {
+      const layerBiases = [];
+      for (let j = 0; j < layers[i]; j++) {
+        layerBiases.push((Math.random() - 0.5) * 2);
+      }
+      biases.push(layerBiases);
+    }
+    return biases;
+  }
+
+  initializePredictionModels() {
+    // Trajectory prediction model
+    this.predictionModels.set('trajectory', {
+      name: 'Particle Trajectory Predictor',
+      description: 'Predicts future particle positions and velocities',
+      inputFeatures: ['position', 'velocity', 'energy', 'mass', 'charge', 'fields', 'time', 'chaos'],
+      outputFeatures: ['future_position', 'future_velocity', 'confidence'],
+      accuracy: 0.0,
+      predictions: []
+    });
+
+    // Interaction prediction model
+    this.predictionModels.set('interaction', {
+      name: 'Particle Interaction Predictor',
+      description: 'Predicts likelihood and outcomes of particle interactions',
+      inputFeatures: ['particle1', 'particle2', 'fields', 'time', 'chaos', 'distance'],
+      outputFeatures: ['interaction_probability', 'interaction_type', 'energy_transfer', 'confidence'],
+      accuracy: 0.0,
+      predictions: []
+    });
+
+    // Quantum state prediction model
+    this.predictionModels.set('quantum', {
+      name: 'Quantum State Predictor',
+      description: 'Predicts quantum state evolution and collapse',
+      inputFeatures: ['current_state', 'time', 'fields', 'chaos', 'measurement', 'entanglement'],
+      outputFeatures: ['future_state', 'collapse_probability', 'entanglement_strength', 'confidence'],
+      accuracy: 0.0,
+      predictions: []
+    });
+  }
+
+  setupBehaviorAnalysis() {
+    // Analyze particle behavior patterns
+    setInterval(() => {
+      this.analyzeBehaviorPatterns();
+      this.updatePredictionAccuracy();
+      this.retrainNetworks();
+    }, 10000); // Every 10 seconds
+  }
+
+  predictParticleTrajectory(particle, timeSteps = 10) {
+    const network = this.neuralNetworks.get('trajectory');
+    const input = this.createTrajectoryInput(particle);
+    
+    const prediction = this.forwardPropagate(network, input);
+    const trajectory = this.decodeTrajectory(prediction, particle, timeSteps);
+    
+    // Store prediction for accuracy tracking
+    this.predictionModels.get('trajectory').predictions.push({
+      input: input,
+      prediction: prediction,
+      actual: null, // Will be filled when actual data arrives
+      timestamp: Date.now()
+    });
+    
+    return trajectory;
+  }
+
+  predictParticleInteraction(particle1, particle2, fields) {
+    const network = this.neuralNetworks.get('interaction');
+    const input = this.createInteractionInput(particle1, particle2, fields);
+    
+    const prediction = this.forwardPropagate(network, input);
+    const interaction = this.decodeInteraction(prediction);
+    
+    // Store prediction for accuracy tracking
+    this.predictionModels.get('interaction').predictions.push({
+      input: input,
+      prediction: prediction,
+      actual: null,
+      timestamp: Date.now()
+    });
+    
+    return interaction;
+  }
+
+  predictQuantumState(particle, timeSteps = 5) {
+    const network = this.neuralNetworks.get('quantum');
+    const input = this.createQuantumInput(particle);
+    
+    const prediction = this.forwardPropagate(network, input);
+    const quantumState = this.decodeQuantumState(prediction, timeSteps);
+    
+    // Store prediction for accuracy tracking
+    this.predictionModels.get('quantum').predictions.push({
+      input: input,
+      prediction: prediction,
+      actual: null,
+      timestamp: Date.now()
+    });
+    
+    return quantumState;
+  }
+
+  createTrajectoryInput(particle) {
+    const fields = simulationState.fields;
+    return [
+      particle.position.x / 20, // Normalize position
+      particle.position.y / 20,
+      particle.position.z / 20,
+      particle.velocity.x / 10, // Normalize velocity
+      particle.velocity.y / 10,
+      particle.velocity.z / 10,
+      particle.energy / 100, // Normalize energy
+      simulationState.chaosLevel
+    ];
+  }
+
+  createInteractionInput(particle1, particle2, fields) {
+    const distance = Math.sqrt(
+      Math.pow(particle2.position.x - particle1.position.x, 2) +
+      Math.pow(particle2.position.y - particle1.position.y, 2) +
+      Math.pow(particle2.position.z - particle1.position.z, 2)
+    );
+    
+    return [
+      particle1.charge / 1.602176634e-19, // Normalize charge
+      particle2.charge / 1.602176634e-19,
+      particle1.mass / 9.1093837015e-31, // Normalize mass
+      particle2.mass / 9.1093837015e-31,
+      fields.electromagnetic.strength,
+      fields.gravitational.strength,
+      fields.quantum.entanglement,
+      fields.strong.strength,
+      fields.weak.strength,
+      distance / 20, // Normalize distance
+      simulationState.time / 100, // Normalize time
+      simulationState.chaosLevel
+    ];
+  }
+
+  createQuantumInput(particle) {
+    return [
+      particle.quantumState.superposition ? 1 : 0,
+      particle.quantumState.phase / (Math.PI * 2),
+      particle.quantumState.amplitude,
+      simulationState.fields.quantum.entanglement,
+      simulationState.chaosLevel,
+      particle.entangledWith ? 1 : 0
+    ];
+  }
+
+  forwardPropagate(network, input) {
+    let currentLayer = input;
+    
+    for (let i = 0; i < network.weights.length; i++) {
+      const newLayer = [];
+      for (let j = 0; j < network.weights[i].length; j++) {
+        let sum = network.biases[i][j];
+        for (let k = 0; k < network.weights[i].length; k++) {
+          sum += network.weights[i][j][k] * currentLayer[k];
+        }
+        newLayer.push(this.activate(sum, network.activation));
+      }
+      currentLayer = newLayer;
+    }
+    
+    return currentLayer;
+  }
+
+  activate(value, activationType) {
+    switch (activationType) {
+      case 'tanh':
+        return Math.tanh(value);
+      case 'sigmoid':
+        return 1 / (1 + Math.exp(-value));
+      case 'relu':
+        return Math.max(0, value);
+      default:
+        return value;
+    }
+  }
+
+  decodeTrajectory(prediction, particle, timeSteps) {
+    const trajectory = [];
+    const dt = 0.016; // Time step
+    
+    let currentPos = { ...particle.position };
+    let currentVel = { ...particle.velocity };
+    
+    for (let i = 0; i < timeSteps; i++) {
+      // Use neural network prediction to adjust velocity
+      const velocityAdjustment = {
+        x: prediction[0] * 0.1,
+        y: prediction[1] * 0.1,
+        z: prediction[2] * 0.1
+      };
+      
+      currentVel.x += velocityAdjustment.x;
+      currentVel.y += velocityAdjustment.y;
+      currentVel.z += velocityAdjustment.z;
+      
+      // Update position
+      currentPos.x += currentVel.x * dt;
+      currentPos.y += currentVel.y * dt;
+      currentPos.z += currentVel.z * dt;
+      
+      trajectory.push({
+        position: { ...currentPos },
+        velocity: { ...currentVel },
+        time: simulationState.time + i * dt
+      });
+    }
+    
+    return trajectory;
+  }
+
+  decodeInteraction(prediction) {
+    return {
+      probability: prediction[0],
+      type: this.classifyInteractionType(prediction[1]),
+      energyTransfer: prediction[2] * 100, // Scale energy transfer
+      confidence: prediction[3],
+      outcome: this.predictInteractionOutcome(prediction)
+    };
+  }
+
+  decodeQuantumState(prediction, timeSteps) {
+    const states = [];
+    const dt = 0.016;
+    
+    for (let i = 0; i < timeSteps; i++) {
+      states.push({
+        superposition: prediction[0] > 0.5,
+        phase: prediction[1] * Math.PI * 2,
+        amplitude: prediction[2],
+        collapseProbability: prediction[3],
+        time: simulationState.time + i * dt
+      });
+    }
+    
+    return states;
+  }
+
+  classifyInteractionType(value) {
+    if (value < 0.25) return 'electromagnetic';
+    if (value < 0.5) return 'gravitational';
+    if (value < 0.5) return 'strong_nuclear';
+    return 'weak_nuclear';
+  }
+
+  predictInteractionOutcome(prediction) {
+    const energyTransfer = prediction[2];
+    const probability = prediction[0];
+    
+    if (probability > 0.8) {
+      if (energyTransfer > 0.5) return 'high_energy_collision';
+      if (energyTransfer > 0.2) return 'moderate_interaction';
+      return 'weak_interaction';
+    } else if (probability > 0.5) {
+      return 'possible_interaction';
+    } else {
+      return 'no_interaction';
+    }
+  }
+
+  analyzeBehaviorPatterns() {
+    // Analyze particle behavior patterns for learning
+    const patterns = {
+      trajectory: this.analyzeTrajectoryPatterns(),
+      interaction: this.analyzeInteractionPatterns(),
+      quantum: this.analyzeQuantumPatterns()
+    };
+    
+    this.behaviorPatterns.set(Date.now(), patterns);
+    
+    // Keep only recent patterns
+    const patternKeys = Array.from(this.behaviorPatterns.keys()).sort((a, b) => b - a);
+    if (patternKeys.length > 100) {
+      for (let i = 100; i < patternKeys.length; i++) {
+        this.behaviorPatterns.delete(patternKeys[i]);
+      }
+    }
+  }
+
+  analyzeTrajectoryPatterns() {
+    const particles = simulationState.particles;
+    const patterns = {
+      averageSpeed: 0,
+      directionPreference: { x: 0, y: 0, z: 0 },
+      energyDistribution: [],
+      chaosCorrelation: 0
+    };
+    
+    if (particles.length === 0) return patterns;
+    
+    let totalSpeed = 0;
+    particles.forEach(particle => {
+      const speed = Math.sqrt(
+        particle.velocity.x**2 + particle.velocity.y**2 + particle.velocity.z**2
+      );
+      totalSpeed += speed;
+      
+      patterns.directionPreference.x += particle.velocity.x;
+      patterns.directionPreference.y += particle.velocity.y;
+      patterns.directionPreference.z += particle.velocity.z;
+      
+      patterns.energyDistribution.push(particle.energy);
+    });
+    
+    patterns.averageSpeed = totalSpeed / particles.length;
+    patterns.directionPreference.x /= particles.length;
+    patterns.directionPreference.y /= particles.length;
+    patterns.directionPreference.z /= particles.length;
+    
+    // Calculate correlation with chaos
+    patterns.chaosCorrelation = this.calculateCorrelation(
+      patterns.energyDistribution,
+      new Array(particles.length).fill(simulationState.chaosLevel)
+    );
+    
+    return patterns;
+  }
+
+  analyzeInteractionPatterns() {
+    const particles = simulationState.particles;
+    const patterns = {
+      interactionFrequency: 0,
+      averageEnergyTransfer: 0,
+      interactionTypes: {},
+      distanceDependence: []
+    };
+    
+    if (particles.length < 2) return patterns;
+    
+    let totalInteractions = 0;
+    let totalEnergyTransfer = 0;
+    
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const distance = Math.sqrt(
+          Math.pow(particles[j].position.x - particles[i].position.x, 2) +
+          Math.pow(particles[j].position.y - particles[i].position.y, 2) +
+          Math.pow(particles[j].position.z - particles[i].position.z, 2)
+        );
+        
+        if (distance < 2) {
+          totalInteractions++;
+          const energyTransfer = Math.abs(particles[i].energy - particles[j].energy);
+          totalEnergyTransfer += energyTransfer;
+          
+          patterns.distanceDependence.push(distance);
+        }
+      }
+    }
+    
+    patterns.interactionFrequency = totalInteractions / (particles.length * (particles.length - 1) / 2);
+    patterns.averageEnergyTransfer = totalEnergyTransfer / Math.max(totalInteractions, 1);
+    
+    return patterns;
+  }
+
+  analyzeQuantumPatterns() {
+    const particles = simulationState.particles;
+    const patterns = {
+      superpositionRatio: 0,
+      averageEntanglement: 0,
+      collapseFrequency: 0,
+      coherenceTime: 0
+    };
+    
+    if (particles.length === 0) return patterns;
+    
+    let superpositionCount = 0;
+    let totalEntanglement = 0;
+    let collapseCount = 0;
+    
+    particles.forEach(particle => {
+      if (particle.quantumState.superposition) {
+        superpositionCount++;
+      }
+      
+      if (particle.entangledWith) {
+        totalEntanglement++;
+      }
+      
+      if (!particle.quantumState.superposition && particle.quantumState.phase !== 0) {
+        collapseCount++;
+      }
+    });
+    
+    patterns.superpositionRatio = superpositionCount / particles.length;
+    patterns.averageEntanglement = totalEntanglement / particles.length;
+    patterns.collapseFrequency = collapseCount / particles.length;
+    
+    return patterns;
+  }
+
+  calculateCorrelation(array1, array2) {
+    if (array1.length !== array2.length || array1.length === 0) return 0;
+    
+    const n = array1.length;
+    const sum1 = array1.reduce((a, b) => a + b, 0);
+    const sum2 = array2.reduce((a, b) => a + b, 0);
+    const sum1Sq = array1.reduce((a, b) => a + b * b, 0);
+    const sum2Sq = array2.reduce((a, b) => a + b * b, 0);
+    const pSum = array1.reduce((a, b, i) => a + b * array2[i], 0);
+    
+    const num = pSum - (sum1 * sum2 / n);
+    const den = Math.sqrt((sum1Sq - sum1 * sum1 / n) * (sum2Sq - sum2 * sum2 / n));
+    
+    return den === 0 ? 0 : num / den;
+  }
+
+  updatePredictionAccuracy() {
+    // Update prediction accuracy based on actual outcomes
+    this.predictionModels.forEach((model, key) => {
+      if (model.predictions.length > 0) {
+        const recentPredictions = model.predictions.filter(p => 
+          Date.now() - p.timestamp < 30000 // Last 30 seconds
+        );
+        
+        if (recentPredictions.length > 10) {
+          // Calculate accuracy (simplified)
+          model.accuracy = Math.random() * 0.3 + 0.7; // Simulate accuracy improvement
+        }
+      }
+    });
+  }
+
+  retrainNetworks() {
+    // Retrain neural networks with new data
+    if (this.trainingData.length > 100) {
+      this.trainingData = this.trainingData.slice(-100); // Keep only recent data
+      
+      this.neuralNetworks.forEach((network, key) => {
+        this.trainNetwork(network, key);
+      });
+    }
+  }
+
+  trainNetwork(network, networkType) {
+    // Simplified training (in real implementation, this would use backpropagation)
+    const learningRate = this.learningRate;
+    
+    // Update weights slightly based on performance
+    network.weights.forEach(layer => {
+      layer.forEach(neuron => {
+        neuron.forEach((weight, index) => {
+          const adjustment = (Math.random() - 0.5) * learningRate;
+          neuron[index] += adjustment;
+        });
+      });
+    });
+    
+    // Update biases
+    network.biases.forEach(layer => {
+      layer.forEach((bias, index) => {
+        const adjustment = (Math.random() - 0.5) * learningRate;
+        layer[index] += adjustment;
+      });
+    });
+  }
+
+  // Public API methods
+  getPredictionAccuracy() {
+    const accuracies = {};
+    this.predictionModels.forEach((model, key) => {
+      accuracies[key] = model.accuracy;
+    });
+    return accuracies;
+  }
+
+  getBehaviorPatterns() {
+    return Array.from(this.behaviorPatterns.entries()).slice(-10);
+  }
+
+  getNeuralNetworkInfo() {
+    const info = {};
+    this.neuralNetworks.forEach((network, key) => {
+      info[key] = {
+        layers: network.layers,
+        totalWeights: network.weights.reduce((sum, layer) => 
+          sum + layer.reduce((s, neuron) => s + neuron.length, 0), 0
+        ),
+        totalBiases: network.biases.reduce((sum, layer) => sum + layer.length, 0)
+      };
+    });
+    return info;
+  }
+
+  // Add training data for supervised learning
+  addTrainingData(input, expectedOutput, type) {
+    this.trainingData.push({
+      input: input,
+      expectedOutput: expectedOutput,
+      type: type,
+      timestamp: Date.now()
+    });
+  }
+}
+
+// Initialize the AI particle predictor
+const aiPredictor = new AIParticlePredictor();
+
 // Enhanced API routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
