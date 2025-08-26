@@ -1015,3 +1015,4 @@ class AdSCFT {
 
 // Export the main class
 module.exports = QuantumFieldTheoryEngine;
+

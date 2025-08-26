@@ -1115,3 +1115,4 @@ class QuantumInformation {
 
 // Export the main class
 module.exports = QuantumGravityEngine;
+

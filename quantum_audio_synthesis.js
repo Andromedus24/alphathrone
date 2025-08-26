@@ -893,3 +893,4 @@ class QuantumHarmonizer {
 
 // Export the main class
 module.exports = QuantumAudioSynthesis;
+
